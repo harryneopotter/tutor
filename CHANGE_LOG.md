@@ -45,10 +45,29 @@ Planned files to modify
 - src/store/appStore.ts (add hydrateFromDB, make actions write-through to Dexie)
 - src/App.tsx (hydrate from DB on mount)
 
+Completed in 06c565e
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/db/database.ts
+- src/repositories/events.ts
+- src/repositories/requests.ts
+- src/repositories/students.ts
+- src/repositories/waitlist.ts
+- src/store/appStore.ts
+- src/App.tsx
+
 Milestone M2 — Extra class reminders/flags + Today Dashboard integration (2025-09-06)
 Planned files to modify
 - src/store/appStore.ts (dedup/merge logic in addExtraClassRequest)
 - src/components/TodayDashboard.tsx (UI to add extra requests via modal; actions remain the same)
+
+Completed in 6d86fa0
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/store/appStore.ts
+- src/components/TodayDashboard.tsx
 
 Milestone M3 — Waitlist & Fill-This-Slot suggestions (2025-09-06)
 Planned files to add
@@ -56,6 +75,13 @@ Planned files to add
 
 Planned files to modify
 - src/components/FillSlotModal.tsx (use ranking; better suggestions)
+
+Completed in a167034
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/utils/ranking.ts
+- src/components/FillSlotModal.tsx
 
 Milestone M4 — Trash (soft-delete) (2025-09-06)
 Planned files to add
@@ -66,9 +92,24 @@ Planned files to modify
 - src/repositories/events.ts (add remove helper)
 - src/App.tsx (add navigation to Trash view)
 
+Completed in 03045b9
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/repositories/events.ts
+- src/store/appStore.ts
+- src/components/TrashView.tsx
+- src/App.tsx
+
 Milestone M7 — ICS export (2025-09-06)
 Planned files to modify
 - src/components/WeeklyCalendar.tsx (Export .ics for current week)
+
+Completed in 3d6627b
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/components/WeeklyCalendar.tsx
 
 Milestone M6 — Availability Report (heatmap) (2025-09-06)
 Planned files to add
@@ -77,7 +118,20 @@ Planned files to add
 Planned files to modify
 - src/App.tsx (add navigation to Availability)
 
+Completed in ed2a0b9
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/components/AvailabilityReport.tsx
+- src/App.tsx
+
 Milestone M8 — CI (build) (2025-09-06)
 Planned files to add
 - .github/workflows/ci.yml (build on push/pull_request)
+
+Completed in 7cb359a
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- .github/workflows/ci.yml
 

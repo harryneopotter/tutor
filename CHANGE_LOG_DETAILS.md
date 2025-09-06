@@ -89,6 +89,10 @@ Plan and rationale (before implementation)
 - src/App.tsx (modify)
   - Call hydrateFromDB() on mount to populate state from Dexie.
 
+Completed in 06c565e
+- Added: src/db/database.ts; src/repositories/{events,requests,students,waitlist}.ts
+- Modified: src/store/appStore.ts; src/App.tsx; CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
+
 Notes
 - No migrations required (v1 schema).
 - Slot size remains 30 minutes (no UI change required for M1).
@@ -103,6 +107,10 @@ Plan and rationale (before implementation)
   - Keep Snooze (24h), Schedule (placeholder for now), and Dismiss actions.
   - Ensure pending/snoozed requests appear prominently.
 
+Completed in 6d86fa0
+- Modified: src/store/appStore.ts (dedup/merge); src/components/TodayDashboard.tsx (modal + form)
+- Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
+
 Milestone M3 — Waitlist & Fill-This-Slot suggestions (2025-09-06)
 Plan and rationale (before implementation)
 - src/utils/ranking.ts (new)
@@ -112,6 +120,11 @@ Plan and rationale (before implementation)
 - src/components/FillSlotModal.tsx
   - Use ranking helper instead of naive slice(0,3).
   - Keep UI the same, but suggestions are better targeted.
+
+Completed in a167034
+- Added: src/utils/ranking.ts
+- Modified: src/components/FillSlotModal.tsx (rank suggestions)
+- Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
 
 Milestone M4 — Trash (soft-delete) (2025-09-06)
 Plan and rationale (before implementation)
@@ -126,11 +139,20 @@ Plan and rationale (before implementation)
 - src/App.tsx (modify)
   - Add "Trash" tab and routing to TrashView.
 
+Completed in 03045b9
+- Added: src/components/TrashView.tsx
+- Modified: src/store/appStore.ts (restore/update/purge), src/repositories/events.ts (remove), src/App.tsx (nav)
+- Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
+
 Milestone M7 — ICS export (2025-09-06)
 Plan and rationale (before implementation)
 - src/components/WeeklyCalendar.tsx
   - Add "Export .ics" button to export events in the currently viewed week.
   - Generate a simple VCALENDAR with VEVENT entries (local time) and trigger download.
+
+Completed in 3d6627b
+- Modified: src/components/WeeklyCalendar.tsx (Export .ics UI + generator)
+- Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
 
 Milestone M6 — Availability Report (heatmap) (2025-09-06)
 Plan and rationale (before implementation)
@@ -140,10 +162,19 @@ Plan and rationale (before implementation)
 - src/App.tsx (modify)
   - Add "Availability" nav and route to AvailabilityReport.
 
+Completed in ed2a0b9
+- Added: src/components/AvailabilityReport.tsx
+- Modified: src/App.tsx (nav)
+- Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
+
 Milestone M8 — CI (build) (2025-09-06)
 Plan and rationale (before implementation)
 - .github/workflows/ci.yml (new)
   - Run on push and pull_request.
   - Steps: setup Node, npm ci, npm run build (tsc && vite build).
   - Omit lint/tests for now to avoid false negatives until configs/tests are added.
+
+Completed in 7cb359a
+- Added: .github/workflows/ci.yml
+- Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
 
