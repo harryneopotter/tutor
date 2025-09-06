@@ -273,6 +273,10 @@ Plan and rationale (before implementation)
   - Use React.lazy() + Suspense to defer loading Today, Waitlist, Availability, Binder, Trash.
   - Keep WeeklyCalendar eager as default view.
 
+Completed in dac62fb
+- Modified: src/App.tsx (lazy imports + Suspense)
+- Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
+
 Milestone M11 — Accessibility & Keyboard (2025-09-06)
 Plan and rationale (before implementation)
 - src/components/WeeklyCalendar.tsx
@@ -283,4 +287,9 @@ Plan and rationale (before implementation)
   - Add ARIA dialog attributes and element IDs.
 - src/components/TodayDashboard.tsx / WaitlistManagement.tsx
   - Add ARIA attributes to existing modals.
+
+Completed in dac62fb
+- Modified: WeeklyCalendar (tabIndex, role=button, keydown handlers)
+- Added ARIA dialog attributes to FillSlotModal, EventModal, AddEventModal, TodayDashboard modals, Waitlist modal
+- Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
 

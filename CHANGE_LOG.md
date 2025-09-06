@@ -235,6 +235,12 @@ Milestone M10 — Code splitting (lazy load non-core views) (2025-09-06)
 Planned files to modify
 - src/App.tsx (lazy load Today, Waitlist, Availability, Binder, Trash)
 
+Completed in dac62fb
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/App.tsx
+
 Milestone M11 — Accessibility & Keyboard (2025-09-06)
 Planned files to modify
 - src/components/WeeklyCalendar.tsx (Event blocks focusable + keyboard open)
@@ -243,4 +249,15 @@ Planned files to modify
 - src/components/AddEventModal.tsx (ARIA dialog attrs)
 - src/components/TodayDashboard.tsx (ARIA on add/schedule modals)
 - src/components/WaitlistManagement.tsx (ARIA on add modal)
+
+Completed in dac62fb
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/components/WeeklyCalendar.tsx
+- src/components/FillSlotModal.tsx
+- src/components/EventModal.tsx
+- src/components/AddEventModal.tsx
+- src/components/TodayDashboard.tsx
+- src/components/WaitlistManagement.tsx
 
