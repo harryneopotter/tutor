@@ -231,3 +231,20 @@ Plan and rationale (before implementation)
 - src/components/WeeklyCalendar.tsx
   - Do not render canceled events in week grid (keep them visible in Today view with canceled status if needed).
 
+Completed in 5a03fcd
+- Modified: src/components/WeeklyCalendar.tsx (filter out canceled)
+- Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
+
+Milestone M8b — Testing (Vitest) (2025-09-06)
+Plan and rationale (before implementation)
+- vitest.config.ts (new)
+  - Configure jsdom environment and TypeScript support.
+- src/utils/__tests__/ranking.test.ts (new)
+  - Verify rankWaitlistCandidates sorts by duration closeness with tie-breaker by name.
+- src/store/__tests__/extras.test.ts (new)
+  - Mock repositories; verify addExtraClassRequest dedupes and merges notes.
+- package.json (modify)
+  - Add scripts: test, test:watch; add devDependency: vitest.
+- .github/workflows/ci.yml (modify)
+  - Run npm test after build.
+

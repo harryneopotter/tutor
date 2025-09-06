@@ -189,3 +189,19 @@ Minor update — Calendar visibility tweak (2025-09-06)
 Planned files to modify
 - src/components/WeeklyCalendar.tsx (hide canceled events on grid)
 
+Completed in 5a03fcd
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/components/WeeklyCalendar.tsx
+
+Milestone M8b — Testing (Vitest) (2025-09-06)
+Planned files to add
+- vitest.config.ts (test config)
+- src/utils/__tests__/ranking.test.ts (ranking utility tests)
+- src/store/__tests__/extras.test.ts (dedup logic tests with mocks)
+
+Planned files to modify
+- package.json (add test scripts and dev deps)
+- .github/workflows/ci.yml (run tests)
+
