@@ -173,7 +173,7 @@ Plan and rationale (before implementation)
 - src/App.tsx (modify)
   - Add "Binder" nav to open StudentBinder.
 
-Completed in 0bBINDER (placeholder)
+Completed in 5aabdaf
 - Modified: src/db/database.ts (v2 schema), src/App.tsx (nav)
 - Added: src/repositories/binder.ts; src/components/StudentBinder.tsx
 - Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md

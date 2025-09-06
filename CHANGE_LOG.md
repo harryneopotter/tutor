@@ -127,7 +127,7 @@ Planned files to modify
 - src/db/database.ts (add v2 with syllabusTopics, lessonPlans)
 - src/App.tsx (add navigation to Binder)
 
-Completed in 0bBINDER (placeholder)
+Completed in 5aabdaf
 Modified/added files
 - CHANGE_LOG.md
 - CHANGE_LOG_DETAILS.md
