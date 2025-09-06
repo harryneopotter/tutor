@@ -77,3 +77,7 @@ Planned files to add
 Planned files to modify
 - src/App.tsx (add navigation to Availability)
 
+Milestone M8 — CI (build) (2025-09-06)
+Planned files to add
+- .github/workflows/ci.yml (build on push/pull_request)
+

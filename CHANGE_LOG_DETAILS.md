@@ -140,3 +140,10 @@ Plan and rationale (before implementation)
 - src/App.tsx (modify)
   - Add "Availability" nav and route to AvailabilityReport.
 
+Milestone M8 — CI (build) (2025-09-06)
+Plan and rationale (before implementation)
+- .github/workflows/ci.yml (new)
+  - Run on push and pull_request.
+  - Steps: setup Node, npm ci, npm run build (tsc && vite build).
+  - Omit lint/tests for now to avoid false negatives until configs/tests are added.
+
