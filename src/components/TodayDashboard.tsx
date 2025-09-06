@@ -304,11 +304,14 @@ export const TodayDashboard: React.FC = () => {
     extraClassRequests, 
     updateEvent,
     updateExtraClassRequest,
-    addExtraClassRequest
+    addExtraClassRequest,
+    addEvent
   } = useAppStore();
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [form, setForm] = useState({ studentId: '', durationMin: 60, notes: '' });
+
+  const [scheduleModal, setScheduleModal] = useState<{ open: boolean; requestId?: string; studentId?: string; durationMin?: number; date?: string; time?: string }>(() => ({ open: false }));
 
   // Get today's classes sorted by time
   const todaysClasses = events
@@ -352,11 +355,17 @@ const pendingExtras = extraClassRequests.filter(request => {
   };
 
   const handleScheduleExtra = (requestId: string) => {
-    // For now, just mark as scheduled - later we'll open the calendar modal
     const request = extraClassRequests.find(r => r.id === requestId);
     if (request) {
-      // This would normally open a scheduling modal
-      alert(`Scheduling extra class for ${getStudentName(request.studentId)}`);
+      // Open scheduling modal with defaults
+      setScheduleModal({
+        open: true,
+        requestId,
+        studentId: request.studentId,
+        durationMin: request.durationMin,
+        date: format(new Date(), 'yyyy-MM-dd'),
+        time: '09:00'
+      });
     }
   };
 
@@ -495,6 +504,66 @@ const pendingExtras = extraClassRequests.filter(request => {
           )}
         </Section>
       </Content>
+
+      {scheduleModal.open && (
+        <Modal onClick={() => setScheduleModal({ open: false })}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <ModalTitle>Schedule Extra Class</ModalTitle>
+            <FormGroup>
+              <Label>Student</Label>
+              <Select disabled value={scheduleModal.studentId}>
+                <option>
+                  {getStudentName(scheduleModal.studentId || '')}
+                </option>
+              </Select>
+            </FormGroup>
+            <FormGroup>
+              <Label>Date</Label>
+              <Input type="date" value={scheduleModal.date || ''} onChange={(e) => setScheduleModal({ ...scheduleModal, date: e.target.value })} />
+            </FormGroup>
+            <FormGroup>
+              <Label>Time</Label>
+              <Input type="time" value={scheduleModal.time || ''} onChange={(e) => setScheduleModal({ ...scheduleModal, time: e.target.value })} />
+            </FormGroup>
+            <FormGroup>
+              <Label>Duration (minutes)</Label>
+              <Input type="number" min={30} step={30} value={scheduleModal.durationMin || 60} onChange={(e) => setScheduleModal({ ...scheduleModal, durationMin: parseInt(e.target.value) || 60 })} />
+            </FormGroup>
+            <ButtonRow>
+              <ActionButton variant="dismiss" onClick={() => setScheduleModal({ open: false })}>Cancel</ActionButton>
+              <ActionButton
+                variant="schedule"
+                onClick={() => {
+                  try {
+                    const { requestId, studentId, durationMin, date, time } = scheduleModal;
+                    if (!requestId || !studentId || !date || !time || !durationMin) return;
+                    const [h, m] = time.split(':').map(Number);
+                    const start = new Date(date);
+                    start.setHours(h, m, 0, 0);
+                    const end = new Date(start.getTime() + durationMin * 60000);
+
+                    const title = `Extra Class - ${getStudentName(studentId)}`;
+                    // Create event
+                    addEvent({ studentId, title, start: start.toISOString(), end: end.toISOString(), confirmed: false, canceled: false });
+
+                    // Try to locate event id just added
+                    const newEvent = (window as any).useAppStore?.getState?.()?.events?.find?.((ev: ClassEvent) => ev.studentId === studentId && ev.start === start.toISOString() && ev.end === end.toISOString() && ev.title === title);
+                    // Fallback: check via imported store (vite dev environment)
+                    const fallbackEvents = (require?.('../store/appStore') as any)?.useAppStore?.getState?.()?.events;
+                    const found = newEvent || (fallbackEvents ? fallbackEvents.find((ev: ClassEvent) => ev.studentId === studentId && ev.start === start.toISOString() && ev.end === end.toISOString() && ev.title === title) : undefined);
+
+                    updateExtraClassRequest(requestId, { status: 'scheduled', linkedEventId: found?.id });
+                    setScheduleModal({ open: false });
+                  } catch (e) {
+                    console.error(e);
+                    setScheduleModal({ open: false });
+                  }
+                }}
+              >Save</ActionButton>
+            </ButtonRow>
+          </ModalContent>
+        </Modal>
+      )}
 
       {showAddModal && (
         <Modal onClick={() => setShowAddModal(false)}>

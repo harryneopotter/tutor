@@ -168,3 +168,14 @@ Planned files to modify
 - package.json (add jszip dependency)
 - src/components/StudentBinder.tsx (export ZIP button and generator)
 
+Completed in 595a36f
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- package.json, package-lock.json
+- src/components/StudentBinder.tsx
+
+Milestone M2c — Schedule Extra flow (2025-09-06)
+Planned files to modify
+- src/components/TodayDashboard.tsx (add scheduling modal to create event and link request)
+

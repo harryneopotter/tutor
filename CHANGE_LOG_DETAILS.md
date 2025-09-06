@@ -211,3 +211,14 @@ Plan and rationale (before implementation)
 - src/components/StudentBinder.tsx (modify)
   - Add "Export ZIP" button to download per-student JSON bundle: student.json, lessonPlans.json, syllabus.json, classes.json, manifest.json.
 
+Completed in 595a36f
+- Modified: package.json (add jszip)
+- Modified: src/components/StudentBinder.tsx (Export ZIP with dynamic import of JSZip)
+- Updated lockfile and docs
+
+Milestone M2c — Schedule Extra flow (2025-09-06)
+Plan and rationale (before implementation)
+- src/components/TodayDashboard.tsx (modify)
+  - Add modal on "Schedule" to pick date, time and duration (default from request).
+  - On save: create ClassEvent and update request to status=scheduled with linkedEventId.
+
