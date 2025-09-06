@@ -267,3 +267,20 @@ Completed in b1ec895
 - Modified: WeeklyCalendar.tsx (open modals)
 - Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
 
+Milestone M10 — Code splitting (lazy load non-core views) (2025-09-06)
+Plan and rationale (before implementation)
+- src/App.tsx (modify)
+  - Use React.lazy() + Suspense to defer loading Today, Waitlist, Availability, Binder, Trash.
+  - Keep WeeklyCalendar eager as default view.
+
+Milestone M11 — Accessibility & Keyboard (2025-09-06)
+Plan and rationale (before implementation)
+- src/components/WeeklyCalendar.tsx
+  - Make events focusable with keyboard, open on Enter/Space.
+- src/components/FillSlotModal.tsx
+  - Add role="dialog" aria-modal and label attributes.
+- src/components/EventModal.tsx / AddEventModal.tsx
+  - Add ARIA dialog attributes and element IDs.
+- src/components/TodayDashboard.tsx / WaitlistManagement.tsx
+  - Add ARIA attributes to existing modals.
+

@@ -506,9 +506,9 @@ const pendingExtras = extraClassRequests.filter(request => {
       </Content>
 
       {scheduleModal.open && (
-        <Modal onClick={() => setScheduleModal({ open: false })}>
+        <Modal role="dialog" aria-modal="true" aria-labelledby="schedule-extra-title" onClick={() => setScheduleModal({ open: false })}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
-            <ModalTitle>Schedule Extra Class</ModalTitle>
+            <ModalTitle id="schedule-extra-title">Schedule Extra Class</ModalTitle>
             <FormGroup>
               <Label>Student</Label>
               <Select disabled value={scheduleModal.studentId}>
@@ -566,9 +566,9 @@ const pendingExtras = extraClassRequests.filter(request => {
       )}
 
       {showAddModal && (
-        <Modal onClick={() => setShowAddModal(false)}>
+        <Modal role="dialog" aria-modal="true" aria-labelledby="add-extra-title" onClick={() => setShowAddModal(false)}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
-            <ModalTitle>Add Extra Class Request</ModalTitle>
+            <ModalTitle id="add-extra-title">Add Extra Class Request</ModalTitle>
             <FormGroup>
               <Label>Student</Label>
               <Select

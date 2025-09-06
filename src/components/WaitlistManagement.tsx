@@ -271,9 +271,9 @@ export const WaitlistManagement: React.FC = () => {
       </Content>
 
       {showAddModal && (
-        <Modal onClick={() => setShowAddModal(false)}>
+        <Modal role="dialog" aria-modal="true" aria-labelledby="add-waitlist-title" onClick={() => setShowAddModal(false)}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
-            <ModalTitle>Add Student to Waitlist</ModalTitle>
+            <ModalTitle id="add-waitlist-title">Add Student to Waitlist</ModalTitle>
             
             <FormGroup>
               <Label>Student</Label>

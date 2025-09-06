@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { WeeklyCalendar } from './components/WeeklyCalendar';
-import { TodayDashboard } from './components/TodayDashboard';
-import { WaitlistManagement } from './components/WaitlistManagement';
-import { TrashView } from './components/TrashView';
-import { AvailabilityReport } from './components/AvailabilityReport';
-import { StudentBinder } from './components/StudentBinder';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
+const TodayDashboard = lazy(() => import('./components/TodayDashboard').then(m => ({ default: m.TodayDashboard })));
+const WaitlistManagement = lazy(() => import('./components/WaitlistManagement').then(m => ({ default: m.WaitlistManagement })));
+const TrashView = lazy(() => import('./components/TrashView').then(m => ({ default: m.TrashView })));
+const AvailabilityReport = lazy(() => import('./components/AvailabilityReport').then(m => ({ default: m.AvailabilityReport })));
+const StudentBinder = lazy(() => import('./components/StudentBinder').then(m => ({ default: m.StudentBinder })));
 import { useAppStore } from './store/appStore';
 
 const AppContainer = styled.div`
@@ -131,7 +132,9 @@ function App() {
         )}
       </Navigation>
       
-      {renderCurrentView()}
+      <Suspense fallback={<div style={{ padding: 16 }}>Loading…</div>}>
+        {renderCurrentView()}
+      </Suspense>
     </AppContainer>
   );
 }

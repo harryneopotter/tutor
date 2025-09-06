@@ -81,9 +81,9 @@ export const AddEventModal: React.FC<AddEventModalProps> = ({ isOpen, startISO, 
   const end = new Date(start.getTime() + durationMin * 60000);
 
   return (
-    <Overlay onClick={onClose}>
+    <Overlay role="dialog" aria-modal="true" aria-labelledby="add-class-title" onClick={onClose}>
       <Modal onClick={e => e.stopPropagation()}>
-        <h3 style={{ marginTop: 0, marginBottom: 12 }}>Add Class</h3>
+        <h3 id="add-class-title" style={{ marginTop: 0, marginBottom: 12 }}>Add Class</h3>
         <Row>
           <Label>Start</Label>
           <div>{format(start, 'EEE, MMM d, h:mm a')}</div>

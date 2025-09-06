@@ -231,3 +231,16 @@ Modified/added files
 - src/components/AddEventModal.tsx
 - src/components/WeeklyCalendar.tsx
 
+Milestone M10 — Code splitting (lazy load non-core views) (2025-09-06)
+Planned files to modify
+- src/App.tsx (lazy load Today, Waitlist, Availability, Binder, Trash)
+
+Milestone M11 — Accessibility & Keyboard (2025-09-06)
+Planned files to modify
+- src/components/WeeklyCalendar.tsx (Event blocks focusable + keyboard open)
+- src/components/FillSlotModal.tsx (ARIA dialog attrs)
+- src/components/EventModal.tsx (ARIA dialog attrs)
+- src/components/AddEventModal.tsx (ARIA dialog attrs)
+- src/components/TodayDashboard.tsx (ARIA on add/schedule modals)
+- src/components/WaitlistManagement.tsx (ARIA on add modal)
+

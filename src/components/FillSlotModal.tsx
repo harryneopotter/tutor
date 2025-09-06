@@ -186,10 +186,10 @@ export const FillSlotModal: React.FC<FillSlotModalProps> = ({
   };
 
   return (
-    <ModalOverlay onClick={onClose}>
+    <ModalOverlay role="dialog" aria-modal="true" aria-labelledby="fill-slot-title" onClick={onClose}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
         <ModalHeader>
-          <ModalTitle>Fill This Slot</ModalTitle>
+          <ModalTitle id="fill-slot-title">Fill This Slot</ModalTitle>
           <ModalSubtitle>
             {format(eventStart, 'EEEE, MMM d')} • {format(eventStart, 'h:mm a')} - {format(eventEnd, 'h:mm a')} 
             ({eventDuration} minutes available)

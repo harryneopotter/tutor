@@ -77,9 +77,9 @@ export const EventModal: React.FC<EventModalProps> = ({ event, onClose }) => {
   const end = parseISO(event.end);
 
   return (
-    <Overlay onClick={onClose}>
+    <Overlay role="dialog" aria-modal="true" aria-labelledby="event-details-title" onClick={onClose}>
       <Modal onClick={e => e.stopPropagation()}>
-        <h3 style={{ marginTop: 0, marginBottom: 12 }}>Event Details</h3>
+        <h3 id="event-details-title" style={{ marginTop: 0, marginBottom: 12 }}>Event Details</h3>
         <Row>
           <Label>Title</Label>
           <Input value={title} onChange={e => setTitle(e.target.value)} />

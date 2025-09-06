@@ -364,6 +364,15 @@ export const WeeklyCalendar: React.FC = () => {
                         key={event.id}
                         eventType={getEventType(event)}
                         style={{ top: `${eventIndex * 20}px` }}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Event: ${event.title}`}
+                        onKeyDown={(ke) => {
+                          if (ke.key === 'Enter' || ke.key === ' ') {
+                            ke.preventDefault();
+                            handleEventClick(event);
+                          }
+                        }}
                         onMouseDown={() => {
                           longPressTimer = setTimeout(() => {
                             handleEventLongPress(event);
