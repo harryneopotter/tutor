@@ -103,3 +103,13 @@ Plan and rationale (before implementation)
   - Keep Snooze (24h), Schedule (placeholder for now), and Dismiss actions.
   - Ensure pending/snoozed requests appear prominently.
 
+Milestone M3 — Waitlist & Fill-This-Slot suggestions (2025-09-06)
+Plan and rationale (before implementation)
+- src/utils/ranking.ts (new)
+  - Provide rankWaitlistCandidates(canceledEventDuration, entries, students) scoring by:
+    - Absolute duration difference (smaller is better)
+    - Tie-breaker: student name A→Z
+- src/components/FillSlotModal.tsx
+  - Use ranking helper instead of naive slice(0,3).
+  - Keep UI the same, but suggestions are better targeted.
+

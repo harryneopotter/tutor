@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { format, parseISO } from 'date-fns';
 import { ClassEvent, Student, WaitlistEntry } from '../types';
+import { rankWaitlistCandidates } from '../utils/ranking';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -169,8 +170,8 @@ export const FillSlotModal: React.FC<FillSlotModalProps> = ({
   const eventEnd = parseISO(canceledEvent.end);
   const eventDuration = Math.round((eventEnd.getTime() - eventStart.getTime()) / (1000 * 60));
 
-  // Get top 3 students from waitlist that fit the duration
-  const suitableWaitlistEntries = waitlistEntries
+  // Rank and get top 3 students from waitlist based on best duration fit
+  const suitableWaitlistEntries = rankWaitlistCandidates(eventDuration, waitlistEntries, availableStudents)
     .filter(entry => entry.durationMin <= eventDuration)
     .slice(0, 3);
 

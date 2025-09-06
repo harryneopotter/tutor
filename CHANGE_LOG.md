@@ -50,3 +50,10 @@ Planned files to modify
 - src/store/appStore.ts (dedup/merge logic in addExtraClassRequest)
 - src/components/TodayDashboard.tsx (UI to add extra requests via modal; actions remain the same)
 
+Milestone M3 — Waitlist & Fill-This-Slot suggestions (2025-09-06)
+Planned files to add
+- src/utils/ranking.ts (candidate ranking helpers)
+
+Planned files to modify
+- src/components/FillSlotModal.tsx (use ranking; better suggestions)
+
