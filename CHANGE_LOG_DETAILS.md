@@ -262,3 +262,8 @@ Plan and rationale (before implementation)
 - src/components/WeeklyCalendar.tsx (modify)
   - Replace prompt with AddEventModal; open EventModal on event click.
 
+Completed in b1ec895
+- Added: EventModal.tsx, AddEventModal.tsx
+- Modified: WeeklyCalendar.tsx (open modals)
+- Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
+

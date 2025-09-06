@@ -223,3 +223,11 @@ Planned files to add
 Planned files to modify
 - src/components/WeeklyCalendar.tsx (use modals instead of prompt; open detail modal on click)
 
+Completed in b1ec895
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/components/EventModal.tsx
+- src/components/AddEventModal.tsx
+- src/components/WeeklyCalendar.tsx
+
