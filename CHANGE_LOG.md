@@ -153,3 +153,7 @@ Modified/added files
 - CHANGE_LOG_DETAILS.md
 - .github/workflows/ci.yml
 
+Milestone M2b — Snooze visibility (Today Dashboard) (2025-09-06)
+Planned files to modify
+- src/components/TodayDashboard.tsx (hide snoozed requests until snoozeUntil)
+

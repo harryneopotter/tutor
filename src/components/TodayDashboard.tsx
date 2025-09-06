@@ -318,10 +318,19 @@ export const TodayDashboard: React.FC = () => {
     })
     .sort((a, b) => parseISO(a.start).getTime() - parseISO(b.start).getTime());
 
-  // Get pending extra class requests
-  const pendingExtras = extraClassRequests.filter(
-    request => request.status === 'open' || request.status === 'snoozed'
-  );
+// Get pending extra class requests
+const now = new Date();
+const pendingExtras = extraClassRequests.filter(request => {
+  if (request.status === 'open') return true;
+  if (request.status === 'snoozed' && request.snoozeUntil) {
+    try {
+      return new Date(request.snoozeUntil) <= now;
+    } catch {
+      return false;
+    }
+  }
+  return false;
+});
 
   const getClassStatus = (event: ClassEvent): 'confirmed' | 'pending' | 'canceled' => {
     if (event.canceled) return 'canceled';

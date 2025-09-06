@@ -194,3 +194,9 @@ Completed in 7cb359a
 - Added: .github/workflows/ci.yml
 - Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
 
+Milestone M2b — Snooze visibility (Today Dashboard) (2025-09-06)
+Plan and rationale (before implementation)
+- src/components/TodayDashboard.tsx
+  - Filter pending extras as: open OR (snoozed AND snoozeUntil <= now)
+  - This keeps snoozed items hidden until they are due.
+
