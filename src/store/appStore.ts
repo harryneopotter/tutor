@@ -1,6 +1,10 @@
 import { create } from 'zustand';
 import { Student, ClassEvent, ExtraClassRequest, WaitlistEntry } from '../types';
 import { sampleStudents, sampleEvents, sampleExtraRequests, sampleWaitlistEntries } from '../utils/sampleData';
+import { studentsRepo } from '../repositories/students';
+import { eventsRepo } from '../repositories/events';
+import { requestsRepo } from '../repositories/requests';
+import { waitlistRepo } from '../repositories/waitlist';
 
 interface AppState {
   // Data
@@ -26,6 +30,7 @@ interface AppState {
   removeWaitlistEntry: (id: string) => void;
   assignSlotFromWaitlist: (eventId: string, studentId: string, duration: number) => void;
   initializeSampleData: () => void;
+  hydrateFromDB: () => Promise<void>;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -47,6 +52,8 @@ export const useAppStore = create<AppState>((set, get) => ({
       id: crypto.randomUUID(),
     };
     set((state) => ({ events: [...state.events, event] }));
+    // Persist (fire-and-forget)
+    void eventsRepo.add(event).catch(console.error);
   },
 
   updateEvent: (id, updates) => {
@@ -55,6 +62,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         event.id === id ? { ...event, ...updates } : event
       )
     }));
+    void eventsRepo.update(id, updates).catch(console.error);
   },
 
   deleteEvent: (id) => {
@@ -64,6 +72,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         event.id === id ? { ...event, deletedAt: now } : event
       )
     }));
+    void eventsRepo.softDelete(id).catch(console.error);
   },
 
   addStudent: (studentData) => {
@@ -72,6 +81,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       id: crypto.randomUUID(),
     };
     set((state) => ({ students: [...state.students, student] }));
+    void studentsRepo.add(student).catch(console.error);
   },
 
   addExtraClassRequest: (requestData) => {
@@ -85,6 +95,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     set((state) => ({ 
       extraClassRequests: [...state.extraClassRequests, request] 
     }));
+    void requestsRepo.add(request).catch(console.error);
   },
 
   updateExtraClassRequest: (id, updates) => {
@@ -96,6 +107,7 @@ export const useAppStore = create<AppState>((set, get) => ({
           : request
       )
     }));
+    void requestsRepo.update(id, { ...updates, updatedAt: now }).catch(console.error);
   },
 
   initializeSampleData: () => {
@@ -105,6 +117,18 @@ export const useAppStore = create<AppState>((set, get) => ({
       extraClassRequests: sampleExtraRequests,
       waitlist: sampleWaitlistEntries
     });
+    // Seed Dexie if empty (fire-and-forget)
+    (async () => {
+      const [studentCount] = await Promise.all([
+        studentsRepo.count(),
+      ]);
+      if (studentCount === 0) {
+        await studentsRepo.addMany(sampleStudents);
+        await eventsRepo.addMany(sampleEvents);
+        await requestsRepo.addMany(sampleExtraRequests);
+        await waitlistRepo.addMany(sampleWaitlistEntries);
+      }
+    })().catch(console.error);
   },
 
   addWaitlistEntry: (entryData) => {
@@ -113,12 +137,14 @@ export const useAppStore = create<AppState>((set, get) => ({
       id: crypto.randomUUID(),
     };
     set((state) => ({ waitlist: [...state.waitlist, entry] }));
+    void waitlistRepo.add(entry).catch(console.error);
   },
 
   removeWaitlistEntry: (id) => {
     set((state) => ({
       waitlist: state.waitlist.filter(entry => entry.id !== id)
     }));
+    void waitlistRepo.remove(id).catch(console.error);
   },
 
   assignSlotFromWaitlist: (eventId, studentId, duration) => {
@@ -144,6 +170,24 @@ export const useAppStore = create<AppState>((set, get) => ({
         events: [...state.events, newEvent],
         waitlist: updatedWaitlist
       }));
+
+      // Persist changes
+      void eventsRepo.add(newEvent).catch(console.error);
+      void waitlistRepo.removeByStudentId(studentId).catch(console.error);
     }
+  },
+  hydrateFromDB: async () => {
+    const [students, events, extraRequests, waitlist] = await Promise.all([
+      studentsRepo.getAll(),
+      eventsRepo.getAll(),
+      requestsRepo.getAll(),
+      waitlistRepo.getAll(),
+    ]);
+    set({
+      students,
+      events,
+      extraClassRequests: extraRequests,
+      waitlist,
+    });
   },
 }));

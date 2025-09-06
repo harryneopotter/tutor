@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { WeeklyCalendar } from './components/WeeklyCalendar';
 import { TodayDashboard } from './components/TodayDashboard';
@@ -52,7 +52,11 @@ type ViewType = 'calendar' | 'today' | 'waitlist';
 
 function App() {
   const [currentView, setCurrentView] = useState<ViewType>('calendar');
-  const { students, initializeSampleData } = useAppStore();
+  const { students, initializeSampleData, hydrateFromDB } = useAppStore();
+
+  useEffect(() => {
+    void hydrateFromDB();
+  }, []);
 
   const handleLoadSampleData = () => {
     initializeSampleData();

@@ -66,3 +66,30 @@ Notes for next milestones
 - Slot granularity set to 30 minutes (confirmed); PRD language should reflect 30-minute slots going forward.
 - Future milestones will append new sections to both CHANGE_LOG.md and CHANGE_LOG_DETAILS.md before implementation begins.
 
+Milestone M1 — Persistence foundation (Dexie) (2025-09-06)
+Plan and rationale (before implementation)
+- src/db/database.ts (new)
+  - Create a Dexie database named tutor_vc_db with typed tables:
+    - students (id primary key, index: name)
+    - classEvents (id primary key, indexes: studentId, start, end, deletedAt)
+    - extraRequests (id primary key, indexes: studentId, status, snoozeUntil)
+    - waitlist (id primary key, indexes: studentId, durationMin)
+- src/repositories/students.ts (new)
+  - CRUD helpers: getAll, add, addMany, count.
+- src/repositories/events.ts (new)
+  - CRUD helpers: getAll, add, addMany, update, softDelete.
+- src/repositories/requests.ts (new)
+  - CRUD helpers: getAll, add, addMany, update.
+- src/repositories/waitlist.ts (new)
+  - CRUD helpers: getAll, add, addMany, remove, removeByStudentId.
+- src/store/appStore.ts (modify)
+  - Add hydrateFromDB() to load state on startup.
+  - Write-through to Dexie in add/update/delete actions for events, students, requests, and waitlist.
+  - initializeSampleData() seeds Dexie if empty (fire-and-forget) while populating UI immediately.
+- src/App.tsx (modify)
+  - Call hydrateFromDB() on mount to populate state from Dexie.
+
+Notes
+- No migrations required (v1 schema).
+- Slot size remains 30 minutes (no UI change required for M1).
+

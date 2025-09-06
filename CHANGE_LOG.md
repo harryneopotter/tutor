@@ -33,3 +33,15 @@ Files added (docs and housekeeping)
 Local-only (intentionally untracked)
 - WARP.md
 
+Milestone M1 — Persistence foundation (Dexie) (2025-09-06)
+Planned files to add
+- src/db/database.ts (Dexie DB initialization, tables, indexes)
+- src/repositories/students.ts (CRUD helpers)
+- src/repositories/events.ts (CRUD + soft-delete helpers)
+- src/repositories/requests.ts (CRUD helpers for ExtraClassRequest)
+- src/repositories/waitlist.ts (CRUD helpers, including removeByStudentId)
+
+Planned files to modify
+- src/store/appStore.ts (add hydrateFromDB, make actions write-through to Dexie)
+- src/App.tsx (hydrate from DB on mount)
+
