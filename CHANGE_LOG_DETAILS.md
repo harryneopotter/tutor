@@ -248,3 +248,8 @@ Plan and rationale (before implementation)
 - .github/workflows/ci.yml (modify)
   - Run npm test after build.
 
+Completed in 321b5c5
+- Modified: package.json (scripts), CI workflow
+- Added: vitest.config.ts, unit tests for ranking and extras
+- Updated lockfile and docs
+

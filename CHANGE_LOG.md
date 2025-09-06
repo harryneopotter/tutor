@@ -205,3 +205,13 @@ Planned files to modify
 - package.json (add test scripts and dev deps)
 - .github/workflows/ci.yml (run tests)
 
+Completed in 321b5c5
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- package.json, package-lock.json
+- vitest.config.ts
+- .github/workflows/ci.yml
+- src/utils/__tests__/ranking.test.ts
+- src/store/__tests__/extras.test.ts
+
