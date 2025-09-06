@@ -157,3 +157,14 @@ Milestone M2b — Snooze visibility (Today Dashboard) (2025-09-06)
 Planned files to modify
 - src/components/TodayDashboard.tsx (hide snoozed requests until snoozeUntil)
 
+Completed in 5735dea
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/components/TodayDashboard.tsx
+
+Milestone M5b — Student ZIP export (2025-09-06)
+Planned files to modify
+- package.json (add jszip dependency)
+- src/components/StudentBinder.tsx (export ZIP button and generator)
+

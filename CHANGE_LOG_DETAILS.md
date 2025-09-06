@@ -200,3 +200,14 @@ Plan and rationale (before implementation)
   - Filter pending extras as: open OR (snoozed AND snoozeUntil <= now)
   - This keeps snoozed items hidden until they are due.
 
+Completed in 5735dea
+- Modified: src/components/TodayDashboard.tsx (filter snoozed by snoozeUntil)
+- Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
+
+Milestone M5b — Student ZIP export (2025-09-06)
+Plan and rationale (before implementation)
+- package.json (modify)
+  - Add dependency: jszip
+- src/components/StudentBinder.tsx (modify)
+  - Add "Export ZIP" button to download per-student JSON bundle: student.json, lessonPlans.json, syllabus.json, classes.json, manifest.json.
+

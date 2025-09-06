@@ -33,6 +33,14 @@ const Controls = styled.div`
   align-items: center;
 `;
 
+const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
+  padding: 8px 12px;
+  border: 1px solid;
+  border-radius: 6px;
+  cursor: pointer;
+  ${p => p.variant === 'primary' ? `background:#3b82f6;border-color:#3b82f6;color:#fff;` : `background:#fff;border-color:#d1d5db;color:#374151;`}
+`;
+
 const Select = styled.select`
   padding: 8px 12px;
   border: 1px solid #d1d5db;
@@ -102,7 +110,7 @@ const TextArea = styled.textarea`
   min-height: 60px;
 `;
 
-const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
+const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' }>`
   padding: 8px 12px;
   border: 1px solid;
   border-radius: 6px;
@@ -158,6 +166,38 @@ export const StudentBinder: React.FC = () => {
           <Select value={studentId} onChange={e => setStudentId(e.target.value)}>
             {students.map(s => (<option key={s.id} value={s.id}>{s.name}</option>))}
           </Select>
+          <ActionButton 
+            variant="secondary"
+            onClick={async () => {
+              if (!studentId) return;
+              const student = students.find(s => s.id === studentId);
+              const classes = JSON.parse(JSON.stringify((await import('../store/appStore')).useAppStore.getState().events.filter(e => e.studentId === studentId)));
+              const manifest = {
+                version: 1,
+                exportedAt: new Date().toISOString(),
+                studentId,
+                files: ['student.json','syllabus.json','lessonPlans.json','classes.json']
+              };
+              const { default: JSZip } = await import('jszip');
+              const zip = new JSZip();
+              zip.file('student.json', JSON.stringify(student, null, 2));
+              zip.file('syllabus.json', JSON.stringify(syllabus, null, 2));
+              zip.file('lessonPlans.json', JSON.stringify(plans, null, 2));
+              zip.file('classes.json', JSON.stringify(classes, null, 2));
+              zip.file('manifest.json', JSON.stringify(manifest, null, 2));
+              const blob = await zip.generateAsync({ type: 'blob' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `${student?.name?.replace(/\s+/g,'_') || 'student'}_binder.zip`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+            }}
+          >
+            Export ZIP
+          </ActionButton>
         </Controls>
       </Header>
 
@@ -175,10 +215,10 @@ export const StudentBinder: React.FC = () => {
                 <Input placeholder="Month (e.g., Sep)" value={topicForm.month} onChange={e => setTopicForm({ ...topicForm, month: e.target.value })} />
                 <Input placeholder="Topic" value={topicForm.topic} onChange={e => setTopicForm({ ...topicForm, topic: e.target.value })} />
                 <Input placeholder="Page (optional)" value={topicForm.page} onChange={e => setTopicForm({ ...topicForm, page: e.target.value })} />
-                <Button 
+                <ActionButton 
                   variant="primary"
                   onClick={() => { if (topicForm.month && topicForm.topic) { addTopic({ month: topicForm.month, topic: topicForm.topic, page: topicForm.page || undefined }); setTopicForm({ month: '', topic: '', page: '' }); } }}
-                >Add</Button>
+                >Add</ActionButton>
               </div>
             </Card>
             <Card>
@@ -202,10 +242,10 @@ export const StudentBinder: React.FC = () => {
                 <Input type="number" min={30} step={30} placeholder="Duration (min)" value={planForm.durationMin} onChange={e => setPlanForm({ ...planForm, durationMin: parseInt(e.target.value) || 60 })} />
                 <Input placeholder="Resources (comma separated URLs)" value={planForm.resources} onChange={e => setPlanForm({ ...planForm, resources: e.target.value })} />
                 <TextArea placeholder="Notes" value={planForm.notes} onChange={e => setPlanForm({ ...planForm, notes: e.target.value })} />
-                <Button 
+                <ActionButton 
                   variant="primary"
                   onClick={() => { if (planForm.topic && planForm.date) { addPlan({ topic: planForm.topic, date: planForm.date, durationMin: planForm.durationMin, resources: planForm.resources ? planForm.resources.split(',').map(s => s.trim()) : undefined, notes: planForm.notes || undefined }); setPlanForm({ topic: '', date: '', durationMin: 60, resources: '', notes: '' }); } }}
-                >Add</Button>
+                >Add</ActionButton>
               </div>
             </Card>
             <Card>
