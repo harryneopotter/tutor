@@ -32,6 +32,26 @@ const Header = styled.div`
   background: #ffffff;
 `;
 
+const HeaderActions = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+`;
+
+const ExportButton = styled.button`
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #374151;
+  cursor: pointer;
+  font-size: 14px;
+  
+  &:hover {
+    background: #f9fafb;
+  }
+`;
+
 const WeekNavigation = styled.div`
   display: flex;
   align-items: center;
@@ -174,6 +194,59 @@ export const WeeklyCalendar: React.FC = () => {
     assignSlotFromWaitlist
   } = useAppStore();
 
+  const formatICSDate = (d: Date) => {
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return (
+      d.getFullYear().toString() +
+      pad(d.getMonth() + 1) +
+      pad(d.getDate()) + 'T' +
+      pad(d.getHours()) +
+      pad(d.getMinutes()) +
+      pad(d.getSeconds())
+    );
+  };
+
+  const handleExportICS = () => {
+    const eventsInWeek = events.filter(ev => {
+      if (ev.deletedAt) return false;
+      const s = new Date(ev.start);
+      return s >= weekStart && s <= weekEnd;
+    });
+
+    const lines: string[] = [];
+    lines.push('BEGIN:VCALENDAR');
+    lines.push('VERSION:2.0');
+    lines.push('PRODID:-//Tutor VC//EN');
+
+    const dtstamp = formatICSDate(new Date());
+
+    for (const ev of eventsInWeek) {
+      const s = new Date(ev.start);
+      const e = new Date(ev.end);
+      const student = students.find(su => su.id === ev.studentId)?.name || '';
+      lines.push('BEGIN:VEVENT');
+      lines.push(`UID:${ev.id}@tutor-vc`);
+      lines.push(`DTSTAMP:${dtstamp}`);
+      lines.push(`DTSTART:${formatICSDate(s)}`);
+      lines.push(`DTEND:${formatICSDate(e)}`);
+      lines.push(`SUMMARY:${ev.title}`);
+      if (student) lines.push(`DESCRIPTION:Student: ${student}`);
+      lines.push('END:VEVENT');
+    }
+
+    lines.push('END:VCALENDAR');
+
+    const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `classes_${format(weekStart, 'yyyyMMdd')}_${format(weekEnd, 'yyyyMMdd')}.ics`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const [showFillSlotModal, setShowFillSlotModal] = useState(false);
   const [canceledEvent, setCanceledEvent] = useState<ClassEvent | null>(null);
 
@@ -258,6 +331,9 @@ export const WeeklyCalendar: React.FC = () => {
           <span>{format(weekStart, 'MMM d')} - {format(weekEnd, 'MMM d, yyyy')}</span>
           <NavButton onClick={goToNextWeek}>Next →</NavButton>
         </WeekNavigation>
+        <HeaderActions>
+          <ExportButton onClick={handleExportICS}>Export .ics</ExportButton>
+        </HeaderActions>
       </Header>
 
       <CalendarGrid>

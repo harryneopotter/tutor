@@ -126,3 +126,9 @@ Plan and rationale (before implementation)
 - src/App.tsx (modify)
   - Add "Trash" tab and routing to TrashView.
 
+Milestone M7 — ICS export (2025-09-06)
+Plan and rationale (before implementation)
+- src/components/WeeklyCalendar.tsx
+  - Add "Export .ics" button to export events in the currently viewed week.
+  - Generate a simple VCALENDAR with VEVENT entries (local time) and trigger download.
+

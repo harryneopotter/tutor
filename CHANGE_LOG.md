@@ -66,3 +66,7 @@ Planned files to modify
 - src/repositories/events.ts (add remove helper)
 - src/App.tsx (add navigation to Trash view)
 
+Milestone M7 — ICS export (2025-09-06)
+Planned files to modify
+- src/components/WeeklyCalendar.tsx (Export .ics for current week)
+
