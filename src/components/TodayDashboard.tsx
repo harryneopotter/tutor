@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { format, isToday, parseISO } from 'date-fns';
 import { useAppStore } from '../store/appStore';
@@ -26,6 +26,88 @@ const Title = styled.h2`
   font-weight: 600;
   color: #111827;
   margin: 0;
+`;
+
+const AddButton = styled.button`
+  padding: 8px 16px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  
+  &:hover { background: #2563eb; }
+`;
+
+const Modal = styled.div`
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 420px;
+  width: 90%;
+`;
+
+const ModalTitle = styled.h3`
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 16px 0;
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 16px;
+`;
+
+const Label = styled.label`
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 4px;
+`;
+
+const Select = styled.select`
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 14px;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 14px;
+`;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 60px;
+`;
+
+const ButtonRow = styled.div`
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
 `;
 
 const DateSubtitle = styled.p`
@@ -221,8 +303,12 @@ export const TodayDashboard: React.FC = () => {
     students, 
     extraClassRequests, 
     updateEvent,
-    updateExtraClassRequest
+    updateExtraClassRequest,
+    addExtraClassRequest
   } = useAppStore();
+
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [form, setForm] = useState({ studentId: '', durationMin: 60, notes: '' });
 
   // Get today's classes sorted by time
   const todaysClasses = events
@@ -289,6 +375,7 @@ export const TodayDashboard: React.FC = () => {
           <Title>Today's Schedule</Title>
           <DateSubtitle>{format(new Date(), 'EEEE, MMMM d, yyyy')}</DateSubtitle>
         </div>
+        <AddButton onClick={() => setShowAddModal(true)}>+ Add Extra Request</AddButton>
       </Header>
 
       <Content>
@@ -399,6 +486,58 @@ export const TodayDashboard: React.FC = () => {
           )}
         </Section>
       </Content>
+
+      {showAddModal && (
+        <Modal onClick={() => setShowAddModal(false)}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <ModalTitle>Add Extra Class Request</ModalTitle>
+            <FormGroup>
+              <Label>Student</Label>
+              <Select
+                value={form.studentId}
+                onChange={(e) => setForm({ ...form, studentId: e.target.value })}
+              >
+                <option value="">Select a student</option>
+                {students.map(s => (
+                  <option key={s.id} value={s.id}>{s.name} ({s.grade})</option>
+                ))}
+              </Select>
+            </FormGroup>
+            <FormGroup>
+              <Label>Duration (minutes)</Label>
+              <Input
+                type="number"
+                min={30}
+                max={180}
+                step={30}
+                value={form.durationMin}
+                onChange={(e) => setForm({ ...form, durationMin: parseInt(e.target.value) || 60 })}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>Notes (optional)</Label>
+              <TextArea
+                value={form.notes}
+                onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                placeholder="Any specific details..."
+              />
+            </FormGroup>
+            <ButtonRow>
+              <ActionButton variant="dismiss" onClick={() => setShowAddModal(false)}>Cancel</ActionButton>
+              <ActionButton
+                variant="schedule"
+                onClick={() => {
+                  if (form.studentId) {
+                    addExtraClassRequest({ studentId: form.studentId, durationMin: form.durationMin, notes: form.notes, status: 'open' });
+                    setShowAddModal(false);
+                    setForm({ studentId: '', durationMin: 60, notes: '' });
+                  }
+                }}
+              >Save</ActionButton>
+            </ButtonRow>
+          </ModalContent>
+        </Modal>
+      )}
     </DashboardContainer>
   );
 };

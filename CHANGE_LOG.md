@@ -45,3 +45,8 @@ Planned files to modify
 - src/store/appStore.ts (add hydrateFromDB, make actions write-through to Dexie)
 - src/App.tsx (hydrate from DB on mount)
 
+Milestone M2 — Extra class reminders/flags + Today Dashboard integration (2025-09-06)
+Planned files to modify
+- src/store/appStore.ts (dedup/merge logic in addExtraClassRequest)
+- src/components/TodayDashboard.tsx (UI to add extra requests via modal; actions remain the same)
+

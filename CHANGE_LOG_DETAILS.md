@@ -93,3 +93,13 @@ Notes
 - No migrations required (v1 schema).
 - Slot size remains 30 minutes (no UI change required for M1).
 
+Milestone M2 — Extra class reminders/flags + Today Dashboard integration (2025-09-06)
+Plan and rationale (before implementation)
+- src/store/appStore.ts
+  - Enhance addExtraClassRequest to deduplicate open/snoozed requests for same student + duration.
+  - Merge notes when applicable and update updatedAt.
+- src/components/TodayDashboard.tsx
+  - Add “Add Extra Request” modal with fields: student, duration (minutes), notes.
+  - Keep Snooze (24h), Schedule (placeholder for now), and Dismiss actions.
+  - Ensure pending/snoozed requests appear prominently.
+

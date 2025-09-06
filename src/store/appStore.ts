@@ -86,6 +86,24 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   addExtraClassRequest: (requestData) => {
     const now = new Date().toISOString();
+    const existing = get().extraClassRequests.find(r => 
+      (r.status === 'open' || r.status === 'snoozed') &&
+      r.studentId === requestData.studentId &&
+      r.durationMin === requestData.durationMin
+    );
+
+    if (existing) {
+      const mergedNotes = requestData.notes
+        ? (existing.notes ? `${existing.notes}; ${requestData.notes}` : requestData.notes)
+        : existing.notes;
+      const updates: Partial<ExtraClassRequest> = { notes: mergedNotes, updatedAt: now };
+      set((state) => ({
+        extraClassRequests: state.extraClassRequests.map(r => r.id === existing.id ? { ...r, ...updates } : r)
+      }));
+      void requestsRepo.update(existing.id, updates).catch(console.error);
+      return;
+    }
+
     const request: ExtraClassRequest = {
       ...requestData,
       id: crypto.randomUUID(),
