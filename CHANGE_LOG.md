@@ -179,3 +179,13 @@ Milestone M2c — Schedule Extra flow (2025-09-06)
 Planned files to modify
 - src/components/TodayDashboard.tsx (add scheduling modal to create event and link request)
 
+Completed in 50886f8
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/components/TodayDashboard.tsx
+
+Minor update — Calendar visibility tweak (2025-09-06)
+Planned files to modify
+- src/components/WeeklyCalendar.tsx (hide canceled events on grid)
+

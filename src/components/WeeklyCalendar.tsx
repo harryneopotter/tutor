@@ -309,6 +309,7 @@ export const WeeklyCalendar: React.FC = () => {
     
     return events.filter(event => {
       if (event.deletedAt) return false;
+      if (event.canceled) return false;
       const eventStart = new Date(event.start);
       return isSameDay(eventStart, day) && 
              eventStart.getHours() === timeSlot.hour && 

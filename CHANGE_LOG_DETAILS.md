@@ -222,3 +222,12 @@ Plan and rationale (before implementation)
   - Add modal on "Schedule" to pick date, time and duration (default from request).
   - On save: create ClassEvent and update request to status=scheduled with linkedEventId.
 
+Completed in 50886f8
+- Modified: src/components/TodayDashboard.tsx (scheduling modal, event creation, request link)
+- Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
+
+Minor update — Calendar visibility tweak (2025-09-06)
+Plan and rationale (before implementation)
+- src/components/WeeklyCalendar.tsx
+  - Do not render canceled events in week grid (keep them visible in Today view with canceled status if needed).
+
