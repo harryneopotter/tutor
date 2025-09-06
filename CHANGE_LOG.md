@@ -70,3 +70,10 @@ Milestone M7 — ICS export (2025-09-06)
 Planned files to modify
 - src/components/WeeklyCalendar.tsx (Export .ics for current week)
 
+Milestone M6 — Availability Report (heatmap) (2025-09-06)
+Planned files to add
+- src/components/AvailabilityReport.tsx (weekly heatmap by slot)
+
+Planned files to modify
+- src/App.tsx (add navigation to Availability)
+

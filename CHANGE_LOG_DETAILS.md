@@ -132,3 +132,11 @@ Plan and rationale (before implementation)
   - Add "Export .ics" button to export events in the currently viewed week.
   - Generate a simple VCALENDAR with VEVENT entries (local time) and trigger download.
 
+Milestone M6 — Availability Report (heatmap) (2025-09-06)
+Plan and rationale (before implementation)
+- src/components/AvailabilityReport.tsx (new)
+  - Render a 7×N grid (Mon–Sun × 30-min slots) with color-coded occupancy per slot.
+  - Colors: light green = free (0%), darker green = partial (0–100%), pink/red = busy (100%).
+- src/App.tsx (modify)
+  - Add "Availability" nav and route to AvailabilityReport.
+
