@@ -5,6 +5,7 @@ import { TodayDashboard } from './components/TodayDashboard';
 import { WaitlistManagement } from './components/WaitlistManagement';
 import { TrashView } from './components/TrashView';
 import { AvailabilityReport } from './components/AvailabilityReport';
+import { StudentBinder } from './components/StudentBinder';
 import { useAppStore } from './store/appStore';
 
 const AppContainer = styled.div`
@@ -50,7 +51,7 @@ const SampleDataButton = styled.button`
   }
 `;
 
-type ViewType = 'calendar' | 'today' | 'waitlist' | 'trash' | 'availability';
+type ViewType = 'calendar' | 'today' | 'waitlist' | 'trash' | 'availability' | 'binder';
 
 function App() {
   const [currentView, setCurrentView] = useState<ViewType>('calendar');
@@ -76,6 +77,8 @@ function App() {
         return <TrashView />;
       case 'availability':
         return <AvailabilityReport />;
+      case 'binder':
+        return <StudentBinder />;
       default:
         return <WeeklyCalendar />;
     }
@@ -107,6 +110,12 @@ function App() {
           onClick={() => setCurrentView('availability')}
         >
           📊 Availability
+        </NavButton>
+        <NavButton 
+          active={currentView === 'binder'}
+          onClick={() => setCurrentView('binder')}
+        >
+          📚 Binder
         </NavButton>
         <NavButton 
           active={currentView === 'trash'}

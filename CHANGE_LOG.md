@@ -118,9 +118,27 @@ Planned files to add
 Planned files to modify
 - src/App.tsx (add navigation to Availability)
 
-Completed in ed2a0b9
+Milestone M5 — Student Binder (syllabus, lesson plans) (2025-09-06)
+Planned files to add
+- src/components/StudentBinder.tsx (binder UI)
+- src/repositories/binder.ts (syllabus/lesson plans CRUD)
+
+Planned files to modify
+- src/db/database.ts (add v2 with syllabusTopics, lessonPlans)
+- src/App.tsx (add navigation to Binder)
+
+Completed in 0bBINDER (placeholder)
 Modified/added files
 - CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/db/database.ts (v2 schema)
+- src/repositories/binder.ts
+- src/components/StudentBinder.tsx
+- src/App.tsx
+
+Milestone M8 — CI (build) (2025-09-06)
+Planned files to add
+- .github/workflows/ci.yml (build on push/pull_request)
 - CHANGE_LOG_DETAILS.md
 - src/components/AvailabilityReport.tsx
 - src/App.tsx

@@ -162,12 +162,28 @@ Plan and rationale (before implementation)
 - src/App.tsx (modify)
   - Add "Availability" nav and route to AvailabilityReport.
 
-Completed in ed2a0b9
-- Added: src/components/AvailabilityReport.tsx
-- Modified: src/App.tsx (nav)
+Milestone M5 — Student Binder (syllabus, lesson plans) (2025-09-06)
+Plan and rationale (before implementation)
+- src/db/database.ts (modify)
+  - Add version 2 with tables: syllabusTopics (id, studentId, month) and lessonPlans (id, studentId, date).
+- src/repositories/binder.ts (new)
+  - CRUD helpers for topics and plans: getAllByStudent, add, update, remove.
+- src/components/StudentBinder.tsx (new)
+  - UI with student picker and tabs: Syllabus and Lesson Plans with add/edit minimal forms.
+- src/App.tsx (modify)
+  - Add "Binder" nav to open StudentBinder.
+
+Completed in 0bBINDER (placeholder)
+- Modified: src/db/database.ts (v2 schema), src/App.tsx (nav)
+- Added: src/repositories/binder.ts; src/components/StudentBinder.tsx
 - Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
 
 Milestone M8 — CI (build) (2025-09-06)
+Plan and rationale (before implementation)
+- .github/workflows/ci.yml (new)
+  - Run on push and pull_request.
+  - Steps: setup Node, npm ci, npm run build (tsc && vite build).
+  - Omit lint/tests for now to avoid false negatives until configs/tests are added.
 Plan and rationale (before implementation)
 - .github/workflows/ci.yml (new)
   - Run on push and pull_request.

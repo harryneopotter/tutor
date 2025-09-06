@@ -15,6 +15,16 @@ export class TutorDB extends Dexie {
       extraRequests: 'id, studentId, status, snoozeUntil',
       waitlist: 'id, studentId, durationMin'
     });
+
+    // v2: add binder tables
+    this.version(2).stores({
+      students: 'id, name',
+      classEvents: 'id, studentId, start, end, deletedAt',
+      extraRequests: 'id, studentId, status, snoozeUntil',
+      waitlist: 'id, studentId, durationMin',
+      syllabusTopics: 'id, studentId, month',
+      lessonPlans: 'id, studentId, date'
+    });
   }
 }
 
