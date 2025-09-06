@@ -215,3 +215,11 @@ Modified/added files
 - src/utils/__tests__/ranking.test.ts
 - src/store/__tests__/extras.test.ts
 
+Milestone M9 — Event modals (view/edit and add) (2025-09-06)
+Planned files to add
+- src/components/EventModal.tsx (view/edit/confirm/cancel/delete)
+- src/components/AddEventModal.tsx (create event from slot)
+
+Planned files to modify
+- src/components/WeeklyCalendar.tsx (use modals instead of prompt; open detail modal on click)
+

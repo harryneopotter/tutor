@@ -14,6 +14,8 @@ import {
 import { useAppStore } from '../store/appStore';
 import { ClassEvent, TimeSlot } from '../types';
 import { FillSlotModal } from './FillSlotModal';
+import { EventModal } from './EventModal';
+import { AddEventModal } from './AddEventModal';
 
 const CalendarContainer = styled.div`
   display: flex;
@@ -249,6 +251,8 @@ export const WeeklyCalendar: React.FC = () => {
 
   const [showFillSlotModal, setShowFillSlotModal] = useState(false);
   const [canceledEvent, setCanceledEvent] = useState<ClassEvent | null>(null);
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [addModal, setAddModal] = useState<{ open: boolean; startISO?: string }>({ open: false });
 
   const timeSlots = generateTimeSlots();
   const weekStart = startOfWeek(currentWeek, { weekStartsOn: 1 }); // Monday
@@ -265,6 +269,7 @@ export const WeeklyCalendar: React.FC = () => {
 
   const handleEventClick = (event: ClassEvent) => {
     setSelectedEvent(event);
+    setShowEventModal(true);
   };
 
   const handleEventLongPress = (event: ClassEvent) => {
@@ -288,20 +293,7 @@ export const WeeklyCalendar: React.FC = () => {
 
   const handleSlotClick = (day: Date, timeSlot: TimeSlot) => {
     const start = setMinutes(setHours(day, timeSlot.hour), timeSlot.minute);
-    const end = setMinutes(setHours(day, timeSlot.hour), timeSlot.minute + 30);
-    
-    // For now, create a simple event - later we'll add a proper modal
-    const title = prompt('Class title:');
-    if (title) {
-      addEvent({
-        studentId: '', // Will be selected from modal
-        title,
-        start: start.toISOString(),
-        end: end.toISOString(),
-        confirmed: false,
-        canceled: false,
-      });
-    }
+    setAddModal({ open: true, startISO: start.toISOString() });
   };
 
   const getEventsForSlot = (day: Date, timeSlot: TimeSlot): ClassEvent[] => {
@@ -420,6 +412,22 @@ export const WeeklyCalendar: React.FC = () => {
           waitlistEntries={waitlist}
           onAssignSlot={handleAssignSlot}
           onSkip={handleSkipFillSlot}
+        />
+      )}
+
+      {/* Add event modal */}
+      <AddEventModal 
+        isOpen={addModal.open}
+        startISO={addModal.startISO || new Date().toISOString()}
+        onClose={() => setAddModal({ open: false })}
+      />
+
+      {/* Event detail modal */}
+      {/** Using selectedEvent from store */}
+      { (useAppStore.getState().selectedEvent) && showEventModal && (
+        <EventModal 
+          event={useAppStore.getState().selectedEvent as ClassEvent}
+          onClose={() => setShowEventModal(false)}
         />
       )}
     </CalendarContainer>

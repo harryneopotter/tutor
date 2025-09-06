@@ -253,3 +253,12 @@ Completed in 321b5c5
 - Added: vitest.config.ts, unit tests for ranking and extras
 - Updated lockfile and docs
 
+Milestone M9 — Event modals (view/edit and add) (2025-09-06)
+Plan and rationale (before implementation)
+- src/components/EventModal.tsx (new)
+  - Show title, student, times; actions: Confirm, Cancel, Delete, Save.
+- src/components/AddEventModal.tsx (new)
+  - Create event at a selected slot with title, student, duration.
+- src/components/WeeklyCalendar.tsx (modify)
+  - Replace prompt with AddEventModal; open EventModal on event click.
+
