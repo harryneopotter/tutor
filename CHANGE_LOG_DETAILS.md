@@ -113,3 +113,16 @@ Plan and rationale (before implementation)
   - Use ranking helper instead of naive slice(0,3).
   - Keep UI the same, but suggestions are better targeted.
 
+Milestone M4 — Trash (soft-delete) (2025-09-06)
+Plan and rationale (before implementation)
+- src/components/TrashView.tsx (new)
+  - List soft-deleted events with Restore button.
+  - If conflict on restore, offer reschedule to the next available 30‑min slot same day.
+- src/store/appStore.ts (modify)
+  - Add restoreEvent(id) and updateEventTimes(id, {start,end}).
+  - On hydrateFromDB(), purge events with deletedAt older than 30 days.
+- src/repositories/events.ts (modify)
+  - Add remove(id) helper for purging.
+- src/App.tsx (modify)
+  - Add "Trash" tab and routing to TrashView.
+

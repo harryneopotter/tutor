@@ -17,5 +17,8 @@ export const eventsRepo = {
   async softDelete(id: string): Promise<number> {
     const deletedAt = new Date().toISOString();
     return db.classEvents.update(id, { deletedAt });
+  },
+  async remove(id: string): Promise<void> {
+    await db.classEvents.delete(id);
   }
 };

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { WeeklyCalendar } from './components/WeeklyCalendar';
 import { TodayDashboard } from './components/TodayDashboard';
 import { WaitlistManagement } from './components/WaitlistManagement';
+import { TrashView } from './components/TrashView';
 import { useAppStore } from './store/appStore';
 
 const AppContainer = styled.div`
@@ -48,7 +49,7 @@ const SampleDataButton = styled.button`
   }
 `;
 
-type ViewType = 'calendar' | 'today' | 'waitlist';
+type ViewType = 'calendar' | 'today' | 'waitlist' | 'trash';
 
 function App() {
   const [currentView, setCurrentView] = useState<ViewType>('calendar');
@@ -70,6 +71,8 @@ function App() {
         return <TodayDashboard />;
       case 'waitlist':
         return <WaitlistManagement />;
+      case 'trash':
+        return <TrashView />;
       default:
         return <WeeklyCalendar />;
     }
@@ -95,6 +98,12 @@ function App() {
           onClick={() => setCurrentView('waitlist')}
         >
           ⏰ Waitlist
+        </NavButton>
+        <NavButton 
+          active={currentView === 'trash'}
+          onClick={() => setCurrentView('trash')}
+        >
+          🗑️ Trash
         </NavButton>
         
         {students.length === 0 && (

@@ -201,11 +201,38 @@ export const useAppStore = create<AppState>((set, get) => ({
       requestsRepo.getAll(),
       waitlistRepo.getAll(),
     ]);
+
+    // Purge events soft-deleted > 30 days ago
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 30);
+    const toPurge = events.filter(e => e.deletedAt && new Date(e.deletedAt) < cutoff);
+    if (toPurge.length > 0) {
+      await Promise.all(toPurge.map(e => eventsRepo.remove(e.id)));
+    }
+
+    const liveEvents = events.filter(e => !e.deletedAt || new Date(e.deletedAt) >= cutoff);
+
     set({
       students,
-      events,
+      events: liveEvents,
       extraClassRequests: extraRequests,
       waitlist,
     });
+  },
+
+  // Restore a soft-deleted event by clearing deletedAt
+  restoreEvent: (id: string) => {
+    set((state) => ({
+      events: state.events.map(ev => ev.id === id ? ({ ...ev, deletedAt: undefined }) : ev)
+    }));
+    void eventsRepo.update(id, { deletedAt: undefined }).catch(console.error);
+  },
+
+  // Update event time range
+  updateEventTimes: (id: string, startISO: string, endISO: string) => {
+    set((state) => ({
+      events: state.events.map(ev => ev.id === id ? ({ ...ev, start: startISO, end: endISO }) : ev)
+    }));
+    void eventsRepo.update(id, { start: startISO, end: endISO }).catch(console.error);
   },
 }));

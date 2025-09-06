@@ -57,3 +57,12 @@ Planned files to add
 Planned files to modify
 - src/components/FillSlotModal.tsx (use ranking; better suggestions)
 
+Milestone M4 — Trash (soft-delete) (2025-09-06)
+Planned files to add
+- src/components/TrashView.tsx (list, restore, and reschedule flow)
+
+Planned files to modify
+- src/store/appStore.ts (restoreEvent, updateEventTimes, purge >30d deleted)
+- src/repositories/events.ts (add remove helper)
+- src/App.tsx (add navigation to Trash view)
+
