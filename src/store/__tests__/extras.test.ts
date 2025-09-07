@@ -6,10 +6,9 @@ vi.mock('../../repositories/requests', () => ({ requestsRepo: { add: async () =>
 vi.mock('../../repositories/waitlist', () => ({ waitlistRepo: { add: async () => 'ok', addMany: async () => {}, getAll: async () => [], remove: async () => {}, removeByStudentId: async () => {} } }));
 
 // polyfill crypto.randomUUID
-(globalThis as any).crypto = (globalThis as any).crypto || {};
-(globalThis as any).crypto.randomUUID = (globalThis as any).crypto.randomUUID || (() => Math.random().toString(36).slice(2));
+vi.stubGlobal('crypto', { randomUUID: () => Math.random().toString(36).slice(2) } as any);
 
-import { useAppStore } from '../../appStore';
+import { useAppStore } from '../appStore';
 
 describe('extras dedup', () => {
   beforeEach(() => {

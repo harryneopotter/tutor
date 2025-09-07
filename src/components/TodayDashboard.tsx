@@ -312,7 +312,7 @@ export const TodayDashboard: React.FC = () => {
     updateEvent,
     updateExtraClassRequest,
     addExtraClassRequest,
-    addEvent
+    scheduleExtra
   } = useAppStore();
 
   const [showAddModal, setShowAddModal] = useState(false);
@@ -557,8 +557,7 @@ const pendingExtras = extraClassRequests.filter(request => {
                         const ok = window.confirm(`Selected time conflicts. Use next available slot at ${format(suggestion.start, 'h:mm a')}?`);
                         if (!ok) return;
                         const title = `Extra Class - ${getStudentName(studentId)}`;
-                        addEvent({ studentId, title, start: suggestion.start.toISOString(), end: suggestion.end.toISOString(), confirmed: false, canceled: false });
-                        updateExtraClassRequest(requestId, { status: 'scheduled' });
+                        scheduleExtra(requestId, { studentId, title, start: suggestion.start.toISOString(), end: suggestion.end.toISOString() });
                         setScheduleModal({ open: false });
                         return;
                       } else {
@@ -568,8 +567,7 @@ const pendingExtras = extraClassRequests.filter(request => {
                     }
 
                     const title = `Extra Class - ${getStudentName(studentId)}`;
-                    addEvent({ studentId, title, start: start.toISOString(), end: end.toISOString(), confirmed: false, canceled: false });
-                    updateExtraClassRequest(requestId, { status: 'scheduled' });
+                    scheduleExtra(requestId, { studentId, title, start: start.toISOString(), end: end.toISOString() });
                     setScheduleModal({ open: false });
                   } catch (e) {
                     console.error(e);

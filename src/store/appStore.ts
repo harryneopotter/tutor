@@ -26,6 +26,15 @@ interface AppState {
   addStudent: (student: Omit<Student, 'id'>) => void;
   addExtraClassRequest: (request: Omit<ExtraClassRequest, 'id' | 'createdAt' | 'updatedAt'>) => void;
   updateExtraClassRequest: (id: string, updates: Partial<ExtraClassRequest>) => void;
+  /**
+   * Schedule an extra class request into a concrete ClassEvent and link them.
+   * - Creates a new ClassEvent and persists it
+   * - Updates the ExtraClassRequest status to 'scheduled' and sets linkedEventId
+   */
+  scheduleExtra: (
+    requestId: string,
+    data: { studentId: string; title: string; start: string; end: string }
+  ) => void;
   addWaitlistEntry: (entry: Omit<WaitlistEntry, 'id'>) => void;
   removeWaitlistEntry: (id: string) => void;
   assignSlotFromWaitlist: (eventId: string, studentId: string, duration: number) => void;
@@ -138,6 +147,29 @@ export const useAppStore = create<AppState>((set, get) => ({
       )
     }));
     void requestsRepo.update(id, { ...updates, updatedAt: now }).catch(console.error);
+  },
+
+  scheduleExtra: (requestId, data) => {
+    const now = new Date().toISOString();
+    const event: ClassEvent = {
+      id: crypto.randomUUID(),
+      studentId: data.studentId,
+      title: data.title,
+      start: data.start,
+      end: data.end,
+      confirmed: false,
+      canceled: false,
+    };
+
+    set((state) => ({
+      events: [...state.events, event],
+      extraClassRequests: state.extraClassRequests.map(r =>
+        r.id === requestId ? { ...r, status: 'scheduled', linkedEventId: event.id, updatedAt: now } : r
+      ),
+    }));
+
+    void eventsRepo.add(event).catch(console.error);
+    void requestsRepo.update(requestId, { status: 'scheduled', linkedEventId: event.id, updatedAt: now }).catch(console.error);
   },
 
   initializeSampleData: () => {
