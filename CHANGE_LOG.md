@@ -374,3 +374,8 @@ Completed in dcd237a
 Modified/added files
 - src/utils/sampleData.ts (more students, today’s events incl. canceled/confirmed, extra requests with windows + snooze cases, waitlist windows)
 
+Minor update — Weekly sample events across Mon–Sun (2025-09-07)
+Completed in a4011f7
+Modified/added files
+- src/utils/sampleData.ts (additional events distributed across the current week at varied times)
+

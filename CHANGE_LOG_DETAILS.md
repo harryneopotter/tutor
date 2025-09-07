@@ -404,3 +404,11 @@ Completed in dcd237a
   - Waitlist entries: added windows across Mon/Tue/Sat/Wed/Sun and two new entries (wait4, wait5)
   - Rationale: richer demo data for Today Dashboard and windows-aware flows (M17)
 
+Minor update — Weekly sample events across Mon–Sun (2025-09-07)
+Completed in a4011f7
+- Modified: src/utils/sampleData.ts
+  - Added ~12 events across the current week: 2x per weekday, 1x per weekend day
+  - Times aligned to 30-minute slots to display cleanly in WeeklyCalendar
+  - Mix of confirmed/pending states and subjects, mapped to existing students
+  - Rationale: make the default Weekly Calendar more representative without manual input
+
