@@ -326,3 +326,14 @@ Planned files to modify
 - src/utils/ranking.ts (favor candidates matching slot windows)
 - src/components/FillSlotModal.tsx (pass eventStart to ranking)
 
+Completed in 900263d
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/types.ts
+- src/components/WaitlistManagement.tsx
+- src/components/TodayDashboard.tsx
+- src/store/appStore.ts
+- src/utils/ranking.ts
+- src/components/FillSlotModal.tsx
+

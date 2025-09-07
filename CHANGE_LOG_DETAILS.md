@@ -358,3 +358,9 @@ Plan and rationale (before implementation)
 - src/components/FillSlotModal.tsx (modify)
   - Pass the canceled event start time to ranking function
 
+Completed in 900263d
+- Modified: types, WaitlistManagement, TodayDashboard (windows UI)
+- Modified: store addExtraClassRequest to merge windows on dedup
+- Modified: ranking to favor window matches; FillSlotModal to pass eventStart
+- Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
+
