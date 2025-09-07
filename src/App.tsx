@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { WeeklyCalendar } from './components/WeeklyCalendar';
-import React, { Suspense, lazy, useEffect, useState } from 'react';
 const TodayDashboard = lazy(() => import('./components/TodayDashboard').then(m => ({ default: m.TodayDashboard })));
 const WaitlistManagement = lazy(() => import('./components/WaitlistManagement').then(m => ({ default: m.WaitlistManagement })));
 const TrashView = lazy(() => import('./components/TrashView').then(m => ({ default: m.TrashView })));
@@ -60,7 +59,7 @@ function App() {
 
   useEffect(() => {
     void hydrateFromDB();
-  }, []);
+  }, [hydrateFromDB]);
 
   const handleLoadSampleData = () => {
     initializeSampleData();

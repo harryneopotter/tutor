@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { format, isToday, parseISO } from 'date-fns';
 import { useAppStore } from '../store/appStore';
-import { ClassEvent, ExtraClassRequest } from '../types';
+import { ClassEvent } from '../types';
 import { hasConflict, findNextAvailableSlotSameDay } from '../utils/scheduling';
 
 const DashboardContainer = styled.div`
@@ -646,11 +646,11 @@ const pendingExtras = extraClassRequests.filter(request => {
               <ActionButton variant="dismiss" onClick={() => setShowAddModal(false)}>Cancel</ActionButton>
               <ActionButton
                 variant="schedule"
-                onClick={() => {
+onClick={() => {
                   if (form.studentId) {
-                    addExtraClassRequest({ studentId: form.studentId, durationMin: form.durationMin, notes: form.notes, status: 'open' });
+                    addExtraClassRequest({ studentId: form.studentId, durationMin: form.durationMin, notes: form.notes, status: 'open', windows: form.windows });
                     setShowAddModal(false);
-                    setForm({ studentId: '', durationMin: 60, notes: '' });
+                    setForm({ studentId: '', durationMin: 60, notes: '', windows: [] });
                   }
                 }}
               >Save</ActionButton>

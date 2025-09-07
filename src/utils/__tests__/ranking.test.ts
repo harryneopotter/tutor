@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { rankWaitlistCandidates } from '../../ranking';
+import { rankWaitlistCandidates } from '../ranking';
 
 describe('rankWaitlistCandidates', () => {
   it('sorts by closeness to duration and then by name', () => {
@@ -15,7 +15,7 @@ describe('rankWaitlistCandidates', () => {
     ];
 
     const ranked = rankWaitlistCandidates(60, entries as any, students as any);
-    expect(ranked.map(e => e.studentId)).toEqual(['a','c','b']);
+expect(ranked.map((e: any) => e.studentId)).toEqual(['a','c','b']);
   });
 });
 

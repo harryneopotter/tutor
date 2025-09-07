@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useAppStore } from '../store/appStore';
 import { binderRepo } from '../repositories/binder';
 import { LessonPlan, SyllabusTopic } from '../types';
-import { format } from 'date-fns';
 
 const Container = styled.div`
   display: flex;
@@ -33,13 +32,6 @@ const Controls = styled.div`
   align-items: center;
 `;
 
-const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
-  padding: 8px 12px;
-  border: 1px solid;
-  border-radius: 6px;
-  cursor: pointer;
-  ${p => p.variant === 'primary' ? `background:#3b82f6;border-color:#3b82f6;color:#fff;` : `background:#fff;border-color:#d1d5db;color:#374151;`}
-`;
 
 const Select = styled.select`
   padding: 8px 12px;

@@ -31,6 +31,8 @@ interface AppState {
   assignSlotFromWaitlist: (eventId: string, studentId: string, duration: number) => void;
   initializeSampleData: () => void;
   hydrateFromDB: () => Promise<void>;
+  restoreEvent: (id: string) => void;
+  updateEventTimes: (id: string, startISO: string, endISO: string) => void;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
