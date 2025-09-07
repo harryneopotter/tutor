@@ -347,3 +347,14 @@ Planned files to add
 Planned files to modify
 - .github/workflows/ci.yml (add lint step)
 
+Completed in b88a603
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- .eslintrc.cjs
+- .eslintignore
+- .github/workflows/ci.yml
+- src/utils/__tests__/ranking.windows.test.ts
+- src/store/__tests__/extras_windows.test.ts
+- lint fixes across src
+
