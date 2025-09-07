@@ -1,8 +1,9 @@
 import { Student, ClassEvent, ExtraClassRequest, WaitlistEntry } from '../types';
-import { addHours, addMinutes, startOfDay } from 'date-fns';
+import { addHours, addMinutes, startOfDay, startOfWeek, addDays } from 'date-fns';
 
 const now = new Date();
 const todayStart = startOfDay(now);
+const weekStart = startOfWeek(now, { weekStartsOn: 1 });
 
 export const sampleStudents: Student[] = [
   {
@@ -50,6 +51,7 @@ export const sampleStudents: Student[] = [
 ];
 
 export const sampleEvents: ClassEvent[] = [
+  // Today examples
   {
     id: 'evt1',
     studentId: '1',
@@ -101,6 +103,123 @@ export const sampleEvents: ClassEvent[] = [
     title: 'Evening Math',
     start: addHours(todayStart, 18.5).toISOString(), // 6:30 PM today
     end: addMinutes(addHours(todayStart, 18.5), 60).toISOString(), // 7:30 PM today
+    confirmed: true,
+    canceled: false
+  },
+
+  // Spread across the current week (Mon–Sun)
+  // Monday
+  {
+    id: 'evtMon1',
+    studentId: '1',
+    title: 'Mon Algebra Drill',
+    start: addHours(addDays(weekStart, 0), 9).toISOString(),
+    end: addMinutes(addHours(addDays(weekStart, 0), 9), 60).toISOString(),
+    confirmed: false,
+    canceled: false
+  },
+  {
+    id: 'evtMon2',
+    studentId: '4',
+    title: 'Mon Geometry Practice',
+    start: addHours(addDays(weekStart, 0), 13).toISOString(),
+    end: addMinutes(addHours(addDays(weekStart, 0), 13), 60).toISOString(),
+    confirmed: true,
+    canceled: false
+  },
+  // Tuesday
+  {
+    id: 'evtTue1',
+    studentId: '2',
+    title: 'Tue Essay Review',
+    start: addHours(addDays(weekStart, 1), 11.5).toISOString(), // 11:30
+    end: addMinutes(addHours(addDays(weekStart, 1), 11.5), 60).toISOString(),
+    confirmed: false,
+    canceled: false
+  },
+  {
+    id: 'evtTue2',
+    studentId: '6',
+    title: 'Tue Evening Math',
+    start: addHours(addDays(weekStart, 1), 19).toISOString(), // 7:00 PM
+    end: addMinutes(addHours(addDays(weekStart, 1), 19), 60).toISOString(),
+    confirmed: true,
+    canceled: false
+  },
+  // Wednesday
+  {
+    id: 'evtWed1',
+    studentId: '3',
+    title: 'Wed SAT Practice',
+    start: addHours(addDays(weekStart, 2), 15).toISOString(),
+    end: addMinutes(addHours(addDays(weekStart, 2), 15), 60).toISOString(),
+    confirmed: false,
+    canceled: false
+  },
+  {
+    id: 'evtWed2',
+    studentId: '5',
+    title: 'Wed Chem Lab Review',
+    start: addHours(addDays(weekStart, 2), 10).toISOString(),
+    end: addMinutes(addHours(addDays(weekStart, 2), 10), 60).toISOString(),
+    confirmed: false,
+    canceled: false
+  },
+  // Thursday
+  {
+    id: 'evtThu1',
+    studentId: '4',
+    title: 'Thu Geometry Basics',
+    start: addHours(addDays(weekStart, 3), 9.5).toISOString(), // 9:30
+    end: addMinutes(addHours(addDays(weekStart, 3), 9.5), 60).toISOString(),
+    confirmed: false,
+    canceled: false
+  },
+  {
+    id: 'evtThu2',
+    studentId: '7',
+    title: 'Thu Reading Comprehension',
+    start: addHours(addDays(weekStart, 3), 16).toISOString(),
+    end: addMinutes(addHours(addDays(weekStart, 3), 16), 60).toISOString(),
+    confirmed: true,
+    canceled: false
+  },
+  // Friday
+  {
+    id: 'evtFri1',
+    studentId: '1',
+    title: 'Fri Algebra Quiz Prep',
+    start: addHours(addDays(weekStart, 4), 14.5).toISOString(), // 2:30 PM
+    end: addMinutes(addHours(addDays(weekStart, 4), 14.5), 60).toISOString(),
+    confirmed: false,
+    canceled: false
+  },
+  {
+    id: 'evtFri2',
+    studentId: '2',
+    title: 'Fri Essay Outline',
+    start: addHours(addDays(weekStart, 4), 9).toISOString(),
+    end: addMinutes(addHours(addDays(weekStart, 4), 9), 60).toISOString(),
+    confirmed: true,
+    canceled: false
+  },
+  // Saturday
+  {
+    id: 'evtSat1',
+    studentId: '3',
+    title: 'Sat SAT Mock Test',
+    start: addHours(addDays(weekStart, 5), 9).toISOString(),
+    end: addMinutes(addHours(addDays(weekStart, 5), 9), 90).toISOString(),
+    confirmed: false,
+    canceled: false
+  },
+  // Sunday
+  {
+    id: 'evtSun1',
+    studentId: '7',
+    title: 'Sun Reading Workshop',
+    start: addHours(addDays(weekStart, 6), 16).toISOString(), // 4 PM
+    end: addMinutes(addHours(addDays(weekStart, 6), 16), 60).toISOString(),
     confirmed: true,
     canceled: false
   }
