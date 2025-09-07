@@ -190,7 +190,6 @@ export const WeeklyCalendar: React.FC = () => {
     events, 
     students,
     waitlist,
-    addEvent, 
     setSelectedEvent,
     deleteEvent,
     assignSlotFromWaitlist
@@ -297,8 +296,6 @@ export const WeeklyCalendar: React.FC = () => {
   };
 
   const getEventsForSlot = (day: Date, timeSlot: TimeSlot): ClassEvent[] => {
-    const slotStart = setMinutes(setHours(day, timeSlot.hour), timeSlot.minute);
-    
     return events.filter(event => {
       if (event.deletedAt) return false;
       if (event.canceled) return false;

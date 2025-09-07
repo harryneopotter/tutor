@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { startOfWeek, endOfWeek, eachDayOfInterval, setHours, setMinutes, format, isSameDay } from 'date-fns';
 import { useAppStore } from '../store/appStore';
-import { ClassEvent } from '../types';
 import { useState } from 'react';
 
 const Container = styled.div`

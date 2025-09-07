@@ -337,3 +337,13 @@ Modified/added files
 - src/utils/ranking.ts
 - src/components/FillSlotModal.tsx
 
+Milestone M18 — Lint & tests (windows logic) (2025-09-07)
+Planned files to add
+- .eslintrc.cjs (ESLint config)
+- .eslintignore
+- src/utils/__tests__/ranking.windows.test.ts
+- src/store/__tests__/extras_windows.test.ts
+
+Planned files to modify
+- .github/workflows/ci.yml (add lint step)
+

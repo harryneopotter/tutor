@@ -364,3 +364,20 @@ Completed in 900263d
 - Modified: ranking to favor window matches; FillSlotModal to pass eventStart
 - Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
 
+Milestone M18 — Lint & tests (windows logic) (2025-09-07)
+Plan and rationale (before implementation)
+- .eslintrc.cjs (new)
+  - ESLint config for TS + React hooks; overrides to relax rules in tests.
+- src/utils/__tests__/ranking.windows.test.ts (new)
+  - Verify window-aware ranking prefers matches.
+- src/store/__tests__/extras_windows.test.ts (new)
+  - Mock repos; verify windows are merged on dedup.
+- .github/workflows/ci.yml (modify)
+  - Add lint step before build/test.
+
+Completed in pending-commit
+- Added: .eslintrc.cjs, .eslintignore
+- Modified: CI workflow to run lint
+- Added tests for window ranking and windows dedup
+- Fixed lint across code (unused imports/vars, effect deps)
+

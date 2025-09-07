@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { isSameDay, parseISO, setHours, setMinutes, startOfDay, endOfDay, addMinutes, differenceInCalendarDays } from 'date-fns';
+import { isSameDay, parseISO, endOfDay, addMinutes, differenceInCalendarDays } from 'date-fns';
 import { useAppStore } from '../store/appStore';
 import { ClassEvent } from '../types';
 
@@ -72,7 +72,6 @@ function overlaps(aStart: Date, aEnd: Date, bStart: Date, bEnd: Date) {
 }
 
 function findNextAvailableSlotSameDay(targetStart: Date, durationMin: number, events: ClassEvent[]): { start: Date, end: Date } | null {
-  const dayStart = startOfDay(targetStart);
   const dayEnd = endOfDay(targetStart);
   for (let t = new Date(targetStart); t <= dayEnd; t = addMinutes(t, 30)) {
     const candidateStart = t;

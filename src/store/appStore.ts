@@ -105,8 +105,8 @@ export const useAppStore = create<AppState>((set, get) => ({
       const mergedNotes = requestData.notes
         ? (existing.notes ? `${existing.notes}; ${requestData.notes}` : requestData.notes)
         : existing.notes;
-      const mergedWindows = mergeWindows((existing as any).windows, (requestData as any).windows);
-      const updates: Partial<ExtraClassRequest> = { notes: mergedNotes, updatedAt: now, windows: mergedWindows } as any;
+      const mergedWindows = mergeWindows(existing.windows, (requestData as Omit<ExtraClassRequest, 'id' | 'createdAt' | 'updatedAt'>).windows);
+      const updates: Partial<ExtraClassRequest> = { notes: mergedNotes, updatedAt: now, windows: mergedWindows };
       set((state) => ({
         extraClassRequests: state.extraClassRequests.map(r => r.id === existing.id ? { ...r, ...updates } : r)
       }));
@@ -115,7 +115,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     }
 
     const request: ExtraClassRequest = {
-      ...(requestData as any),
+      ...requestData,
       id: crypto.randomUUID(),
       createdAt: now,
       updatedAt: now,

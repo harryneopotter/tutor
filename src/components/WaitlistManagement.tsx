@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAppStore } from '../store/appStore';
-import { WaitlistEntry } from '../types';
 
 const WaitlistContainer = styled.div`
   display: flex;
