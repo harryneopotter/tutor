@@ -369,3 +369,8 @@ Completed in d649059
 Modified/added files
 - .gitignore (add WARP.md to ignore list so WARP.md stays local-only)
 
+Minor update — Sample data expansion (2025-09-07)
+Completed in dcd237a
+Modified/added files
+- src/utils/sampleData.ts (more students, today’s events incl. canceled/confirmed, extra requests with windows + snooze cases, waitlist windows)
+

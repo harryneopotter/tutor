@@ -395,3 +395,12 @@ Completed in d649059
 - Modified: .gitignore (add WARP.md)
 - Note: Untracked WARP.md again to keep local-only guidance out of the repository.
 
+Minor update — Sample data expansion (2025-09-07)
+Completed in dcd237a
+- Modified: src/utils/sampleData.ts
+  - Added students: David Lee (id 4), Emma Thompson (5), Frank Wu (6), Grace Kim (7)
+  - Expanded today’s events: Geometry Basics (id evt4), Chemistry Review (evt5, canceled), Evening Math (evt6, confirmed)
+  - Extra requests: added windows and snooze examples (extra3 snoozed with past snoozeUntil to appear; extra5 evening windows)
+  - Waitlist entries: added windows across Mon/Tue/Sat/Wed/Sun and two new entries (wait4, wait5)
+  - Rationale: richer demo data for Today Dashboard and windows-aware flows (M17)
+
