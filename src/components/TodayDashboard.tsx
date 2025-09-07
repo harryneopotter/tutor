@@ -111,6 +111,12 @@ const ButtonRow = styled.div`
   justify-content: flex-end;
 `;
 
+const WindowRow = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 8px;
+`;
+
 const DateSubtitle = styled.p`
   font-size: 14px;
   color: #6b7280;
@@ -310,7 +316,7 @@ export const TodayDashboard: React.FC = () => {
   } = useAppStore();
 
   const [showAddModal, setShowAddModal] = useState(false);
-  const [form, setForm] = useState({ studentId: '', durationMin: 60, notes: '' });
+  const [form, setForm] = useState({ studentId: '', durationMin: 60, notes: '', windows: [] as { dow: number; start: string; end: string }[] });
 
   const [scheduleModal, setScheduleModal] = useState<{ open: boolean; requestId?: string; studentId?: string; durationMin?: number; date?: string; time?: string }>(() => ({ open: false }));
 
@@ -610,6 +616,31 @@ const pendingExtras = extraClassRequests.filter(request => {
                 onChange={(e) => setForm({ ...form, notes: e.target.value })}
                 placeholder="Any specific details..."
               />
+            </FormGroup>
+            <FormGroup>
+              <Label>Preferred windows (optional)</Label>
+              <div style={{ display: 'grid', gap: 8 }}>
+                {(form.windows || []).map((w, i) => (
+                  <WindowRow key={i}>
+                    <Select value={w.dow} onChange={e => {
+                      const v = parseInt(e.target.value);
+                      const nw = [...form.windows]; nw[i] = { ...nw[i], dow: v }; setForm({ ...form, windows: nw });
+                    }}>
+                      <option value={1}>Mon</option>
+                      <option value={2}>Tue</option>
+                      <option value={3}>Wed</option>
+                      <option value={4}>Thu</option>
+                      <option value={5}>Fri</option>
+                      <option value={6}>Sat</option>
+                      <option value={0}>Sun</option>
+                    </Select>
+                    <Input type="time" value={w.start} onChange={e => { const nw = [...form.windows]; nw[i] = { ...nw[i], start: e.target.value }; setForm({ ...form, windows: nw }); }} />
+                    <Input type="time" value={w.end} onChange={e => { const nw = [...form.windows]; nw[i] = { ...nw[i], end: e.target.value }; setForm({ ...form, windows: nw }); }} />
+                    <ActionButton variant="dismiss" onClick={() => { const nw = [...form.windows]; nw.splice(i,1); setForm({ ...form, windows: nw }); }}>Remove</ActionButton>
+                  </WindowRow>
+                ))}
+                <ActionButton variant="schedule" onClick={() => setForm({ ...form, windows: [...(form.windows||[]), { dow: 1, start: '09:00', end: '10:00' }] })}>+ Add window</ActionButton>
+              </div>
             </FormGroup>
             <ButtonRow>
               <ActionButton variant="dismiss" onClick={() => setShowAddModal(false)}>Cancel</ActionButton>

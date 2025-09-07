@@ -343,3 +343,18 @@ Completed in 823a42e
 - Modified: EventModal to edit date/time/duration and perform conflict checks with suggestions
 - Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
 
+Milestone M17 — Availability windows for extras/waitlist (2025-09-07)
+Plan and rationale (before implementation)
+- src/types.ts (modify)
+  - WaitlistEntry: add optional windows: { dow: number; start: string; end: string }[]
+- src/components/WaitlistManagement.tsx (modify)
+  - UI to add one or more weekly windows (DOW + time range)
+- src/components/TodayDashboard.tsx (modify)
+  - Add windows controls to Add Extra Request modal
+- src/store/appStore.ts (modify)
+  - In addExtraClassRequest, merge windows when deduping (union by DOW/start/end)
+- src/utils/ranking.ts (modify)
+  - Prefer waitlist entries whose windows include the canceled slot time
+- src/components/FillSlotModal.tsx (modify)
+  - Pass the canceled event start time to ranking function
+

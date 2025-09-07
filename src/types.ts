@@ -34,6 +34,7 @@ export interface WaitlistEntry {
   studentId: string;
   durationMin: number;
   notes?: string;
+  windows?: { dow: number; start: string; end: string }[];
 }
 
 export interface SyllabusTopic {

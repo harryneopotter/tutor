@@ -170,8 +170,8 @@ export const FillSlotModal: React.FC<FillSlotModalProps> = ({
   const eventEnd = parseISO(canceledEvent.end);
   const eventDuration = Math.round((eventEnd.getTime() - eventStart.getTime()) / (1000 * 60));
 
-  // Rank and get top 3 students from waitlist based on best duration fit
-  const suitableWaitlistEntries = rankWaitlistCandidates(eventDuration, waitlistEntries, availableStudents)
+  // Rank and get top 3 students from waitlist based on windows and duration fit
+  const suitableWaitlistEntries = rankWaitlistCandidates(eventDuration, waitlistEntries, availableStudents, { eventStart })
     .filter(entry => entry.durationMin <= eventDuration)
     .slice(0, 3);
 

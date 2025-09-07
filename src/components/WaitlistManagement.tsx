@@ -209,7 +209,8 @@ export const WaitlistManagement: React.FC = () => {
   const [newEntry, setNewEntry] = useState({
     studentId: '',
     durationMin: 60,
-    notes: ''
+    notes: '',
+    windows: [] as { dow: number; start: string; end: string }[]
   });
 
   const getStudentName = (studentId: string): string => {
@@ -225,7 +226,7 @@ export const WaitlistManagement: React.FC = () => {
   const handleAddEntry = () => {
     if (newEntry.studentId) {
       addWaitlistEntry(newEntry);
-      setNewEntry({ studentId: '', durationMin: 60, notes: '' });
+      setNewEntry({ studentId: '', durationMin: 60, notes: '', windows: [] });
       setShowAddModal(false);
     }
   };
@@ -302,6 +303,32 @@ export const WaitlistManagement: React.FC = () => {
                 max="180"
                 step="30"
               />
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Availability Windows (optional)</Label>
+              <div style={{ display: 'grid', gap: 8 }}>
+                {(newEntry.windows || []).map((w, i) => (
+                  <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: 8 }}>
+                    <select value={w.dow} onChange={e => {
+                      const val = parseInt(e.target.value);
+                      const win = [...newEntry.windows]; win[i] = { ...win[i], dow: val }; setNewEntry({ ...newEntry, windows: win });
+                    }}>
+                      <option value={1}>Mon</option>
+                      <option value={2}>Tue</option>
+                      <option value={3}>Wed</option>
+                      <option value={4}>Thu</option>
+                      <option value={5}>Fri</option>
+                      <option value={6}>Sat</option>
+                      <option value={0}>Sun</option>
+                    </select>
+                    <input type="time" value={w.start} onChange={e => { const win = [...newEntry.windows]; win[i] = { ...win[i], start: e.target.value }; setNewEntry({ ...newEntry, windows: win }); }} />
+                    <input type="time" value={w.end} onChange={e => { const win = [...newEntry.windows]; win[i] = { ...win[i], end: e.target.value }; setNewEntry({ ...newEntry, windows: win }); }} />
+                    <Button variant="secondary" onClick={() => { const win = [...newEntry.windows]; win.splice(i,1); setNewEntry({ ...newEntry, windows: win }); }}>Remove</Button>
+                  </div>
+                ))}
+                <Button variant="primary" onClick={() => setNewEntry({ ...newEntry, windows: [...(newEntry.windows||[]), { dow: 1, start: '09:00', end: '10:00' }] })}>+ Add window</Button>
+              </div>
             </FormGroup>
 
             <FormGroup>

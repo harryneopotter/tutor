@@ -86,6 +86,15 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   addExtraClassRequest: (requestData) => {
     const now = new Date().toISOString();
+
+    const mergeWindows = (a?: { dow: number; start: string; end: string }[], b?: { dow: number; start: string; end: string }[]) => {
+      const key = (w: { dow: number; start: string; end: string }) => `${w.dow}|${w.start}|${w.end}`;
+      const map = new Map<string, { dow: number; start: string; end: string }>();
+      (a || []).forEach(w => map.set(key(w), w));
+      (b || []).forEach(w => map.set(key(w), w));
+      return Array.from(map.values());
+    };
+
     const existing = get().extraClassRequests.find(r => 
       (r.status === 'open' || r.status === 'snoozed') &&
       r.studentId === requestData.studentId &&
@@ -96,7 +105,8 @@ export const useAppStore = create<AppState>((set, get) => ({
       const mergedNotes = requestData.notes
         ? (existing.notes ? `${existing.notes}; ${requestData.notes}` : requestData.notes)
         : existing.notes;
-      const updates: Partial<ExtraClassRequest> = { notes: mergedNotes, updatedAt: now };
+      const mergedWindows = mergeWindows((existing as any).windows, (requestData as any).windows);
+      const updates: Partial<ExtraClassRequest> = { notes: mergedNotes, updatedAt: now, windows: mergedWindows } as any;
       set((state) => ({
         extraClassRequests: state.extraClassRequests.map(r => r.id === existing.id ? { ...r, ...updates } : r)
       }));
@@ -105,7 +115,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     }
 
     const request: ExtraClassRequest = {
-      ...requestData,
+      ...(requestData as any),
       id: crypto.randomUUID(),
       createdAt: now,
       updatedAt: now,

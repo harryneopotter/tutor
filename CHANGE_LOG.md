@@ -317,3 +317,12 @@ Modified/added files
 - CHANGE_LOG_DETAILS.md
 - src/components/EventModal.tsx
 
+Milestone M17 — Availability windows for extras/waitlist (2025-09-07)
+Planned files to modify
+- src/types.ts (add windows to WaitlistEntry)
+- src/components/WaitlistManagement.tsx (capture windows)
+- src/components/TodayDashboard.tsx (capture windows in Add Extra Request)
+- src/store/appStore.ts (merge windows in dedup)
+- src/utils/ranking.ts (favor candidates matching slot windows)
+- src/components/FillSlotModal.tsx (pass eventStart to ranking)
+
