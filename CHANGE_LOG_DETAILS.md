@@ -298,3 +298,16 @@ Plan and rationale (before implementation)
 - src/components/WeeklyCalendar.tsx
   - Export ICS events with UTC timestamps (YYYYMMDDTHHMMSSZ), ensure DTSTAMP/DTSTART/DTEND are UTC to avoid DST drift across importers.
 
+Completed in 1810277
+- Modified: WeeklyCalendar.tsx (UTC format for ICS, text sanitization)
+- Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
+
+Milestone M13 — Event conflict detection & suggestions (2025-09-07)
+Plan and rationale (before implementation)
+- src/utils/scheduling.ts (new)
+  - overlaps(), minutesOverlap(), findNextAvailableSlotSameDay().
+- src/components/AddEventModal.tsx (modify)
+  - On save, if conflict, prompt to use suggested next free 30-min slot same day.
+- src/components/TodayDashboard.tsx (modify)
+  - On scheduling save, same conflict check and suggestion.
+

@@ -265,3 +265,17 @@ Milestone M12 — ICS timezone correctness (UTC) (2025-09-07)
 Planned files to modify
 - src/components/WeeklyCalendar.tsx (export ICS dates as UTC with Z)
 
+Completed in 1810277
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/components/WeeklyCalendar.tsx
+
+Milestone M13 — Event conflict detection & suggestions (2025-09-07)
+Planned files to add
+- src/utils/scheduling.ts (overlap detection and next-available search)
+
+Planned files to modify
+- src/components/AddEventModal.tsx (prevent conflicts; suggest next slot)
+- src/components/TodayDashboard.tsx (prevent conflicts in scheduling modal)
+

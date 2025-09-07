@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useAppStore } from '../store/appStore';
 import { Student } from '../types';
 import { format } from 'date-fns';
+import { findNextAvailableSlotSameDay, hasConflict } from '../utils/scheduling';
 
 const Overlay = styled.div`
   position: fixed;
@@ -114,7 +115,20 @@ export const AddEventModal: React.FC<AddEventModalProps> = ({ isOpen, startISO, 
           <Button
             variant="primary"
             onClick={() => {
-              addEvent({ studentId, title, start: start.toISOString(), end: end.toISOString(), confirmed: false, canceled: false });
+              const evts = useAppStore.getState().events;
+              if (hasConflict(start, end, evts)) {
+                const suggestion = findNextAvailableSlotSameDay(start, durationMin, evts);
+                if (suggestion) {
+                  const ok = window.confirm(`Selected time conflicts. Use next available slot at ${format(suggestion.start, 'h:mm a')}?`);
+                  if (!ok) return;
+                  addEvent({ studentId, title, start: suggestion.start.toISOString(), end: suggestion.end.toISOString(), confirmed: false, canceled: false });
+                } else {
+                  alert('No available slot today.');
+                  return;
+                }
+              } else {
+                addEvent({ studentId, title, start: start.toISOString(), end: end.toISOString(), confirmed: false, canceled: false });
+              }
               onClose();
             }}
           >

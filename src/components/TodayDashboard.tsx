@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { format, isToday, parseISO } from 'date-fns';
 import { useAppStore } from '../store/appStore';
 import { ClassEvent, ExtraClassRequest } from '../types';
+import { hasConflict, findNextAvailableSlotSameDay } from '../utils/scheduling';
 
 const DashboardContainer = styled.div`
   display: flex;
@@ -542,17 +543,27 @@ const pendingExtras = extraClassRequests.filter(request => {
                     start.setHours(h, m, 0, 0);
                     const end = new Date(start.getTime() + durationMin * 60000);
 
+                    const evts = useAppStore.getState().events;
+                    // conflict check
+                    if (hasConflict(start, end, evts)) {
+                      const suggestion = findNextAvailableSlotSameDay(start, durationMin, evts);
+                      if (suggestion) {
+                        const ok = window.confirm(`Selected time conflicts. Use next available slot at ${format(suggestion.start, 'h:mm a')}?`);
+                        if (!ok) return;
+                        const title = `Extra Class - ${getStudentName(studentId)}`;
+                        addEvent({ studentId, title, start: suggestion.start.toISOString(), end: suggestion.end.toISOString(), confirmed: false, canceled: false });
+                        updateExtraClassRequest(requestId, { status: 'scheduled' });
+                        setScheduleModal({ open: false });
+                        return;
+                      } else {
+                        alert('No available slot today.');
+                        return;
+                      }
+                    }
+
                     const title = `Extra Class - ${getStudentName(studentId)}`;
-                    // Create event
                     addEvent({ studentId, title, start: start.toISOString(), end: end.toISOString(), confirmed: false, canceled: false });
-
-                    // Try to locate event id just added
-                    const newEvent = (window as any).useAppStore?.getState?.()?.events?.find?.((ev: ClassEvent) => ev.studentId === studentId && ev.start === start.toISOString() && ev.end === end.toISOString() && ev.title === title);
-                    // Fallback: check via imported store (vite dev environment)
-                    const fallbackEvents = (require?.('../store/appStore') as any)?.useAppStore?.getState?.()?.events;
-                    const found = newEvent || (fallbackEvents ? fallbackEvents.find((ev: ClassEvent) => ev.studentId === studentId && ev.start === start.toISOString() && ev.end === end.toISOString() && ev.title === title) : undefined);
-
-                    updateExtraClassRequest(requestId, { status: 'scheduled', linkedEventId: found?.id });
+                    updateExtraClassRequest(requestId, { status: 'scheduled' });
                     setScheduleModal({ open: false });
                   } catch (e) {
                     console.error(e);
