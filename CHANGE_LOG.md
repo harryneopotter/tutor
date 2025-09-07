@@ -291,11 +291,29 @@ Milestone M14 — Availability filter (2025-09-07)
 Planned files to modify
 - src/components/AvailabilityReport.tsx (student filter in header)
 
+Completed in 823a42e
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/components/AvailabilityReport.tsx
+
 Milestone M15 — Trash days-left indicator (2025-09-07)
 Planned files to modify
 - src/components/TrashView.tsx (show days remaining until purge)
 
+Completed in 823a42e
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/components/TrashView.tsx
+
 Milestone M16 — Event time editing + conflict checks (2025-09-07)
 Planned files to modify
 - src/components/EventModal.tsx (edit date/time/duration with conflict detection)
+
+Completed in 823a42e
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/components/EventModal.tsx
 
