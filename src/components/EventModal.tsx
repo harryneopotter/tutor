@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useAppStore } from '../store/appStore';
 import { ClassEvent } from '../types';
 import { format, parseISO } from 'date-fns';
+import { hasConflict, findNextAvailableSlotSameDay } from '../utils/scheduling';
 
 const Overlay = styled.div`
   position: fixed;
@@ -75,6 +76,9 @@ export const EventModal: React.FC<EventModalProps> = ({ event, onClose }) => {
 
   const start = parseISO(event.start);
   const end = parseISO(event.end);
+  const [date, setDate] = useState<string>(format(start, 'yyyy-MM-dd'));
+  const [time, setTime] = useState<string>(format(start, 'HH:mm'));
+  const [durationMin, setDurationMin] = useState<number>(Math.max(30, Math.round((end.getTime() - start.getTime()) / 60000)));
 
   return (
     <Overlay role="dialog" aria-modal="true" aria-labelledby="event-details-title" onClick={onClose}>
@@ -94,8 +98,21 @@ export const EventModal: React.FC<EventModalProps> = ({ event, onClose }) => {
           </Select>
         </Row>
         <Row>
+          <Label>Date</Label>
+          <Input type="date" value={date} onChange={e => setDate(e.target.value)} />
+        </Row>
+        <Row>
           <Label>Time</Label>
-          <div>{format(start, 'EEE, MMM d, h:mm a')} - {format(end, 'h:mm a')}</div>
+          <Input type="time" value={time} onChange={e => setTime(e.target.value)} />
+        </Row>
+        <Row>
+          <Label>Duration</Label>
+          <Select value={durationMin} onChange={e => setDurationMin(parseInt(e.target.value))}>
+            <option value={30}>30 min</option>
+            <option value={60}>60 min</option>
+            <option value={90}>90 min</option>
+            <option value={120}>120 min</option>
+          </Select>
         </Row>
         <Row>
           <Label>Status</Label>
@@ -111,7 +128,31 @@ export const EventModal: React.FC<EventModalProps> = ({ event, onClose }) => {
           {!event.canceled && (
             <Button onClick={() => updateEvent(event.id, { canceled: true, confirmed: false })}>Cancel</Button>
           )}
-          <Button onClick={() => { updateEvent(event.id, { title, studentId }); onClose(); }} variant="primary">Save</Button>
+          <Button onClick={() => {
+            try {
+              const [h, m] = time.split(':').map(Number);
+              const newStart = new Date(date);
+              newStart.setHours(h, m, 0, 0);
+              const newEnd = new Date(newStart.getTime() + durationMin * 60000);
+              const evts = (useAppStore.getState().events).filter(e => e.id !== event.id);
+              if (hasConflict(newStart, newEnd, evts)) {
+                const suggestion = findNextAvailableSlotSameDay(newStart, durationMin, evts);
+                if (suggestion) {
+                  const ok = window.confirm(`Selected time conflicts. Use next available slot at ${format(suggestion.start, 'h:mm a')}?`);
+                  if (!ok) return;
+                  updateEvent(event.id, { title, studentId, start: suggestion.start.toISOString(), end: suggestion.end.toISOString() });
+                } else {
+                  alert('No available slot today.');
+                  return;
+                }
+              } else {
+                updateEvent(event.id, { title, studentId, start: newStart.toISOString(), end: newEnd.toISOString() });
+              }
+              onClose();
+            } catch (e) {
+              console.error(e);
+            }
+          }} variant="primary">Save</Button>
           <Button onClick={() => { deleteEvent(event.id); onClose(); }} variant="danger">Delete</Button>
           <Button onClick={onClose}>Close</Button>
         </ButtonRow>

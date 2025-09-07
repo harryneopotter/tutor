@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { isSameDay, parseISO, setHours, setMinutes, startOfDay, endOfDay, addMinutes } from 'date-fns';
+import { isSameDay, parseISO, setHours, setMinutes, startOfDay, endOfDay, addMinutes, differenceInCalendarDays } from 'date-fns';
 import { useAppStore } from '../store/appStore';
 import { ClassEvent } from '../types';
 
@@ -129,6 +129,13 @@ export const TrashView: React.FC = () => {
                 <div style={{ fontWeight: 600 }}>{ev.title}</div>
                 <div style={{ fontSize: 12, color: '#6b7280' }}>
                   {getStudentName(ev.studentId)} • {new Date(ev.start).toLocaleString()} - {new Date(ev.end).toLocaleTimeString()} 
+                </div>
+                <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 4 }}>
+                  {(() => {
+                    const daysSince = ev.deletedAt ? differenceInCalendarDays(new Date(), new Date(ev.deletedAt)) : 0;
+                    const left = Math.max(0, 30 - daysSince);
+                    return `${left} day${left === 1 ? '' : 's'} left`;
+                  })()}
                 </div>
               </Info>
               <Actions>

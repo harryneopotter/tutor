@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { startOfWeek, endOfWeek, eachDayOfInterval, setHours, setMinutes, format, isSameDay } from 'date-fns';
 import { useAppStore } from '../store/appStore';
 import { ClassEvent } from '../types';
+import { useState } from 'react';
 
 const Container = styled.div`
   display: flex;
@@ -17,6 +18,18 @@ const Header = styled.div`
   align-items: center;
   padding: 16px 24px;
   border-bottom: 1px solid #e1e5e9;
+`;
+
+const Controls = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+`;
+
+const Select = styled.select`
+  padding: 6px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
 `;
 
 const Title = styled.h2`
@@ -89,18 +102,20 @@ function minutesOverlap(aStart: Date, aEnd: Date, bStart: Date, bEnd: Date) {
 }
 
 export const AvailabilityReport: React.FC = () => {
-  const { currentWeek, events } = useAppStore();
+  const { currentWeek, events, students } = useAppStore();
+  const [studentFilter, setStudentFilter] = useState<string>('');
   const weekStart = startOfWeek(currentWeek, { weekStartsOn: 1 });
   const weekEnd = endOfWeek(currentWeek, { weekStartsOn: 1 });
   const days = eachDayOfInterval({ start: weekStart, end: weekEnd });
   const slots = generateTimeSlots();
+  const filteredEvents = studentFilter ? events.filter(e => e.studentId === studentFilter) : events;
 
   const cellLevel = (day: Date, hour: number, minute: number): 'free' | 'partial' | 'busy' => {
     const slotStart = setMinutes(setHours(day, hour), minute);
     const slotEnd = setMinutes(setHours(day, hour), minute + 30);
 
     let occupied = 0;
-    for (const ev of events) {
+    for (const ev of filteredEvents) {
       if (ev.deletedAt) continue;
       const evStart = new Date(ev.start);
       const evEnd = new Date(ev.end);
@@ -117,7 +132,15 @@ export const AvailabilityReport: React.FC = () => {
     <Container>
       <Header>
         <Title>Availability Report</Title>
-        <div>{format(weekStart, 'MMM d')} - {format(weekEnd, 'MMM d, yyyy')}</div>
+        <Controls>
+          <div>{format(weekStart, 'MMM d')} - {format(weekEnd, 'MMM d, yyyy')}</div>
+          <Select value={studentFilter} onChange={(e) => setStudentFilter(e.target.value)}>
+            <option value="">All students</option>
+            {students.map(s => (
+              <option key={s.id} value={s.id}>{s.name}</option>
+            ))}
+          </Select>
+        </Controls>
       </Header>
       <Grid>
         <TimeColumn>

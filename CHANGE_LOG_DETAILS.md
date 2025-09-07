@@ -316,3 +316,18 @@ Completed in d7686c0
 - Modified: AddEventModal and TodayDashboard scheduling flow to prevent overlaps and offer suggestions
 - Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
 
+Milestone M14 — Availability filter (2025-09-07)
+Plan and rationale (before implementation)
+- src/components/AvailabilityReport.tsx (modify)
+  - Add student selector to optionally filter heatmap to a single student’s events.
+
+Milestone M15 — Trash days-left (2025-09-07)
+Plan and rationale (before implementation)
+- src/components/TrashView.tsx (modify)
+  - Compute and display days left until 30-day purge for each item.
+
+Milestone M16 — Event time editing + conflict checks (2025-09-07)
+Plan and rationale (before implementation)
+- src/components/EventModal.tsx (modify)
+  - Allow editing start date/time and duration. On save, check for conflicts and suggest next available slot if needed.
+

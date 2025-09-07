@@ -287,3 +287,15 @@ Modified/added files
 - src/components/AddEventModal.tsx
 - src/components/TodayDashboard.tsx
 
+Milestone M14 — Availability filter (2025-09-07)
+Planned files to modify
+- src/components/AvailabilityReport.tsx (student filter in header)
+
+Milestone M15 — Trash days-left indicator (2025-09-07)
+Planned files to modify
+- src/components/TrashView.tsx (show days remaining until purge)
+
+Milestone M16 — Event time editing + conflict checks (2025-09-07)
+Planned files to modify
+- src/components/EventModal.tsx (edit date/time/duration with conflict detection)
+
