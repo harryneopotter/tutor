@@ -279,3 +279,11 @@ Planned files to modify
 - src/components/AddEventModal.tsx (prevent conflicts; suggest next slot)
 - src/components/TodayDashboard.tsx (prevent conflicts in scheduling modal)
 
+Completed in d7686c0
+Modified/added files
+- CHANGE_LOG.md
+- CHANGE_LOG_DETAILS.md
+- src/utils/scheduling.ts
+- src/components/AddEventModal.tsx
+- src/components/TodayDashboard.tsx
+

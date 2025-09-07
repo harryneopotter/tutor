@@ -311,3 +311,8 @@ Plan and rationale (before implementation)
 - src/components/TodayDashboard.tsx (modify)
   - On scheduling save, same conflict check and suggestion.
 
+Completed in d7686c0
+- Added: src/utils/scheduling.ts
+- Modified: AddEventModal and TodayDashboard scheduling flow to prevent overlaps and offer suggestions
+- Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
+
