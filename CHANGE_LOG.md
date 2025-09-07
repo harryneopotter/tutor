@@ -261,3 +261,7 @@ Modified/added files
 - src/components/TodayDashboard.tsx
 - src/components/WaitlistManagement.tsx
 
+Milestone M12 — ICS timezone correctness (UTC) (2025-09-07)
+Planned files to modify
+- src/components/WeeklyCalendar.tsx (export ICS dates as UTC with Z)
+

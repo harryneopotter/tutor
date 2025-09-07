@@ -196,15 +196,15 @@ export const WeeklyCalendar: React.FC = () => {
     assignSlotFromWaitlist
   } = useAppStore();
 
-  const formatICSDate = (d: Date) => {
+  const formatICSDateUTC = (d: Date) => {
     const pad = (n: number) => String(n).padStart(2, '0');
     return (
-      d.getFullYear().toString() +
-      pad(d.getMonth() + 1) +
-      pad(d.getDate()) + 'T' +
-      pad(d.getHours()) +
-      pad(d.getMinutes()) +
-      pad(d.getSeconds())
+      d.getUTCFullYear().toString() +
+      pad(d.getUTCMonth() + 1) +
+      pad(d.getUTCDate()) + 'T' +
+      pad(d.getUTCHours()) +
+      pad(d.getUTCMinutes()) +
+      pad(d.getUTCSeconds()) + 'Z'
     );
   };
 
@@ -220,7 +220,7 @@ export const WeeklyCalendar: React.FC = () => {
     lines.push('VERSION:2.0');
     lines.push('PRODID:-//Tutor VC//EN');
 
-    const dtstamp = formatICSDate(new Date());
+    const dtstamp = formatICSDateUTC(new Date());
 
     for (const ev of eventsInWeek) {
       const s = new Date(ev.start);
@@ -229,10 +229,10 @@ export const WeeklyCalendar: React.FC = () => {
       lines.push('BEGIN:VEVENT');
       lines.push(`UID:${ev.id}@tutor-vc`);
       lines.push(`DTSTAMP:${dtstamp}`);
-      lines.push(`DTSTART:${formatICSDate(s)}`);
-      lines.push(`DTEND:${formatICSDate(e)}`);
-      lines.push(`SUMMARY:${ev.title}`);
-      if (student) lines.push(`DESCRIPTION:Student: ${student}`);
+      lines.push(`DTSTART:${formatICSDateUTC(s)}`);
+      lines.push(`DTEND:${formatICSDateUTC(e)}`);
+      lines.push(`SUMMARY:${ev.title.replace(/\r?\n/g, ' ')}`);
+      if (student) lines.push(`DESCRIPTION:${('Student: ' + student).replace(/\r?\n/g, ' ')}`);
       lines.push('END:VEVENT');
     }
 

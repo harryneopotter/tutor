@@ -293,3 +293,8 @@ Completed in dac62fb
 - Added ARIA dialog attributes to FillSlotModal, EventModal, AddEventModal, TodayDashboard modals, Waitlist modal
 - Updated docs: CHANGE_LOG.md; CHANGE_LOG_DETAILS.md
 
+Milestone M12 — ICS timezone correctness (UTC) (2025-09-07)
+Plan and rationale (before implementation)
+- src/components/WeeklyCalendar.tsx
+  - Export ICS events with UTC timestamps (YYYYMMDDTHHMMSSZ), ensure DTSTAMP/DTSTART/DTEND are UTC to avoid DST drift across importers.
+
