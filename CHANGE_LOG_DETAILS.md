@@ -381,3 +381,17 @@ Completed in pending-commit
 - Added tests for window ranking and windows dedup
 - Fixed lint across code (unused imports/vars, effect deps)
 
+Milestone M2c — Schedule Extra flow (follow-up to link request to event) (2025-09-07)
+Rationale
+- Original M2c implementation created the event and set status=scheduled, but did not set linkedEventId.
+- This follow-up adds a store action to atomically create the event and link the request.
+
+Completed in 0268e4c
+- Modified: src/store/appStore.ts (add scheduleExtra: creates ClassEvent, updates ExtraClassRequest with status='scheduled' and linkedEventId)
+- Modified: src/components/TodayDashboard.tsx (use scheduleExtra in scheduling modal; preserves conflict suggestions)
+
+Minor update — Repo housekeeping (2025-09-07)
+Completed in d649059
+- Modified: .gitignore (add WARP.md)
+- Note: Untracked WARP.md again to keep local-only guidance out of the repository.
+

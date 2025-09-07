@@ -358,3 +358,14 @@ Modified/added files
 - src/store/__tests__/extras_windows.test.ts
 - lint fixes across src
 
+Milestone M2c — Schedule Extra flow (follow-up to link request to event) (2025-09-07)
+Completed in 0268e4c
+Modified/added files
+- src/store/appStore.ts (add scheduleExtra and linking)
+- src/components/TodayDashboard.tsx (use scheduleExtra in modal)
+
+Minor update — Repo housekeeping (2025-09-07)
+Completed in d649059
+Modified/added files
+- .gitignore (add WARP.md to ignore list so WARP.md stays local-only)
+
