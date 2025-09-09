@@ -4,47 +4,62 @@ A single-user, offline-first tutoring management application built with React, T
 
 ## Features Implemented
 
-### ✅ Weekly Calendar Dashboard
-- 30-minute time slots from 6 AM to 10 PM
-- Monday-start week navigation
-- Color-coded events (blue: tutor classes, green: student classes, red: missing info)
-- Click-to-add events functionality
-- Today highlighting
+### ✅ Weekly Calendar
+- 30-minute time slots (6 AM → 10 PM), Monday-start
+- Click-to-add classes; event details modal
+- Export .ics for current week (UTC timestamps)
+- Subtle visuals: zebra hour rows, Now Line, gentle hover
 
-### ✅ Today Dashboard
+### ✅ Today
 - Chronological list of today's classes
-- Confirm/cancel buttons for pending classes
-- Status indicators (confirmed, pending, canceled)
-- Pending extra class requests section
-- Schedule/Snooze/Dismiss actions for extra requests
+- Confirm/Cancel pending classes
+- Pending extra requests with Schedule/Snooze/Dismiss
+- Consistent Card surfaces and StatusPill
 
-### ✅ Navigation
-- Tab-based navigation between Weekly Calendar and Today Dashboard
-- Sample data loader for testing
+### ✅ Waitlist
+- Manage entries (student, duration, optional weekly windows)
+- Add/remove entries via modal
+
+### ✅ Availability Report
+- Weekly heatmap (Mon–Sun × 30-min slots), optional student filter
+
+### ✅ Binder
+- Student syllabus topics and lesson plans (Dexie persistence)
+- Export per-student ZIP (JSON bundle)
+
+### ✅ Trash
+- Soft-deleted classes list with restore and days-left indicator
+
+### ✅ Navigation & Theme
+- Top nav for Calendar, Today, Waitlist, Availability, Binder, Trash
+- Settings → Theme palettes (Indigo, Teal, Rose, Amber) and Appearance (System/Light/Dark); persists across refresh
+- Shared primitives: Button, Input, TextArea, Card, Modal, StatusPill
+- Spacing uses an 8-pt grid
 
 ## Getting Started
 
 ```bash
-# Install dependencies
-npm install
+# Install dependencies (clean)
+npm ci
 
 # Start development server
 npm run dev
 ```
 
-The application will be available at `http://localhost:3000`
+- Dev server: http://localhost:3000 (see vite.config.ts).
+- In Warp, prefer launching in a separate PowerShell window to avoid terminal hijacking:
+  ```powershell
+  Start-Process pwsh -ArgumentList '-NoExit','-Command','npm run dev' -WorkingDirectory 'E:\AI\Github\projects for git\Tutor'
+  ```
 
 ## Usage
 
-1. **Load Sample Data**: Click \"Load Sample Data\" to populate with test students and classes
-2. **Weekly Calendar**: 
-   - Navigate weeks with Previous/Next buttons
-   - Click empty time slots to add new classes
-   - Click existing events to view details
-3. **Today Dashboard**:
-   - View today's schedule
-   - Confirm or cancel pending classes
-   - Manage extra class requests
+1. Settings → choose a theme palette (Indigo/Teal/Rose/Amber)
+2. Load Sample Data (if you want demo content)
+3. Weekly Calendar: navigate weeks, click empty slots to add classes, click events for details
+4. Today: confirm/cancel, manage extra requests
+5. Waitlist: manage entries and notes/windows
+6. Binder, Availability, Trash as needed
 
 ## Technology Stack
 
@@ -55,14 +70,64 @@ The application will be available at `http://localhost:3000`
 - **date-fns** for date manipulation
 - **Dexie** for IndexedDB storage (planned)
 
-## Next Steps (Remaining MVP Features)
+## Screenshots
 
-- [ ] Waitlist & Fill-This-Slot functionality
-- [ ] Student Detail Binder (syllabus, lesson plans, files)
-- [ ] Trash/soft-delete with 30-day recovery
-- [ ] Availability Report (heatmap view)
-- [ ] ICS export functionality
-- [ ] IndexedDB integration for persistence
+> Place images in `docs/screenshots/` with the filenames below to render these previews.
+> Note: Screenshots are captured with Playwright on-demand only and are excluded from default test/build/CI.
+
+- Weekly Calendar (light)
+
+  ![Weekly Calendar (light)](docs/screenshots/calendar_light.png)
+
+- Weekly Calendar (dark)
+
+  ![Weekly Calendar (dark)](docs/screenshots/calendar_dark.png)
+
+- Today (light)
+
+  ![Today (light)](docs/screenshots/today_light.png)
+
+- Today (dark)
+
+  ![Today (dark)](docs/screenshots/today_dark.png)
+
+- Availability (light/dark)
+
+  ![Availability (light)](docs/screenshots/availability_light.png)
+
+  ![Availability (dark)](docs/screenshots/availability_dark.png)
+
+- Binder (light/dark)
+
+  ![Binder (light)](docs/screenshots/binder_light.png)
+
+  ![Binder (dark)](docs/screenshots/binder_dark.png)
+
+- Waitlist (light/dark)
+
+  ![Waitlist (light)](docs/screenshots/waitlist_light.png)
+
+  ![Waitlist (dark)](docs/screenshots/waitlist_dark.png)
+
+- Trash (light/dark)
+
+  ![Trash (light)](docs/screenshots/trash_light.png)
+
+  ![Trash (dark)](docs/screenshots/trash_dark.png)
+
+## What’s New (Visual Refresh)
+
+- Theme system + palette selector (Settings)
+- Shared UI primitives (Button/Input/TextArea/Card/Modal/StatusPill)
+- Subtle calendar visuals (zebra rows, Now Line, today tint, gentle hover)
+- Card micro-shadows (motion-safe)
+- Spacing normalized to 8-pt grid
+
+## Backlog / Next
+
+- Icon baseline alignment (complete); minor header polish as needed
+- A11y QA follow-up (axe scan/contrast quick pass)
+- README screenshots update
 
 ## Project Structure
 
@@ -103,6 +168,9 @@ The dev server runs on http://localhost:3000 (see vite.config.ts).
 - `npm run build` – Type-check then build production bundle to `dist/`
 - `npm run preview` – Preview the production build locally
 - `npm run lint` – Lint the project with ESLint
+- `npm test` – Run unit + a11y tests (Vitest + axe); uses a fake IndexedDB polyfill
+- `npm run screenshots:install` – Download Playwright browsers (on-demand)
+- `npm run screenshots` – Capture docs/screenshots/* via Playwright (on-demand)
 
 ## Build & Preview
 
@@ -123,7 +191,10 @@ Outputs to `dist/`. You can deploy the contents of `dist/` to any static hosting
 
 ## Accessibility & Performance
 
-- Accessibility: keyboard-friendly interactions, clear focus states, and color-contrast guidelines
+- Accessibility:
+  - Keyboard-friendly interactions; Settings/Waitlist modals use ARIA roles
+  - Visible focus for buttons/inputs (brand ring)
+  - Automated a11y tests with axe for key screens (Calendar, Today, Waitlist, Trash, Binder)
 - Performance: leverage Vite’s fast HMR, consider React.lazy() + dynamic import() for route- or feature-level code splitting
 - Images/assets: prefer modern formats and pre-sized assets; avoid layout shift
 

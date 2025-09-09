@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import { useAppStore } from '../store/appStore';
 import { binderRepo } from '../repositories/binder';
 import { LessonPlan, SyllabusTopic } from '../types';
+import { Input as UIInput } from '../ui/components/Input';
+import { TextArea as UITextArea } from '../ui/components/TextArea';
+import { Card as UICard } from '../ui/components/Card';
 
 const Container = styled.div`
   display: flex;
@@ -28,7 +31,7 @@ const Title = styled.h2`
 
 const Controls = styled.div`
   display: flex;
-  gap: 12px;
+  gap: 16px;
   align-items: center;
 `;
 
@@ -45,12 +48,12 @@ const Tabs = styled.div`
   padding: 0 24px;
 `;
 
-const Tab = styled.button<{ active: boolean }>`
+const Tab = styled.button<{ $active: boolean }>`
   padding: 10px 12px;
   border: none;
-  background: ${p => p.active ? '#3b82f6' : 'transparent'};
-  color: ${p => p.active ? '#ffffff' : '#374151'};
-  border-bottom: 2px solid ${p => p.active ? '#3b82f6' : 'transparent'};
+  background: ${p => p.$active ? '#3b82f6' : 'transparent'};
+  color: ${p => p.$active ? '#ffffff' : '#374151'};
+  border-bottom: 2px solid ${p => p.$active ? '#3b82f6' : 'transparent'};
   cursor: pointer;
 `;
 
@@ -63,12 +66,6 @@ const Content = styled.div`
   overflow: auto;
 `;
 
-const Card = styled.div`
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 16px;
-  background: #ffffff;
-`;
 
 const List = styled.div`
   display: flex;
@@ -80,27 +77,13 @@ const Row = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
+  padding: 8px 16px;
   background: #f9fafb;
   border: 1px solid #e5e7eb;
   border-radius: 6px;
 `;
 
-const Input = styled.input`
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-`;
 
-const TextArea = styled.textarea`
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  resize: vertical;
-  min-height: 60px;
-`;
 
 const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' }>`
   padding: 8px 12px;
@@ -155,7 +138,7 @@ export const StudentBinder: React.FC = () => {
       <Header>
         <Title>Student Binder</Title>
         <Controls>
-          <Select value={studentId} onChange={e => setStudentId(e.target.value)}>
+          <Select aria-label="Student" value={studentId} onChange={e => setStudentId(e.target.value)}>
             {students.map(s => (<option key={s.id} value={s.id}>{s.name}</option>))}
           </Select>
           <ActionButton 
@@ -194,27 +177,27 @@ export const StudentBinder: React.FC = () => {
       </Header>
 
       <Tabs>
-        <Tab active={activeTab === 'syllabus'} onClick={() => setActiveTab('syllabus')}>Syllabus</Tab>
-        <Tab active={activeTab === 'plans'} onClick={() => setActiveTab('plans')}>Lesson Plans</Tab>
+        <Tab $active={activeTab === 'syllabus'} onClick={() => setActiveTab('syllabus')}>Syllabus</Tab>
+        <Tab $active={activeTab === 'plans'} onClick={() => setActiveTab('plans')}>Lesson Plans</Tab>
       </Tabs>
 
       <Content>
         {activeTab === 'syllabus' ? (
           <>
-            <Card>
-              <h4>Add Topic</h4>
+            <UICard>
+              <h3>Add Topic</h3>
               <div style={{ display: 'grid', gap: 8 }}>
-                <Input placeholder="Month (e.g., Sep)" value={topicForm.month} onChange={e => setTopicForm({ ...topicForm, month: e.target.value })} />
-                <Input placeholder="Topic" value={topicForm.topic} onChange={e => setTopicForm({ ...topicForm, topic: e.target.value })} />
-                <Input placeholder="Page (optional)" value={topicForm.page} onChange={e => setTopicForm({ ...topicForm, page: e.target.value })} />
+                <UIInput placeholder="Month (e.g., Sep)" value={topicForm.month} onChange={e => setTopicForm({ ...topicForm, month: e.target.value })} />
+                <UIInput placeholder="Topic" value={topicForm.topic} onChange={e => setTopicForm({ ...topicForm, topic: e.target.value })} />
+                <UIInput placeholder="Page (optional)" value={topicForm.page} onChange={e => setTopicForm({ ...topicForm, page: e.target.value })} />
                 <ActionButton 
                   variant="primary"
                   onClick={() => { if (topicForm.month && topicForm.topic) { addTopic({ month: topicForm.month, topic: topicForm.topic, page: topicForm.page || undefined }); setTopicForm({ month: '', topic: '', page: '' }); } }}
                 >Add</ActionButton>
               </div>
-            </Card>
-            <Card>
-              <h4>Topics</h4>
+              </UICard>
+              <UICard>
+                <h3>Topics</h3>
               <List>
                 {syllabus.map(t => (
                   <Row key={t.id}>
@@ -222,26 +205,26 @@ export const StudentBinder: React.FC = () => {
                   </Row>
                 ))}
               </List>
-            </Card>
-          </>
+              </UICard>
+            </>
         ) : (
           <>
-            <Card>
-              <h4>Add Lesson Plan</h4>
+            <UICard>
+              <h3>Add Lesson Plan</h3>
               <div style={{ display: 'grid', gap: 8 }}>
-                <Input placeholder="Topic" value={planForm.topic} onChange={e => setPlanForm({ ...planForm, topic: e.target.value })} />
-                <Input placeholder="Date (YYYY-MM-DD)" value={planForm.date} onChange={e => setPlanForm({ ...planForm, date: e.target.value })} />
-                <Input type="number" min={30} step={30} placeholder="Duration (min)" value={planForm.durationMin} onChange={e => setPlanForm({ ...planForm, durationMin: parseInt(e.target.value) || 60 })} />
-                <Input placeholder="Resources (comma separated URLs)" value={planForm.resources} onChange={e => setPlanForm({ ...planForm, resources: e.target.value })} />
-                <TextArea placeholder="Notes" value={planForm.notes} onChange={e => setPlanForm({ ...planForm, notes: e.target.value })} />
+                <UIInput placeholder="Topic" value={planForm.topic} onChange={e => setPlanForm({ ...planForm, topic: e.target.value })} />
+                <UIInput placeholder="Date (YYYY-MM-DD)" value={planForm.date} onChange={e => setPlanForm({ ...planForm, date: e.target.value })} />
+                <UIInput type="number" min={30} step={30} placeholder="Duration (min)" value={planForm.durationMin} onChange={e => setPlanForm({ ...planForm, durationMin: parseInt(e.target.value) || 60 })} />
+                <UIInput placeholder="Resources (comma separated URLs)" value={planForm.resources} onChange={e => setPlanForm({ ...planForm, resources: e.target.value })} />
+                <UITextArea placeholder="Notes" value={planForm.notes} onChange={e => setPlanForm({ ...planForm, notes: e.target.value })} rows={3} />
                 <ActionButton 
                   variant="primary"
                   onClick={() => { if (planForm.topic && planForm.date) { addPlan({ topic: planForm.topic, date: planForm.date, durationMin: planForm.durationMin, resources: planForm.resources ? planForm.resources.split(',').map(s => s.trim()) : undefined, notes: planForm.notes || undefined }); setPlanForm({ topic: '', date: '', durationMin: 60, resources: '', notes: '' }); } }}
                 >Add</ActionButton>
               </div>
-            </Card>
-            <Card>
-              <h4>Lesson Plans</h4>
+              </UICard>
+              <UICard>
+                <h3>Lesson Plans</h3>
               <List>
                 {plans.map(p => (
                   <Row key={p.id}>
@@ -252,8 +235,8 @@ export const StudentBinder: React.FC = () => {
                   </Row>
                 ))}
               </List>
-            </Card>
-          </>
+              </UICard>
+            </>
         )}
       </Content>
     </Container>

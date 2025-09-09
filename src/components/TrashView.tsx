@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { isSameDay, parseISO, endOfDay, addMinutes, differenceInCalendarDays } from 'date-fns';
 import { useAppStore } from '../store/appStore';
 import { ClassEvent } from '../types';
+import { Button as UIButton } from '../ui/components/Button';
+import { Card as UICard } from '../ui/components/Card';
 
 const Container = styled.div`
   display: flex;
@@ -34,15 +36,13 @@ const Content = styled.div`
   overflow-y: auto;
 `;
 
-const Card = styled.div`
+const CardRow = styled(UICard)`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
   background: #f8fafc;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 `;
 
 const Info = styled.div`
@@ -54,18 +54,6 @@ const Actions = styled.div`
   gap: 8px;
 `;
 
-const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
-  padding: 8px 12px;
-  border: 1px solid;
-  border-radius: 6px;
-  font-size: 12px;
-  cursor: pointer;
-  ${p => p.variant === 'primary' ? `
-    background: #10b981; border-color: #10b981; color: white; &:hover { background: #059669; }
-  ` : `
-    background: white; border-color: #d1d5db; color: #374151; &:hover { background: #f9fafb; }
-  `}
-`;
 
 function overlaps(aStart: Date, aEnd: Date, bStart: Date, bEnd: Date) {
   return aStart < bEnd && bStart < aEnd;
@@ -123,7 +111,7 @@ export const TrashView: React.FC = () => {
           <div style={{ color: '#6b7280' }}>No deleted classes in the last 30 days.</div>
         ) : (
           trashed.map(ev => (
-            <Card key={ev.id}>
+            <CardRow key={ev.id}>
               <Info>
                 <div style={{ fontWeight: 600 }}>{ev.title}</div>
                 <div style={{ fontSize: 12, color: '#6b7280' }}>
@@ -138,9 +126,9 @@ export const TrashView: React.FC = () => {
                 </div>
               </Info>
               <Actions>
-                <Button onClick={() => tryRestore(ev)} variant="primary">Restore</Button>
+                <UIButton onClick={() => tryRestore(ev)} variant="success" size="sm">Restore</UIButton>
               </Actions>
-            </Card>
+            </CardRow>
           ))
         )}
       </Content>

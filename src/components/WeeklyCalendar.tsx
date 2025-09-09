@@ -16,6 +16,7 @@ import { ClassEvent, TimeSlot } from '../types';
 import { FillSlotModal } from './FillSlotModal';
 import { EventModal } from './EventModal';
 import { AddEventModal } from './AddEventModal';
+import { Button as UIButton } from '../ui/components/Button';
 
 const CalendarContainer = styled.div`
   display: flex;
@@ -40,19 +41,6 @@ const HeaderActions = styled.div`
   align-items: center;
 `;
 
-const ExportButton = styled.button`
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background: #ffffff;
-  color: #374151;
-  cursor: pointer;
-  font-size: 14px;
-  
-  &:hover {
-    background: #f9fafb;
-  }
-`;
 
 const WeekNavigation = styled.div`
   display: flex;
@@ -60,19 +48,6 @@ const WeekNavigation = styled.div`
   gap: 16px;
 `;
 
-const NavButton = styled.button`
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background: #ffffff;
-  color: #374151;
-  cursor: pointer;
-  font-size: 14px;
-  
-  &:hover {
-    background: #f9fafb;
-  }
-`;
 
 const WeekTitle = styled.h2`
   font-size: 18px;
@@ -109,13 +84,23 @@ const DayColumn = styled.div`
   min-width: 120px;
 `;
 
-const DayHeader = styled.div<{ isToday: boolean }>`
+const NowLine = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #ef4444;
+  z-index: 2;
+  pointer-events: none;
+`;
+
+const DayHeader = styled.div<{ $isToday: boolean }>`
   height: 60px;
   padding: 8px 12px;
-  border-bottom: 2px solid ${props => props.isToday ? '#3b82f6' : '#e5e7eb'};
-  background: ${props => props.isToday ? '#eff6ff' : '#ffffff'};
+  border-bottom: 2px solid ${props => props.$isToday ? '#3b82f6' : '#e5e7eb'};
+  background: ${props => props.$isToday ? '#eff6ff' : '#ffffff'};
   font-weight: 600;
-  color: ${props => props.isToday ? '#1d4ed8' : '#374151'};
+  color: ${props => props.$isToday ? '#1d4ed8' : '#374151'};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -139,7 +124,7 @@ const TimeSlotCell = styled.div`
   cursor: pointer;
   
   &:hover {
-    background: #f3f4f6;
+    background: #f1f5f9;
   }
 `;
 
@@ -317,12 +302,12 @@ export const WeeklyCalendar: React.FC = () => {
       <Header>
         <WeekTitle>Weekly Calendar</WeekTitle>
         <WeekNavigation>
-          <NavButton onClick={goToPreviousWeek}>← Previous</NavButton>
+          <UIButton variant="secondary" size="sm" onClick={goToPreviousWeek}>← Previous</UIButton>
           <span>{format(weekStart, 'MMM d')} - {format(weekEnd, 'MMM d, yyyy')}</span>
-          <NavButton onClick={goToNextWeek}>Next →</NavButton>
+          <UIButton variant="secondary" size="sm" onClick={goToNextWeek}>Next →</UIButton>
         </WeekNavigation>
         <HeaderActions>
-          <ExportButton onClick={handleExportICS}>Export .ics</ExportButton>
+          <UIButton variant="secondary" size="sm" onClick={handleExportICS}>Export .ics</UIButton>
         </HeaderActions>
       </Header>
 
@@ -340,18 +325,40 @@ export const WeeklyCalendar: React.FC = () => {
         {/* Day columns */}
         {weekDays.map((day, dayIndex) => (
           <DayColumn key={dayIndex}>
-            <DayHeader isToday={isSameDay(day, new Date())}>
+            <DayHeader $isToday={isSameDay(day, new Date())}>
               <DayName>{format(day, 'EEE')}</DayName>
               <DayNumber>{format(day, 'd')}</DayNumber>
             </DayHeader>
-            
+
+            {(() => {
+              const now = new Date();
+              if (isSameDay(day, now)) {
+                const startHour = 6;
+                const endHour = 22;
+                const h = now.getHours();
+                const m = now.getMinutes();
+                if (h >= startHour && h <= endHour) {
+                  const totalMinutes = (h - startHour) * 60 + m;
+                  const top = 60 + totalMinutes * 2;
+                  return <NowLine style={{ top }} />;
+                }
+              }
+              return null;
+            })()}
+
             {timeSlots.map((slot, slotIndex) => {
               const eventsInSlot = getEventsForSlot(day, slot);
+              const zebra = slot.hour % 2 === 1;
+              const todayCol = isSameDay(day, new Date());
+              const background = todayCol
+                ? (zebra ? '#EEF2FF' : '#F8FAFF')
+                : (zebra ? '#F3F6FB' : undefined);
               
               return (
                 <TimeSlotCell 
                   key={slotIndex}
                   onClick={() => handleSlotClick(day, slot)}
+                  style={background ? { background } : undefined}
                 >
                   {eventsInSlot.map((event, eventIndex) => {
                     let longPressTimer: NodeJS.Timeout;

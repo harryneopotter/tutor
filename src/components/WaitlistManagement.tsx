@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAppStore } from '../store/appStore';
+import { Button as UIButton } from '../ui/components/Button';
+import { Modal as UIModal } from '../ui/components/Modal';
+import { Input as UIInput } from '../ui/components/Input';
+import { TextArea as UITextArea } from '../ui/components/TextArea';
 
 const WaitlistContainer = styled.div`
   display: flex;
@@ -26,20 +30,6 @@ const Title = styled.h2`
   margin: 0;
 `;
 
-const AddButton = styled.button`
-  padding: 8px 16px;
-  background: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  
-  &:hover {
-    background: #2563eb;
-  }
-`;
 
 const Content = styled.div`
   flex: 1;
@@ -49,7 +39,7 @@ const Content = styled.div`
 
 const WaitlistGrid = styled.div`
   display: grid;
-  gap: 12px;
+  gap: 16px;
 `;
 
 const WaitlistCard = styled.div`
@@ -88,19 +78,6 @@ const Duration = styled.div`
   margin: 0 12px;
 `;
 
-const RemoveButton = styled.button`
-  padding: 4px 8px;
-  background: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 12px;
-  cursor: pointer;
-  
-  &:hover {
-    background: #dc2626;
-  }
-`;
 
 const EmptyState = styled.div`
   text-align: center;
@@ -108,33 +85,6 @@ const EmptyState = styled.div`
   color: #6b7280;
 `;
 
-const Modal = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-`;
-
-const ModalContent = styled.div`
-  background: white;
-  border-radius: 8px;
-  padding: 24px;
-  max-width: 400px;
-  width: 90%;
-`;
-
-const ModalTitle = styled.h3`
-  font-size: 16px;
-  font-weight: 600;
-  color: #111827;
-  margin: 0 0 16px 0;
-`;
 
 const FormGroup = styled.div`
   margin-bottom: 16px;
@@ -156,51 +106,9 @@ const Select = styled.select`
   font-size: 14px;
 `;
 
-const Input = styled.input`
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 14px;
-`;
 
-const TextArea = styled.textarea`
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 14px;
-  resize: vertical;
-  min-height: 60px;
-`;
 
-const ButtonGroup = styled.div`
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-  margin-top: 24px;
-`;
 
-const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
-  padding: 8px 16px;
-  border: 1px solid;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  
-  ${props => props.variant === 'primary' ? `
-    background: #3b82f6;
-    border-color: #3b82f6;
-    color: white;
-    &:hover { background: #2563eb; }
-  ` : `
-    background: white;
-    border-color: #d1d5db;
-    color: #374151;
-    &:hover { background: #f9fafb; }
-  `}
-`;
 
 export const WaitlistManagement: React.FC = () => {
   const { students, waitlist, addWaitlistEntry, removeWaitlistEntry } = useAppStore();
@@ -238,9 +146,9 @@ export const WaitlistManagement: React.FC = () => {
     <WaitlistContainer>
       <Header>
         <Title>Waitlist Management</Title>
-        <AddButton onClick={() => setShowAddModal(true)}>
+        <UIButton variant="primary" onClick={() => setShowAddModal(true)}>
           + Add Student
-        </AddButton>
+        </UIButton>
       </Header>
 
       <Content>
@@ -261,95 +169,91 @@ export const WaitlistManagement: React.FC = () => {
                   </StudentDetails>
                 </StudentInfo>
                 <Duration>{entry.durationMin} min</Duration>
-                <RemoveButton onClick={() => handleRemoveEntry(entry.id)}>
+                <UIButton variant="danger" size="sm" onClick={() => handleRemoveEntry(entry.id)}>
                   Remove
-                </RemoveButton>
+                </UIButton>
               </WaitlistCard>
             ))}
           </WaitlistGrid>
         )}
       </Content>
 
-      {showAddModal && (
-        <Modal role="dialog" aria-modal="true" aria-labelledby="add-waitlist-title" onClick={() => setShowAddModal(false)}>
-          <ModalContent onClick={(e) => e.stopPropagation()}>
-            <ModalTitle id="add-waitlist-title">Add Student to Waitlist</ModalTitle>
-            
-            <FormGroup>
-              <Label>Student</Label>
-              <Select
-                value={newEntry.studentId}
-                onChange={(e) => setNewEntry({...newEntry, studentId: e.target.value})}
-              >
-                <option value="">Select a student</option>
-                {students
-                  .filter(student => !waitlist.some(entry => entry.studentId === student.id))
-                  .map(student => (
-                    <option key={student.id} value={student.id}>
-                      {student.name} ({student.grade})
-                    </option>
-                  ))}
-              </Select>
-            </FormGroup>
+      <UIModal
+        open={showAddModal}
+        title="Add Student to Waitlist"
+        onClose={() => setShowAddModal(false)}
+        footer={
+          <>
+            <UIButton variant="secondary" onClick={() => setShowAddModal(false)}>Cancel</UIButton>
+            <UIButton variant="primary" onClick={handleAddEntry}>Add to Waitlist</UIButton>
+          </>
+        }
+      >
+        <FormGroup>
+          <Label>Student</Label>
+          <Select
+            value={newEntry.studentId}
+            onChange={(e) => setNewEntry({...newEntry, studentId: e.target.value})}
+          >
+            <option value="">Select a student</option>
+            {students
+              .filter(student => !waitlist.some(entry => entry.studentId === student.id))
+              .map(student => (
+                <option key={student.id} value={student.id}>
+                  {student.name} ({student.grade})
+                </option>
+              ))}
+          </Select>
+        </FormGroup>
 
-            <FormGroup>
-              <Label>Preferred Duration (minutes)</Label>
-              <Input
-                type="number"
-                value={newEntry.durationMin}
-                onChange={(e) => setNewEntry({...newEntry, durationMin: parseInt(e.target.value) || 60})}
-                min="30"
-                max="180"
-                step="30"
-              />
-            </FormGroup>
+        <FormGroup>
+          <Label>Preferred Duration (minutes)</Label>
+          <UIInput
+            type="number"
+            value={newEntry.durationMin}
+            onChange={(e) => setNewEntry({...newEntry, durationMin: parseInt(e.target.value) || 60})}
+            min={30}
+            max={180}
+            step={30}
+          />
+        </FormGroup>
 
-            <FormGroup>
-              <Label>Availability Windows (optional)</Label>
-              <div style={{ display: 'grid', gap: 8 }}>
-                {(newEntry.windows || []).map((w, i) => (
-                  <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: 8 }}>
-                    <select value={w.dow} onChange={e => {
-                      const val = parseInt(e.target.value);
-                      const win = [...newEntry.windows]; win[i] = { ...win[i], dow: val }; setNewEntry({ ...newEntry, windows: win });
-                    }}>
-                      <option value={1}>Mon</option>
-                      <option value={2}>Tue</option>
-                      <option value={3}>Wed</option>
-                      <option value={4}>Thu</option>
-                      <option value={5}>Fri</option>
-                      <option value={6}>Sat</option>
-                      <option value={0}>Sun</option>
-                    </select>
-                    <input type="time" value={w.start} onChange={e => { const win = [...newEntry.windows]; win[i] = { ...win[i], start: e.target.value }; setNewEntry({ ...newEntry, windows: win }); }} />
-                    <input type="time" value={w.end} onChange={e => { const win = [...newEntry.windows]; win[i] = { ...win[i], end: e.target.value }; setNewEntry({ ...newEntry, windows: win }); }} />
-                    <Button variant="secondary" onClick={() => { const win = [...newEntry.windows]; win.splice(i,1); setNewEntry({ ...newEntry, windows: win }); }}>Remove</Button>
-                  </div>
-                ))}
-                <Button variant="primary" onClick={() => setNewEntry({ ...newEntry, windows: [...(newEntry.windows||[]), { dow: 1, start: '09:00', end: '10:00' }] })}>+ Add window</Button>
+        <FormGroup>
+          <Label>Availability Windows (optional)</Label>
+          <div style={{ display: 'grid', gap: 8 }}>
+            {(newEntry.windows || []).map((w, i) => (
+              <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: 8 }}>
+                <select value={w.dow} onChange={e => {
+                  const val = parseInt(e.target.value);
+                  const win = [...newEntry.windows]; win[i] = { ...win[i], dow: val }; setNewEntry({ ...newEntry, windows: win });
+                }}>
+                  <option value={1}>Mon</option>
+                  <option value={2}>Tue</option>
+                  <option value={3}>Wed</option>
+                  <option value={4}>Thu</option>
+                  <option value={5}>Fri</option>
+                  <option value={6}>Sat</option>
+                  <option value={0}>Sun</option>
+                </select>
+                <input type="time" value={w.start} onChange={e => { const win = [...newEntry.windows]; win[i] = { ...win[i], start: e.target.value }; setNewEntry({ ...newEntry, windows: win }); }} />
+                <input type="time" value={w.end} onChange={e => { const win = [...newEntry.windows]; win[i] = { ...win[i], end: e.target.value }; setNewEntry({ ...newEntry, windows: win }); }} />
+                <UIButton variant="secondary" size="sm" onClick={() => { const win = [...newEntry.windows]; win.splice(i,1); setNewEntry({ ...newEntry, windows: win }); }}>Remove</UIButton>
               </div>
-            </FormGroup>
+            ))}
+            <UIButton variant="primary" onClick={() => setNewEntry({ ...newEntry, windows: [...(newEntry.windows||[]), { dow: 1, start: '09:00', end: '10:00' }] })}>+ Add window</UIButton>
+          </div>
+        </FormGroup>
 
-            <FormGroup>
-              <Label>Notes (optional)</Label>
-              <TextArea
-                value={newEntry.notes}
-                onChange={(e) => setNewEntry({...newEntry, notes: e.target.value})}
-                placeholder="Any specific preferences or notes..."
-              />
-            </FormGroup>
-
-            <ButtonGroup>
-              <Button variant="secondary" onClick={() => setShowAddModal(false)}>
-                Cancel
-              </Button>
-              <Button variant="primary" onClick={handleAddEntry}>
-                Add to Waitlist
-              </Button>
-            </ButtonGroup>
-          </ModalContent>
-        </Modal>
-      )}
+        <FormGroup>
+          <Label>Notes (optional)</Label>
+          <UITextArea
+            value={newEntry.notes}
+            onChange={(e) => setNewEntry({...newEntry, notes: e.target.value})}
+            placeholder="Any specific preferences or notes..."
+            rows={3}
+          />
+        </FormGroup>
+      </UIModal>
     </WaitlistContainer>
   );
 };

@@ -4,6 +4,11 @@ import { format, isToday, parseISO } from 'date-fns';
 import { useAppStore } from '../store/appStore';
 import { ClassEvent } from '../types';
 import { hasConflict, findNextAvailableSlotSameDay } from '../utils/scheduling';
+import { StatusPill } from '../ui/components/StatusPill';
+import { Input as UIInput } from '../ui/components/Input';
+import { TextArea as UITextArea } from '../ui/components/TextArea';
+import { Modal as UIModal } from '../ui/components/Modal';
+import { Card as UICard } from '../ui/components/Card';
 
 const DashboardContainer = styled.div`
   display: flex;
@@ -42,30 +47,6 @@ const AddButton = styled.button`
   &:hover { background: #2563eb; }
 `;
 
-const Modal = styled.div`
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-`;
-
-const ModalContent = styled.div`
-  background: white;
-  border-radius: 8px;
-  padding: 24px;
-  max-width: 420px;
-  width: 90%;
-`;
-
-const ModalTitle = styled.h3`
-  font-size: 16px;
-  font-weight: 600;
-  color: #111827;
-  margin: 0 0 16px 0;
-`;
 
 const FormGroup = styled.div`
   margin-bottom: 16px;
@@ -83,33 +64,11 @@ const Select = styled.select`
   width: 100%;
   padding: 8px 12px;
   border: 1px solid #d1d5db;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 14px;
 `;
 
-const Input = styled.input`
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 14px;
-`;
 
-const TextArea = styled.textarea`
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 14px;
-  resize: vertical;
-  min-height: 60px;
-`;
-
-const ButtonRow = styled.div`
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-`;
 
 const WindowRow = styled.div`
   display: grid;
@@ -146,32 +105,39 @@ const SectionTitle = styled.h3`
 const ClassList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 `;
 
-const ClassItem = styled.div<{ status: 'confirmed' | 'pending' | 'canceled' }>`
+const ClassItem = styled(UICard)<{ status: 'confirmed' | 'pending' | 'canceled' }>`
   display: flex;
-  justify-content: between;
+  justify-content: space-between;
   align-items: center;
   padding: 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
   background: ${props => {
     switch (props.status) {
       case 'confirmed': return '#f0fdf4';
-      case 'pending': return '#fefce8';
+      case 'pending': return '#fffbeb';
       case 'canceled': return '#fef2f2';
-      default: return '#ffffff';
+      default: return 'white';
     }
   }};
-  border-left: 4px solid ${props => {
-    switch (props.status) {
-      case 'confirmed': return '#10b981';
-      case 'pending': return '#f59e0b';
-      case 'canceled': return '#ef4444';
-      default: return '#e5e7eb';
-    }
-  }};
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: ${props => {
+      switch (props.status) {
+        case 'confirmed': return '#10b981';
+        case 'pending': return '#f59e0b';
+        case 'canceled': return '#ef4444';
+        default: return '#e5e7eb';
+      }
+    }};
+    border-top-left-radius: inherit;
+    border-bottom-left-radius: inherit;
+  }
 `;
 
 const ClassInfo = styled.div`
@@ -250,47 +216,23 @@ const ActionButton = styled.button<{ variant: 'confirm' | 'cancel' | 'schedule' 
   }}
 `;
 
-const StatusBadge = styled.span<{ status: 'confirmed' | 'pending' | 'canceled' }>`
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  ${props => {
-    switch (props.status) {
-      case 'confirmed':
-        return `
-          background: #d1fae5;
-          color: #065f46;
-        `;
-      case 'pending':
-        return `
-          background: #fef3c7;
-          color: #92400e;
-        `;
-      case 'canceled':
-        return `
-          background: #fecaca;
-          color: #991b1b;
-        `;
-      default:
-        return `
-          background: #f3f4f6;
-          color: #374151;
-        `;
-    }
-  }}
-`;
 
-const ExtraRequestItem = styled.div`
+const ExtraRequestItem = styled(UICard)`
   display: flex;
-  justify-content: between;
+  justify-content: space-between;
   align-items: center;
   padding: 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
   background: #f8fafc;
-  border-left: 4px solid #3b82f6;
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: #3b82f6;
+    border-top-left-radius: inherit;
+    border-bottom-left-radius: inherit;
+  }
 `;
 
 const EmptyState = styled.div`
@@ -421,9 +363,7 @@ const pendingExtras = extraClassRequests.filter(request => {
                     <ClassInfo>
                       <ClassTitle>
                         {event.title}
-                        <StatusBadge status={status} style={{ marginLeft: 8 }}>
-                          {status}
-                        </StatusBadge>
+                        <StatusPill status={status} style={{ marginLeft: 8 }} />
                       </ClassTitle>
                       <ClassDetails>
                         {getStudentName(event.studentId)} • {startTime} - {endTime}
@@ -512,150 +452,152 @@ const pendingExtras = extraClassRequests.filter(request => {
         </Section>
       </Content>
 
-      {scheduleModal.open && (
-        <Modal role="dialog" aria-modal="true" aria-labelledby="schedule-extra-title" onClick={() => setScheduleModal({ open: false })}>
-          <ModalContent onClick={(e) => e.stopPropagation()}>
-            <ModalTitle id="schedule-extra-title">Schedule Extra Class</ModalTitle>
-            <FormGroup>
-              <Label>Student</Label>
-              <Select disabled value={scheduleModal.studentId}>
-                <option>
-                  {getStudentName(scheduleModal.studentId || '')}
-                </option>
-              </Select>
-            </FormGroup>
-            <FormGroup>
-              <Label>Date</Label>
-              <Input type="date" value={scheduleModal.date || ''} onChange={(e) => setScheduleModal({ ...scheduleModal, date: e.target.value })} />
-            </FormGroup>
-            <FormGroup>
-              <Label>Time</Label>
-              <Input type="time" value={scheduleModal.time || ''} onChange={(e) => setScheduleModal({ ...scheduleModal, time: e.target.value })} />
-            </FormGroup>
-            <FormGroup>
-              <Label>Duration (minutes)</Label>
-              <Input type="number" min={30} step={30} value={scheduleModal.durationMin || 60} onChange={(e) => setScheduleModal({ ...scheduleModal, durationMin: parseInt(e.target.value) || 60 })} />
-            </FormGroup>
-            <ButtonRow>
-              <ActionButton variant="dismiss" onClick={() => setScheduleModal({ open: false })}>Cancel</ActionButton>
-              <ActionButton
-                variant="schedule"
-                onClick={() => {
-                  try {
-                    const { requestId, studentId, durationMin, date, time } = scheduleModal;
-                    if (!requestId || !studentId || !date || !time || !durationMin) return;
-                    const [h, m] = time.split(':').map(Number);
-                    const start = new Date(date);
-                    start.setHours(h, m, 0, 0);
-                    const end = new Date(start.getTime() + durationMin * 60000);
+      <UIModal
+        open={scheduleModal.open}
+        title="Schedule Extra Class"
+        onClose={() => setScheduleModal({ open: false })}
+        footer={
+          <>
+            <ActionButton variant="dismiss" onClick={() => setScheduleModal({ open: false })}>Cancel</ActionButton>
+            <ActionButton
+              variant="schedule"
+              onClick={() => {
+                try {
+                  const { requestId, studentId, durationMin, date, time } = scheduleModal;
+                  if (!requestId || !studentId || !date || !time || !durationMin) return;
+                  const [h, m] = time.split(':').map(Number);
+                  const start = new Date(date);
+                  start.setHours(h, m, 0, 0);
+                  const end = new Date(start.getTime() + durationMin * 60000);
 
-                    const evts = useAppStore.getState().events;
-                    // conflict check
-                    if (hasConflict(start, end, evts)) {
-                      const suggestion = findNextAvailableSlotSameDay(start, durationMin, evts);
-                      if (suggestion) {
-                        const ok = window.confirm(`Selected time conflicts. Use next available slot at ${format(suggestion.start, 'h:mm a')}?`);
-                        if (!ok) return;
-                        const title = `Extra Class - ${getStudentName(studentId)}`;
-                        scheduleExtra(requestId, { studentId, title, start: suggestion.start.toISOString(), end: suggestion.end.toISOString() });
-                        setScheduleModal({ open: false });
-                        return;
-                      } else {
-                        alert('No available slot today.');
-                        return;
-                      }
+                  const evts = useAppStore.getState().events;
+                  if (hasConflict(start, end, evts)) {
+                    const suggestion = findNextAvailableSlotSameDay(start, durationMin, evts);
+                    if (suggestion) {
+                      const ok = window.confirm(`Selected time conflicts. Use next available slot at ${format(suggestion.start, 'h:mm a')}?`);
+                      if (!ok) return;
+                      const title = `Extra Class - ${getStudentName(studentId)}`;
+                      scheduleExtra(requestId, { studentId, title, start: suggestion.start.toISOString(), end: suggestion.end.toISOString() });
+                      setScheduleModal({ open: false });
+                      return;
+                    } else {
+                      alert('No available slot today.');
+                      return;
                     }
-
-                    const title = `Extra Class - ${getStudentName(studentId)}`;
-                    scheduleExtra(requestId, { studentId, title, start: start.toISOString(), end: end.toISOString() });
-                    setScheduleModal({ open: false });
-                  } catch (e) {
-                    console.error(e);
-                    setScheduleModal({ open: false });
                   }
-                }}
-              >Save</ActionButton>
-            </ButtonRow>
-          </ModalContent>
-        </Modal>
-      )}
 
-      {showAddModal && (
-        <Modal role="dialog" aria-modal="true" aria-labelledby="add-extra-title" onClick={() => setShowAddModal(false)}>
-          <ModalContent onClick={(e) => e.stopPropagation()}>
-            <ModalTitle id="add-extra-title">Add Extra Class Request</ModalTitle>
-            <FormGroup>
-              <Label>Student</Label>
-              <Select
-                value={form.studentId}
-                onChange={(e) => setForm({ ...form, studentId: e.target.value })}
-              >
-                <option value="">Select a student</option>
-                {students.map(s => (
-                  <option key={s.id} value={s.id}>{s.name} ({s.grade})</option>
-                ))}
-              </Select>
-            </FormGroup>
-            <FormGroup>
-              <Label>Duration (minutes)</Label>
-              <Input
-                type="number"
-                min={30}
-                max={180}
-                step={30}
-                value={form.durationMin}
-                onChange={(e) => setForm({ ...form, durationMin: parseInt(e.target.value) || 60 })}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label>Notes (optional)</Label>
-              <TextArea
-                value={form.notes}
-                onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                placeholder="Any specific details..."
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label>Preferred windows (optional)</Label>
-              <div style={{ display: 'grid', gap: 8 }}>
-                {(form.windows || []).map((w, i) => (
-                  <WindowRow key={i}>
-                    <Select value={w.dow} onChange={e => {
-                      const v = parseInt(e.target.value);
-                      const nw = [...form.windows]; nw[i] = { ...nw[i], dow: v }; setForm({ ...form, windows: nw });
-                    }}>
-                      <option value={1}>Mon</option>
-                      <option value={2}>Tue</option>
-                      <option value={3}>Wed</option>
-                      <option value={4}>Thu</option>
-                      <option value={5}>Fri</option>
-                      <option value={6}>Sat</option>
-                      <option value={0}>Sun</option>
-                    </Select>
-                    <Input type="time" value={w.start} onChange={e => { const nw = [...form.windows]; nw[i] = { ...nw[i], start: e.target.value }; setForm({ ...form, windows: nw }); }} />
-                    <Input type="time" value={w.end} onChange={e => { const nw = [...form.windows]; nw[i] = { ...nw[i], end: e.target.value }; setForm({ ...form, windows: nw }); }} />
-                    <ActionButton variant="dismiss" onClick={() => { const nw = [...form.windows]; nw.splice(i,1); setForm({ ...form, windows: nw }); }}>Remove</ActionButton>
-                  </WindowRow>
-                ))}
-                <ActionButton variant="schedule" onClick={() => setForm({ ...form, windows: [...(form.windows||[]), { dow: 1, start: '09:00', end: '10:00' }] })}>+ Add window</ActionButton>
-              </div>
-            </FormGroup>
-            <ButtonRow>
-              <ActionButton variant="dismiss" onClick={() => setShowAddModal(false)}>Cancel</ActionButton>
-              <ActionButton
-                variant="schedule"
-onClick={() => {
-                  if (form.studentId) {
-                    addExtraClassRequest({ studentId: form.studentId, durationMin: form.durationMin, notes: form.notes, status: 'open', windows: form.windows });
-                    setShowAddModal(false);
-                    setForm({ studentId: '', durationMin: 60, notes: '', windows: [] });
-                  }
-                }}
-              >Save</ActionButton>
-            </ButtonRow>
-          </ModalContent>
-        </Modal>
-      )}
+                  const title = `Extra Class - ${getStudentName(studentId)}`;
+                  scheduleExtra(requestId, { studentId, title, start: start.toISOString(), end: end.toISOString() });
+                  setScheduleModal({ open: false });
+                } catch (e) {
+                  console.error(e);
+                  setScheduleModal({ open: false });
+                }
+              }}
+            >Save</ActionButton>
+          </>
+        }
+      >
+        <FormGroup>
+          <Label>Student</Label>
+          <Select disabled value={scheduleModal.studentId}>
+            <option>
+              {getStudentName(scheduleModal.studentId || '')}
+            </option>
+          </Select>
+        </FormGroup>
+        <FormGroup>
+          <Label>Date</Label>
+          <UIInput type="date" value={scheduleModal.date || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setScheduleModal({ ...scheduleModal, date: e.target.value })} />
+        </FormGroup>
+        <FormGroup>
+          <Label>Time</Label>
+          <UIInput type="time" value={scheduleModal.time || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setScheduleModal({ ...scheduleModal, time: e.target.value })} />
+        </FormGroup>
+        <FormGroup>
+          <Label>Duration (minutes)</Label>
+          <UIInput type="number" min={30} step={30} value={scheduleModal.durationMin || 60} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setScheduleModal({ ...scheduleModal, durationMin: parseInt(e.target.value) || 60 })} />
+        </FormGroup>
+      </UIModal>
+
+      <UIModal
+        open={showAddModal}
+        title="Add Extra Class Request"
+        onClose={() => setShowAddModal(false)}
+        footer={
+          <>
+            <ActionButton variant="dismiss" onClick={() => setShowAddModal(false)}>Cancel</ActionButton>
+            <ActionButton
+              variant="schedule"
+              onClick={() => {
+                if (form.studentId) {
+                  addExtraClassRequest({ studentId: form.studentId, durationMin: form.durationMin, notes: form.notes, status: 'open', windows: form.windows });
+                  setShowAddModal(false);
+                  setForm({ studentId: '', durationMin: 60, notes: '', windows: [] });
+                }
+              }}
+            >Save</ActionButton>
+          </>
+        }
+      >
+        <FormGroup>
+          <Label>Student</Label>
+          <Select
+            value={form.studentId}
+            onChange={(e) => setForm({ ...form, studentId: e.target.value })}
+          >
+            <option value="">Select a student</option>
+            {students.map(s => (
+              <option key={s.id} value={s.id}>{s.name} ({s.grade})</option>
+            ))}
+          </Select>
+        </FormGroup>
+        <FormGroup>
+          <Label>Duration (minutes)</Label>
+          <UIInput
+            type="number"
+            min={30}
+            max={180}
+            step={30}
+            value={form.durationMin}
+            onChange={(e) => setForm({ ...form, durationMin: parseInt(e.target.value) || 60 })}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label>Notes (optional)</Label>
+          <UITextArea
+            value={form.notes}
+            onChange={(e) => setForm({ ...form, notes: e.target.value })}
+            placeholder="Any specific details..."
+            rows={3}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label>Preferred windows (optional)</Label>
+          <div style={{ display: 'grid', gap: 8 }}>
+            {(form.windows || []).map((w, i) => (
+              <WindowRow key={i}>
+                <Select value={w.dow} onChange={e => {
+                  const v = parseInt(e.target.value);
+                  const nw = [...form.windows]; nw[i] = { ...nw[i], dow: v }; setForm({ ...form, windows: nw });
+                }}>
+                  <option value={1}>Mon</option>
+                  <option value={2}>Tue</option>
+                  <option value={3}>Wed</option>
+                  <option value={4}>Thu</option>
+                  <option value={5}>Fri</option>
+                  <option value={6}>Sat</option>
+                  <option value={0}>Sun</option>
+                </Select>
+                <UIInput type="time" value={w.start} onChange={e => { const nw = [...form.windows]; nw[i] = { ...nw[i], start: e.target.value }; setForm({ ...form, windows: nw }); }} />
+                <UIInput type="time" value={w.end} onChange={e => { const nw = [...form.windows]; nw[i] = { ...nw[i], end: e.target.value }; setForm({ ...form, windows: nw }); }} />
+                <ActionButton variant="dismiss" onClick={() => { const nw = [...form.windows]; nw.splice(i,1); setForm({ ...form, windows: nw }); }}>Remove</ActionButton>
+              </WindowRow>
+            ))}
+            <ActionButton variant="schedule" onClick={() => setForm({ ...form, windows: [...(form.windows||[]), { dow: 1, start: '09:00', end: '10:00' }] })}>+ Add window</ActionButton>
+          </div>
+        </FormGroup>
+      </UIModal>
     </DashboardContainer>
   );
 };

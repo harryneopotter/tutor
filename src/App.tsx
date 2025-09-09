@@ -7,10 +7,12 @@ const TrashView = lazy(() => import('./components/TrashView').then(m => ({ defau
 const AvailabilityReport = lazy(() => import('./components/AvailabilityReport').then(m => ({ default: m.AvailabilityReport })));
 const StudentBinder = lazy(() => import('./components/StudentBinder').then(m => ({ default: m.StudentBinder })));
 import { useAppStore } from './store/appStore';
+import { SettingsModal } from './components/SettingsModal';
 
 const AppContainer = styled.div`
   height: 100vh;
-  background: #f5f5f5;
+  background: ${({ theme }) => theme.colors.surface0};
+  transition: background-color 200ms ease;
 `;
 
 const Navigation = styled.div`
@@ -18,6 +20,13 @@ const Navigation = styled.div`
   background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   padding: 0;
+`;
+
+const RightControls = styled.div`
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;
 
 const NavButton = styled.button<{ active: boolean }>`
@@ -30,15 +39,21 @@ const NavButton = styled.button<{ active: boolean }>`
   cursor: pointer;
   border-bottom: 2px solid ${props => props.active ? '#3b82f6' : 'transparent'};
   transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   
   &:hover {
     background: ${props => props.active ? '#2563eb' : '#f9fafb'};
+  }
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(79,70,229,0.25);
   }
 `;
 
 const SampleDataButton = styled.button`
   padding: 8px 16px;
-  margin-left: auto;
   border: 1px solid #d1d5db;
   border-radius: 4px;
   background: #ffffff;
@@ -51,10 +66,23 @@ const SampleDataButton = styled.button`
   }
 `;
 
+const SettingsButton = styled(SampleDataButton)`
+  border-color: #e2e8f0;
+`;
+
 type ViewType = 'calendar' | 'today' | 'waitlist' | 'trash' | 'availability' | 'binder';
+
+const Icon = styled.span`
+  font-size: 16px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 function App() {
   const [currentView, setCurrentView] = useState<ViewType>('calendar');
+  const [showSettings, setShowSettings] = useState(false);
   const { students, initializeSampleData, hydrateFromDB } = useAppStore();
 
   useEffect(() => {
@@ -89,51 +117,67 @@ function App() {
       <Navigation>
         <NavButton 
           active={currentView === 'calendar'}
+          aria-current={currentView === 'calendar' ? 'page' : undefined}
           onClick={() => setCurrentView('calendar')}
         >
-          📅 Weekly Calendar
+          <Icon aria-hidden>📅</Icon>
+          <span>Weekly Calendar</span>
         </NavButton>
         <NavButton 
           active={currentView === 'today'}
+          aria-current={currentView === 'today' ? 'page' : undefined}
           onClick={() => setCurrentView('today')}
         >
-          📋 Today
+          <Icon aria-hidden>📋</Icon>
+          <span>Today</span>
         </NavButton>
         <NavButton 
           active={currentView === 'waitlist'}
+          aria-current={currentView === 'waitlist' ? 'page' : undefined}
           onClick={() => setCurrentView('waitlist')}
         >
-          ⏰ Waitlist
+          <Icon aria-hidden>⏰</Icon>
+          <span>Waitlist</span>
         </NavButton>
         <NavButton 
           active={currentView === 'availability'}
+          aria-current={currentView === 'availability' ? 'page' : undefined}
           onClick={() => setCurrentView('availability')}
         >
-          📊 Availability
+          <Icon aria-hidden>📊</Icon>
+          <span>Availability</span>
         </NavButton>
         <NavButton 
           active={currentView === 'binder'}
+          aria-current={currentView === 'binder' ? 'page' : undefined}
           onClick={() => setCurrentView('binder')}
         >
-          📚 Binder
+          <Icon aria-hidden>📚</Icon>
+          <span>Binder</span>
         </NavButton>
         <NavButton 
           active={currentView === 'trash'}
+          aria-current={currentView === 'trash' ? 'page' : undefined}
           onClick={() => setCurrentView('trash')}
         >
-          🗑️ Trash
+          <Icon aria-hidden>🗑️</Icon>
+          <span>Trash</span>
         </NavButton>
-        
-        {students.length === 0 && (
-          <SampleDataButton onClick={handleLoadSampleData}>
-            Load Sample Data
-          </SampleDataButton>
-        )}
+
+        <RightControls>
+          <SettingsButton onClick={() => setShowSettings(true)}>⚙ Settings</SettingsButton>
+          {students.length === 0 && (
+            <SampleDataButton onClick={handleLoadSampleData}>
+              Load Sample Data
+            </SampleDataButton>
+          )}
+        </RightControls>
       </Navigation>
       
       <Suspense fallback={<div style={{ padding: 16 }}>Loading…</div>}>
         {renderCurrentView()}
       </Suspense>
+      <SettingsModal open={showSettings} onClose={() => setShowSettings(false)} />
     </AppContainer>
   );
 }

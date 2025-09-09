@@ -41,3 +41,7 @@ docs/screenshots/
 # Internal change logs (keep local-only)
 CHANGE_LOG*.md
 
+# Design files and local documentation
+.design/
+tutor_redesign-1.md
+
