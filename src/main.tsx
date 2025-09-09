@@ -16,11 +16,9 @@ const Root = () => {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
     const handler = (e: MediaQueryListEvent) => setSystemDark(e.matches);
     mq.addEventListener?.('change', handler);
-    // @ts-expect-error legacy Safari
     mq.addListener?.(handler);
     return () => {
       mq.removeEventListener?.('change', handler);
-      // @ts-expect-error legacy Safari
       mq.removeListener?.(handler);
     };
   }, []);
