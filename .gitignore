@@ -33,3 +33,11 @@ prd.md
 *.pdf
 WARP.md
 
+# Local docs (keep untracked)
+docs/REDESIGN_STATUS.md
+docs/SCREENSHOT_GUIDE.md
+docs/screenshots/
+
+# Internal change logs (keep local-only)
+CHANGE_LOG*.md
+
