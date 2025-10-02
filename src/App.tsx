@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { WeeklyCalendar } from './components/WeeklyCalendar';
+import SplashScreen from './components/SplashScreen';
 const TodayDashboard = lazy(() => import('./components/TodayDashboard').then(m => ({ default: m.TodayDashboard })));
 const WaitlistManagement = lazy(() => import('./components/WaitlistManagement').then(m => ({ default: m.WaitlistManagement })));
 const TrashView = lazy(() => import('./components/TrashView').then(m => ({ default: m.TrashView })));
@@ -83,11 +84,24 @@ const Icon = styled.span`
 function App() {
   const [currentView, setCurrentView] = useState<ViewType>('calendar');
   const [showSettings, setShowSettings] = useState(false);
+  const [showSplash, setShowSplash] = useState(false);
   const { students, initializeSampleData, hydrateFromDB } = useAppStore();
 
   useEffect(() => {
     void hydrateFromDB();
   }, [hydrateFromDB]);
+
+  useEffect(() => {
+    const hasSeenSplash = localStorage.getItem('hasSeenSplash');
+    if (!hasSeenSplash) {
+      setShowSplash(true);
+    }
+  }, []);
+
+  const handleSplashFinish = () => {
+    localStorage.setItem('hasSeenSplash', 'true');
+    setShowSplash(false);
+  };
 
   const handleLoadSampleData = () => {
     initializeSampleData();
@@ -111,6 +125,10 @@ function App() {
         return <WeeklyCalendar />;
     }
   };
+
+  if (showSplash) {
+    return <SplashScreen onFinish={handleSplashFinish} />;
+  }
 
   return (
     <AppContainer>
