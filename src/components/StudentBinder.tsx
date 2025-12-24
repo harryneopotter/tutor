@@ -11,7 +11,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #ffffff;
+  background: ${({ theme }) => theme.colors.surface1};
+  color: ${({ theme }) => theme.colors.ink900};
 `;
 
 const Header = styled.div`
@@ -19,13 +20,14 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 16px 24px;
-  border-bottom: 1px solid #e1e5e9;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.ink400};
+  background: ${({ theme }) => theme.colors.surface1};
 `;
 
 const Title = styled.h2`
   font-size: 18px;
   font-weight: 600;
-  color: #111827;
+  color: ${({ theme }) => theme.colors.ink900};
   margin: 0;
 `;
 
@@ -38,23 +40,26 @@ const Controls = styled.div`
 
 const Select = styled.select`
   padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border: 1px solid ${({ theme }) => theme.colors.ink400};
+  border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ theme }) => theme.colors.surface1};
+  color: ${({ theme }) => theme.colors.ink900};
 `;
 
 const Tabs = styled.div`
   display: flex;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.ink400};
   padding: 0 24px;
 `;
 
 const Tab = styled.button<{ $active: boolean }>`
   padding: 10px 12px;
   border: none;
-  background: ${p => p.$active ? '#3b82f6' : 'transparent'};
-  color: ${p => p.$active ? '#ffffff' : '#374151'};
-  border-bottom: 2px solid ${p => p.$active ? '#3b82f6' : 'transparent'};
+  background: ${p => (p.$active ? p.theme.colors.brand : 'transparent')};
+  color: ${p => (p.$active ? '#ffffff' : p.theme.colors.ink900)};
+  border-bottom: 2px solid ${p => (p.$active ? p.theme.colors.brand : 'transparent')};
   cursor: pointer;
+  &:hover { background: ${p => (p.$active ? p.theme.colors.brandHover : p.theme.colors.surface0)}; }
 `;
 
 const Content = styled.div`

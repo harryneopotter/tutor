@@ -16,6 +16,7 @@ interface AppState {
   // UI State
   currentWeek: Date;
   selectedEvent: ClassEvent | null;
+  initialized: boolean;
   
   // Actions
   setCurrentWeek: (week: Date) => void;
@@ -52,6 +53,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   waitlist: [],
   currentWeek: new Date(),
   selectedEvent: null,
+  initialized: false,
 
   // Actions
   setCurrentWeek: (week) => set({ currentWeek: week }),
@@ -239,29 +241,36 @@ export const useAppStore = create<AppState>((set, get) => ({
     }
   },
   hydrateFromDB: async () => {
-    const [students, events, extraRequests, waitlist] = await Promise.all([
-      studentsRepo.getAll(),
-      eventsRepo.getAll(),
-      requestsRepo.getAll(),
-      waitlistRepo.getAll(),
-    ]);
+    try {
+      const [students, events, extraRequests, waitlist] = await Promise.all([
+        studentsRepo.getAll(),
+        eventsRepo.getAll(),
+        requestsRepo.getAll(),
+        waitlistRepo.getAll(),
+      ]);
 
-    // Purge events soft-deleted > 30 days ago
-    const cutoff = new Date();
-    cutoff.setDate(cutoff.getDate() - 30);
-    const toPurge = events.filter(e => e.deletedAt && new Date(e.deletedAt) < cutoff);
-    if (toPurge.length > 0) {
-      await Promise.all(toPurge.map(e => eventsRepo.remove(e.id)));
+      // Purge events soft-deleted > 30 days ago
+      const cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - 30);
+      const toPurge = events.filter(e => e.deletedAt && new Date(e.deletedAt) < cutoff);
+      if (toPurge.length > 0) {
+        await Promise.all(toPurge.map(e => eventsRepo.remove(e.id)));
+      }
+
+      const liveEvents = events.filter(e => !e.deletedAt || new Date(e.deletedAt) >= cutoff);
+
+      set({
+        students,
+        events: liveEvents,
+        extraClassRequests: extraRequests,
+        waitlist,
+        initialized: true,
+      });
+    } catch (err) {
+      console.error(err);
+      // Even if hydration fails, allow the app to proceed
+      set({ initialized: true });
     }
-
-    const liveEvents = events.filter(e => !e.deletedAt || new Date(e.deletedAt) >= cutoff);
-
-    set({
-      students,
-      events: liveEvents,
-      extraClassRequests: extraRequests,
-      waitlist,
-    });
   },
 
   // Restore a soft-deleted event by clearing deletedAt

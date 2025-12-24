@@ -10,7 +10,7 @@ const ModalOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(2, 6, 23, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,14 +18,16 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContent = styled.div`
-  background: white;
-  border-radius: 12px;
+  background: ${({ theme }) => theme.colors.surface1};
+  color: ${({ theme }) => theme.colors.ink900};
+  border-radius: ${({ theme }) => theme.radius.lg};
   padding: 24px;
   max-width: 500px;
   width: 90%;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  box-shadow: ${({ theme }) => theme.shadow.card};
+  border: 1px solid ${({ theme }) => theme.colors.ink400};
 `;
 
 const ModalHeader = styled.div`
@@ -35,20 +37,20 @@ const ModalHeader = styled.div`
 const ModalTitle = styled.h3`
   font-size: 18px;
   font-weight: 600;
-  color: #111827;
+  color: ${({ theme }) => theme.colors.ink900};
   margin: 0 0 8px 0;
 `;
 
 const ModalSubtitle = styled.p`
   font-size: 14px;
-  color: #6b7280;
+  color: ${({ theme }) => theme.colors.ink600};
   margin: 0;
 `;
 
 const SectionTitle = styled.h4`
   font-size: 16px;
   font-weight: 500;
-  color: #374151;
+  color: ${({ theme }) => theme.colors.ink900};
   margin: 20px 0 12px 0;
 `;
 
@@ -64,13 +66,13 @@ const StudentCard = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  background: #f9fafb;
+  border: 1px solid ${({ theme }) => theme.colors.ink400};
+  border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ theme }) => theme.colors.surface0};
   transition: background 0.2s;
   
   &:hover {
-    background: #f3f4f6;
+    background: ${({ theme }) => theme.colors.surface1};
   }
 `;
 
@@ -80,19 +82,19 @@ const StudentInfo = styled.div`
 
 const StudentName = styled.div`
   font-weight: 500;
-  color: #111827;
+  color: ${({ theme }) => theme.colors.ink900};
   margin-bottom: 2px;
 `;
 
 const StudentDetails = styled.div`
   font-size: 12px;
-  color: #6b7280;
+  color: ${({ theme }) => theme.colors.ink600};
 `;
 
 const ActionButton = styled.button<{ variant: 'primary' | 'secondary' | 'danger' }>`
   padding: 6px 12px;
   border: 1px solid;
-  border-radius: 4px;
+  border-radius: ${({ theme }) => theme.radius.sm};
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
@@ -102,30 +104,30 @@ const ActionButton = styled.button<{ variant: 'primary' | 'secondary' | 'danger'
     switch (props.variant) {
       case 'primary':
         return `
-          background: #3b82f6;
-          border-color: #3b82f6;
+          background: ${props.theme.colors.brand};
+          border-color: ${props.theme.colors.brand};
           color: white;
-          &:hover { background: #2563eb; }
+          &:hover { background: ${props.theme.colors.brandHover}; }
         `;
       case 'secondary':
         return `
-          background: #ffffff;
-          border-color: #d1d5db;
-          color: #374151;
-          &:hover { background: #f9fafb; }
+          background: ${props.theme.colors.surface1};
+          border-color: ${props.theme.colors.ink400};
+          color: ${props.theme.colors.ink900};
+          &:hover { background: ${props.theme.colors.surface0}; }
         `;
       case 'danger':
         return `
-          background: #ef4444;
-          border-color: #ef4444;
+          background: ${props.theme.colors.danger};
+          border-color: ${props.theme.colors.danger};
           color: white;
-          &:hover { background: #dc2626; }
+          &:hover { opacity: 0.9; }
         `;
       default:
         return `
-          background: #ffffff;
-          border-color: #d1d5db;
-          color: #374151;
+          background: ${props.theme.colors.surface1};
+          border-color: ${props.theme.colors.ink400};
+          color: ${props.theme.colors.ink900};
         `;
     }
   }}
@@ -141,7 +143,7 @@ const ButtonGroup = styled.div`
 const EmptyState = styled.div`
   text-align: center;
   padding: 32px 16px;
-  color: #6b7280;
+  color: ${({ theme }) => theme.colors.ink600};
   font-size: 14px;
 `;
 

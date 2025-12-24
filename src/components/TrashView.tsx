@@ -10,8 +10,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #ffffff;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: ${({ theme }) => theme.colors.surface1};
+  color: ${({ theme }) => theme.colors.ink900};
 `;
 
 const Header = styled.div`
@@ -19,14 +19,14 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 16px 24px;
-  border-bottom: 1px solid #e1e5e9;
-  background: #ffffff;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.ink400};
+  background: ${({ theme }) => theme.colors.surface1};
 `;
 
 const Title = styled.h2`
   font-size: 18px;
   font-weight: 600;
-  color: #111827;
+  color: ${({ theme }) => theme.colors.ink900};
   margin: 0;
 `;
 
@@ -41,7 +41,7 @@ const CardRow = styled(UICard)`
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  background: #f8fafc;
+  background: ${({ theme }) => theme.colors.surface0};
   margin-bottom: 16px;
 `;
 

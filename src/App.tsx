@@ -1,7 +1,6 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { WeeklyCalendar } from './components/WeeklyCalendar';
-import SplashScreen from './components/SplashScreen';
 const TodayDashboard = lazy(() => import('./components/TodayDashboard').then(m => ({ default: m.TodayDashboard })));
 const WaitlistManagement = lazy(() => import('./components/WaitlistManagement').then(m => ({ default: m.WaitlistManagement })));
 const TrashView = lazy(() => import('./components/TrashView').then(m => ({ default: m.TrashView })));
@@ -9,18 +8,47 @@ const AvailabilityReport = lazy(() => import('./components/AvailabilityReport').
 const StudentBinder = lazy(() => import('./components/StudentBinder').then(m => ({ default: m.StudentBinder })));
 import { useAppStore } from './store/appStore';
 import { SettingsModal } from './components/SettingsModal';
+import { SplashScreen } from './components/SplashScreen';
+// Premium Book UI integration (feature flag)
+const PremiumBookUILazy = lazy(() => import('./redesign/premium-book-ui'));
 
 const AppContainer = styled.div`
   height: 100vh;
   background: ${({ theme }) => theme.colors.surface0};
-  transition: background-color 200ms ease;
+  color: ${({ theme }) => theme.colors.ink900};
+  transition: background-color 200ms ease, color 200ms ease;
 `;
 
-const Navigation = styled.div`
+const Navigation = styled.nav`
+  position: sticky;
+  top: 12px;
   display: flex;
-  background: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 0;
+  margin: 0 16px 24px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: ${({ theme }) => theme.blur.thick} saturate(250%);
+  -webkit-backdrop-filter: ${({ theme }) => theme.blur.thick} saturate(250%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: ${({ theme }) => theme.radius.xl};
+  box-shadow: 
+    0 32px 64px rgba(0,0,0,0.15),
+    ${({ theme }) => theme.shadow.liquidGlass};
+  z-index: 1000;
+  overflow: hidden;
+  padding: 4px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0.2) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
 `;
 
 const RightControls = styled.div`
@@ -30,45 +58,77 @@ const RightControls = styled.div`
   gap: 8px;
 `;
 
-const NavButton = styled.button<{ active: boolean }>`
-  padding: 12px 24px;
+const NavButton = styled.button<{ $active: boolean }>`
+  padding: 10px 24px;
+  margin: 2px;
   border: none;
-  background: ${props => props.active ? '#3b82f6' : 'transparent'};
-  color: ${props => props.active ? '#ffffff' : '#374151'};
-  font-size: 14px;
-  font-weight: 500;
+  background: ${props => props.$active
+    ? `linear-gradient(180deg, ${props.theme.colors.brand} 0%, ${props.theme.colors.brandHover} 100%)`
+    : 'transparent'};
+  color: ${props => props.$active ? '#ffffff' : props.theme.colors.ink900};
+  font-size: 13px;
+  font-weight: 800;
   cursor: pointer;
-  border-bottom: 2px solid ${props => props.active ? '#3b82f6' : 'transparent'};
-  transition: all 0.2s;
+  border-radius: ${({ theme }) => theme.radius.lg};
+  transition: all 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: -0.01em;
+  
+  ${props => props.$active && css`
+    box-shadow: 
+      ${props.theme.shadow.skeuoRaised},
+      0 8px 24px ${props.theme.colors.brand}40,
+      inset 0 1px 1px rgba(255,255,255,0.4);
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 1px; left: 1px; right: 1px; height: 40%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+  `}
   
   &:hover {
-    background: ${props => props.active ? '#2563eb' : '#f9fafb'};
+    background: ${props => props.$active ? props.theme.colors.brandHover : 'rgba(0,0,0,0.06)'};
+    transform: translateY(${props => props.$active ? '-2px' : '-1px'});
   }
+  
+  &:active {
+    transform: translateY(1px) scale(0.96);
+    ${props => props.$active && css`
+      box-shadow: ${props.theme.shadow.skeuoPressed};
+      &::after { opacity: 0; }
+    `}
+  }
+
   &:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(79,70,229,0.25);
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.info}50;
   }
 `;
 
 const SampleDataButton = styled.button`
   padding: 8px 16px;
-  border: 1px solid #d1d5db;
+  border: 1px solid ${({ theme }) => theme.colors.ink400};
   border-radius: 4px;
-  background: #ffffff;
-  color: #374151;
+  background: ${({ theme }) => theme.colors.surface1};
+  color: ${({ theme }) => theme.colors.ink900};
   font-size: 12px;
   cursor: pointer;
   
   &:hover {
-    background: #f9fafb;
+    background: ${({ theme }) => theme.colors.surface0};
   }
 `;
 
 const SettingsButton = styled(SampleDataButton)`
-  border-color: #e2e8f0;
+  border-color: ${({ theme }) => theme.colors.ink400};
 `;
 
 type ViewType = 'calendar' | 'today' | 'waitlist' | 'trash' | 'availability' | 'binder';
@@ -82,10 +142,12 @@ const Icon = styled.span`
 `;
 
 function App() {
+  const ENABLE_BOOK_UI = (import.meta as any).env?.VITE_ENABLE_BOOK_UI === 'true';
   const [currentView, setCurrentView] = useState<ViewType>('calendar');
   const [showSettings, setShowSettings] = useState(false);
   const [showSplash, setShowSplash] = useState(false);
-  const { students, initializeSampleData, hydrateFromDB } = useAppStore();
+  const { students, initializeSampleData, hydrateFromDB, initialized } = useAppStore();
+  const [splashExiting, setSplashExiting] = useState(false);
 
   useEffect(() => {
     void hydrateFromDB();
@@ -98,10 +160,6 @@ function App() {
     }
   }, []);
 
-  const handleSplashFinish = () => {
-    localStorage.setItem('hasSeenSplash', 'true');
-    setShowSplash(false);
-  };
 
   const handleLoadSampleData = () => {
     initializeSampleData();
@@ -126,55 +184,71 @@ function App() {
     }
   };
 
-  if (showSplash) {
-    return <SplashScreen onFinish={handleSplashFinish} />;
+  if (!initialized || (showSplash && !splashExiting)) {
+    const ready = initialized;
+    const handleContinue = () => {
+      setSplashExiting(true);
+      setShowSplash(false);
+      localStorage.setItem('hasSeenSplash', 'true');
+    };
+    return <SplashScreen ready={ready} exiting={splashExiting} onContinue={handleContinue} />;
+  }
+
+  if (ENABLE_BOOK_UI) {
+    return (
+      <div style={{ height: '100vh', width: '100vw' }}>
+        <Suspense fallback={<div style={{ color: '#6b7280', padding: 16 }}>Loading Premium Book UI…</div>}>
+          <PremiumBookUILazy />
+        </Suspense>
+      </div>
+    );
   }
 
   return (
     <AppContainer>
       <Navigation>
-        <NavButton 
-          active={currentView === 'calendar'}
+        <NavButton
+          $active={currentView === 'calendar'}
           aria-current={currentView === 'calendar' ? 'page' : undefined}
           onClick={() => setCurrentView('calendar')}
         >
           <Icon aria-hidden>📅</Icon>
           <span>Weekly Calendar</span>
         </NavButton>
-        <NavButton 
-          active={currentView === 'today'}
+        <NavButton
+          $active={currentView === 'today'}
           aria-current={currentView === 'today' ? 'page' : undefined}
           onClick={() => setCurrentView('today')}
         >
           <Icon aria-hidden>📋</Icon>
           <span>Today</span>
         </NavButton>
-        <NavButton 
-          active={currentView === 'waitlist'}
+        <NavButton
+          $active={currentView === 'waitlist'}
           aria-current={currentView === 'waitlist' ? 'page' : undefined}
           onClick={() => setCurrentView('waitlist')}
         >
           <Icon aria-hidden>⏰</Icon>
           <span>Waitlist</span>
         </NavButton>
-        <NavButton 
-          active={currentView === 'availability'}
+        <NavButton
+          $active={currentView === 'availability'}
           aria-current={currentView === 'availability' ? 'page' : undefined}
           onClick={() => setCurrentView('availability')}
         >
           <Icon aria-hidden>📊</Icon>
           <span>Availability</span>
         </NavButton>
-        <NavButton 
-          active={currentView === 'binder'}
+        <NavButton
+          $active={currentView === 'binder'}
           aria-current={currentView === 'binder' ? 'page' : undefined}
           onClick={() => setCurrentView('binder')}
         >
           <Icon aria-hidden>📚</Icon>
           <span>Binder</span>
         </NavButton>
-        <NavButton 
-          active={currentView === 'trash'}
+        <NavButton
+          $active={currentView === 'trash'}
           aria-current={currentView === 'trash' ? 'page' : undefined}
           onClick={() => setCurrentView('trash')}
         >
@@ -191,7 +265,7 @@ function App() {
           )}
         </RightControls>
       </Navigation>
-      
+
       <Suspense fallback={<div style={{ padding: 16 }}>Loading…</div>}>
         {renderCurrentView()}
       </Suspense>

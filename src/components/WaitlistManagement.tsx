@@ -10,23 +10,35 @@ const WaitlistContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #ffffff;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: ${({ theme }) => theme.colors.surface0};
+  color: ${({ theme }) => theme.colors.ink900};
 `;
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 24px;
-  border-bottom: 1px solid #e1e5e9;
-  background: #ffffff;
+  padding: 24px 32px;
+  background: ${({ theme }) => theme.colors.glass1};
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border-bottom: 1px solid ${({ theme }) => theme.colors.glassBorder};
+  position: relative;
+  z-index: 10;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px; left: 0; right: 0; height: 8px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, transparent 100%);
+    pointer-events: none;
+  }
 `;
 
 const Title = styled.h2`
   font-size: 18px;
   font-weight: 600;
-  color: #111827;
+  color: ${({ theme }) => theme.colors.ink900};
   margin: 0;
 `;
 
@@ -46,11 +58,29 @@ const WaitlistCard = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  background: ${({ theme }) => theme.colors.glass1};
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border: 1px solid ${({ theme }) => theme.colors.glassBorder};
+  border-radius: ${({ theme }) => theme.radius.lg};
+  box-shadow: ${({ theme }) => theme.shadow.liquidGlass};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, ${({ theme }) => theme.colors.glassHighlight}, transparent);
+    opacity: 0.5;
+  }
+  
+  &:hover {
+    box-shadow: 0 12px 48px rgba(0,0,0,0.12);
+    transform: translateY(-4px);
+  }
 `;
 
 const StudentInfo = styled.div`
@@ -69,13 +99,15 @@ const StudentDetails = styled.div`
 `;
 
 const Duration = styled.div`
-  padding: 4px 8px;
-  background: #eff6ff;
-  color: #1d4ed8;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
-  margin: 0 12px;
+  padding: 6px 12px;
+  background: ${({ theme }) => theme.colors.info}15;
+  color: ${({ theme }) => theme.colors.info};
+  border-radius: ${({ theme }) => theme.radius.full};
+  font-size: 11px;
+  font-weight: 700;
+  margin: 0 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 `;
 
 
@@ -87,23 +119,36 @@ const EmptyState = styled.div`
 
 
 const FormGroup = styled.div`
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 `;
 
 const Label = styled.label`
   display: block;
-  font-size: 14px;
-  font-weight: 500;
-  color: #374151;
-  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.ink600};
+  margin-bottom: 8px;
+  font-family: ${({ theme }) => theme.font.heading};
+  letter-spacing: -0.01em;
 `;
 
 const Select = styled.select`
   width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 14px;
+  padding: 10px 14px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+  font-size: 15px;
+  font-family: ${({ theme }) => theme.font.body};
+  background: ${({ theme }) => theme.colors.surface0}80;
+  color: ${({ theme }) => theme.colors.ink900};
+  outline: none;
+  transition: all ${({ theme }) => theme.transition.speed} ${({ theme }) => theme.transition.default};
+  
+  &:focus {
+    background: ${({ theme }) => theme.colors.surface1};
+    border-color: ${({ theme }) => theme.colors.info};
+    box-shadow: 0 0 0 4px ${({ theme }) => theme.colors.info}20;
+  }
 `;
 
 
@@ -193,7 +238,7 @@ export const WaitlistManagement: React.FC = () => {
           <Label>Student</Label>
           <Select
             value={newEntry.studentId}
-            onChange={(e) => setNewEntry({...newEntry, studentId: e.target.value})}
+            onChange={(e) => setNewEntry({ ...newEntry, studentId: e.target.value })}
           >
             <option value="">Select a student</option>
             {students
@@ -211,7 +256,7 @@ export const WaitlistManagement: React.FC = () => {
           <UIInput
             type="number"
             value={newEntry.durationMin}
-            onChange={(e) => setNewEntry({...newEntry, durationMin: parseInt(e.target.value) || 60})}
+            onChange={(e) => setNewEntry({ ...newEntry, durationMin: parseInt(e.target.value) || 60 })}
             min={30}
             max={180}
             step={30}
@@ -237,10 +282,10 @@ export const WaitlistManagement: React.FC = () => {
                 </select>
                 <input type="time" value={w.start} onChange={e => { const win = [...newEntry.windows]; win[i] = { ...win[i], start: e.target.value }; setNewEntry({ ...newEntry, windows: win }); }} />
                 <input type="time" value={w.end} onChange={e => { const win = [...newEntry.windows]; win[i] = { ...win[i], end: e.target.value }; setNewEntry({ ...newEntry, windows: win }); }} />
-                <UIButton variant="secondary" size="sm" onClick={() => { const win = [...newEntry.windows]; win.splice(i,1); setNewEntry({ ...newEntry, windows: win }); }}>Remove</UIButton>
+                <UIButton variant="secondary" size="sm" onClick={() => { const win = [...newEntry.windows]; win.splice(i, 1); setNewEntry({ ...newEntry, windows: win }); }}>Remove</UIButton>
               </div>
             ))}
-            <UIButton variant="primary" onClick={() => setNewEntry({ ...newEntry, windows: [...(newEntry.windows||[]), { dow: 1, start: '09:00', end: '10:00' }] })}>+ Add window</UIButton>
+            <UIButton variant="primary" onClick={() => setNewEntry({ ...newEntry, windows: [...(newEntry.windows || []), { dow: 1, start: '09:00', end: '10:00' }] })}>+ Add window</UIButton>
           </div>
         </FormGroup>
 
@@ -248,7 +293,7 @@ export const WaitlistManagement: React.FC = () => {
           <Label>Notes (optional)</Label>
           <UITextArea
             value={newEntry.notes}
-            onChange={(e) => setNewEntry({...newEntry, notes: e.target.value})}
+            onChange={(e) => setNewEntry({ ...newEntry, notes: e.target.value })}
             placeholder="Any specific preferences or notes..."
             rows={3}
           />

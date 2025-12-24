@@ -29,7 +29,7 @@ Desktop.ini
 
 # Project-specific non-essential files
 Tutor.code-workspace
-prd.md
+!prd.md
 *.pdf
 WARP.md
 
@@ -42,6 +42,6 @@ docs/screenshots/
 CHANGE_LOG*.md
 
 # Design files and local documentation
-.design/
-tutor_redesign-1.md
+!.design/
+!tutor_redesign-1.md
 

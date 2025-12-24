@@ -14,6 +14,11 @@ declare module 'styled-components' {
       warning: string;
       danger: string;
       info: string;
+      glass0: string;
+      glass1: string;
+      glassHighlight: string;
+      glassBorder: string;
+      border: string;
     };
     radius: {
       xs: string;
@@ -25,11 +30,27 @@ declare module 'styled-components' {
     };
     shadow: {
       card: string;
+      premium: string;
+      skeuo: string;
+      skeuoRaised: string;
+      skeuoPressed: string;
+      liquidGlass: string;
+    };
+    blur: {
+      thin: string;
+      regular: string;
+      thick: string;
     };
     spacing: (n: number) => string;
     font: {
       body: string;
+      heading: string;
       mono: string;
+    };
+    transition: {
+      default: string;
+      spring: string;
+      speed: string;
     };
   }
 }

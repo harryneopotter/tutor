@@ -14,37 +14,73 @@ const DashboardContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #ffffff;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: ${({ theme }) => theme.colors.surface0};
+  color: ${({ theme }) => theme.colors.ink900};
 `;
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 24px;
-  border-bottom: 1px solid #e1e5e9;
-  background: #ffffff;
+  padding: 24px 32px;
+  background: ${({ theme }) => theme.colors.glass1};
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border-bottom: 1px solid ${({ theme }) => theme.colors.glassBorder};
+  z-index: 10;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px; left: 0; right: 0; height: 8px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, transparent 100%);
+    pointer-events: none;
+  }
 `;
 
 const Title = styled.h2`
   font-size: 18px;
   font-weight: 600;
-  color: #111827;
+  color: ${({ theme }) => theme.colors.ink900};
   margin: 0;
 `;
 
 const AddButton = styled.button`
-  padding: 8px 16px;
-  background: #3b82f6;
+  padding: 12px 24px;
+  background: linear-gradient(180deg, ${({ theme }) => theme.colors.brand} 0%, ${({ theme }) => theme.colors.brandHover} 100%);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: ${({ theme }) => theme.radius.md};
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
   cursor: pointer;
+  position: relative;
+  box-shadow: ${({ theme }) => theme.shadow.skeuoRaised}, 0 4px 12px rgba(0,0,0,0.1);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
   
-  &:hover { background: #2563eb; }
+  &::after {
+    content: '';
+    position: absolute;
+    top: 1px; left: 1px; right: 1px; height: 45%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 100%);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+  
+  &:hover { 
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15), ${({ theme }) => theme.shadow.skeuoRaised};
+  }
+  
+  &:active {
+    transform: translateY(1px);
+    box-shadow: ${({ theme }) => theme.shadow.skeuoPressed};
+    background: ${({ theme }) => theme.colors.brandHover};
+    &::after { opacity: 0; }
+  }
 `;
 
 
@@ -108,35 +144,27 @@ const ClassList = styled.div`
   gap: 16px;
 `;
 
-const ClassItem = styled(UICard)<{ status: 'confirmed' | 'pending' | 'canceled' }>`
+const ClassItem = styled(UICard).attrs({ glass: true }) <{ status: 'confirmed' | 'pending' | 'canceled' }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
-  background: ${props => {
-    switch (props.status) {
-      case 'confirmed': return '#f0fdf4';
-      case 'pending': return '#fffbeb';
-      case 'canceled': return '#fef2f2';
-      default: return 'white';
-    }
-  }};
-  position: relative;
+  padding: 20px;
+  margin-bottom: 2px;
+  
   &::before {
     content: '';
     position: absolute;
     inset: 0 auto 0 0;
-    width: 4px;
+    width: 6px;
     background: ${props => {
-      switch (props.status) {
-        case 'confirmed': return '#10b981';
-        case 'pending': return '#f59e0b';
-        case 'canceled': return '#ef4444';
-        default: return '#e5e7eb';
-      }
-    }};
-    border-top-left-radius: inherit;
-    border-bottom-left-radius: inherit;
+    switch (props.status) {
+      case 'confirmed': return props.theme.colors.success;
+      case 'pending': return props.theme.colors.warning;
+      case 'canceled': return props.theme.colors.danger;
+      default: return props.theme.colors.border;
+    }
+  }};
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
   }
 `;
 
@@ -161,77 +189,78 @@ const ClassActions = styled.div`
 `;
 
 const ActionButton = styled.button<{ variant: 'confirm' | 'cancel' | 'schedule' | 'snooze' | 'dismiss' }>`
-  padding: 6px 12px;
-  border: 1px solid;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
+  padding: 8px 16px;
+  border: none;
+  border-radius: ${({ theme }) => theme.radius.md};
+  font-size: 13px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: ${({ theme }) => theme.shadow.skeuoRaised};
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 1px; left: 1px; right: 1px; height: 45%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+    border-radius: inherit;
+    pointer-events: none;
+  }
   
   ${props => {
     switch (props.variant) {
       case 'confirm':
         return `
-          background: #10b981;
-          border-color: #10b981;
+          background: linear-gradient(180deg, #10b981 0%, #059669 100%);
           color: white;
-          &:hover { background: #059669; }
+          &:hover { filter: brightness(1.05); }
         `;
       case 'cancel':
         return `
-          background: #ef4444;
-          border-color: #ef4444;
+          background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
           color: white;
-          &:hover { background: #dc2626; }
+          &:hover { filter: brightness(1.05); }
         `;
       case 'schedule':
         return `
-          background: #3b82f6;
-          border-color: #3b82f6;
+          background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
           color: white;
-          &:hover { background: #2563eb; }
-        `;
-      case 'snooze':
-        return `
-          background: #ffffff;
-          border-color: #d1d5db;
-          color: #374151;
-          &:hover { background: #f9fafb; }
-        `;
-      case 'dismiss':
-        return `
-          background: #ffffff;
-          border-color: #d1d5db;
-          color: #374151;
-          &:hover { background: #f9fafb; }
+          &:hover { filter: brightness(1.05); }
         `;
       default:
         return `
-          background: #ffffff;
-          border-color: #d1d5db;
+          background: linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);
           color: #374151;
+          border: 1px solid rgba(0,0,0,0.1);
+          &::after { background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%); }
+          &:hover { background: #ffffff; }
         `;
     }
   }}
+
+  &:active {
+    transform: translateY(1px);
+    box-shadow: ${({ theme }) => theme.shadow.skeuoPressed};
+    &::after { opacity: 0; }
+  }
 `;
 
 
-const ExtraRequestItem = styled(UICard)`
+const ExtraRequestItem = styled(UICard).attrs({ glass: true })`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
-  background: #f8fafc;
-  position: relative;
+  padding: 20px;
+  margin-bottom: 2px;
   &::before {
     content: '';
     position: absolute;
     inset: 0 auto 0 0;
-    width: 4px;
-    background: #3b82f6;
-    border-top-left-radius: inherit;
-    border-bottom-left-radius: inherit;
+    width: 6px;
+    background: ${({ theme }) => theme.colors.info};
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
   }
 `;
 
@@ -247,10 +276,10 @@ const BellIcon = styled.span`
 `;
 
 export const TodayDashboard: React.FC = () => {
-  const { 
-    events, 
-    students, 
-    extraClassRequests, 
+  const {
+    events,
+    students,
+    extraClassRequests,
     updateEvent,
     updateExtraClassRequest,
     addExtraClassRequest,
@@ -270,19 +299,19 @@ export const TodayDashboard: React.FC = () => {
     })
     .sort((a, b) => parseISO(a.start).getTime() - parseISO(b.start).getTime());
 
-// Get pending extra class requests
-const now = new Date();
-const pendingExtras = extraClassRequests.filter(request => {
-  if (request.status === 'open') return true;
-  if (request.status === 'snoozed' && request.snoozeUntil) {
-    try {
-      return new Date(request.snoozeUntil) <= now;
-    } catch {
-      return false;
+  // Get pending extra class requests
+  const now = new Date();
+  const pendingExtras = extraClassRequests.filter(request => {
+    if (request.status === 'open') return true;
+    if (request.status === 'snoozed' && request.snoozeUntil) {
+      try {
+        return new Date(request.snoozeUntil) <= now;
+      } catch {
+        return false;
+      }
     }
-  }
-  return false;
-});
+    return false;
+  });
 
   const getClassStatus = (event: ClassEvent): 'confirmed' | 'pending' | 'canceled' => {
     if (event.canceled) return 'canceled';
@@ -322,7 +351,7 @@ const pendingExtras = extraClassRequests.filter(request => {
     // Snooze for 24 hours
     const snoozeUntil = new Date();
     snoozeUntil.setHours(snoozeUntil.getHours() + 24);
-    
+
     updateExtraClassRequest(requestId, {
       status: 'snoozed',
       snoozeUntil: snoozeUntil.toISOString()
@@ -357,7 +386,7 @@ const pendingExtras = extraClassRequests.filter(request => {
                 const status = getClassStatus(event);
                 const startTime = format(parseISO(event.start), 'h:mm a');
                 const endTime = format(parseISO(event.end), 'h:mm a');
-                
+
                 return (
                   <ClassItem key={event.id} status={status}>
                     <ClassInfo>
@@ -369,17 +398,17 @@ const pendingExtras = extraClassRequests.filter(request => {
                         {getStudentName(event.studentId)} • {startTime} - {endTime}
                       </ClassDetails>
                     </ClassInfo>
-                    
+
                     <ClassActions>
                       {status === 'pending' && (
                         <>
-                          <ActionButton 
+                          <ActionButton
                             variant="confirm"
                             onClick={() => handleConfirmClass(event.id)}
                           >
                             ✅ Confirm
                           </ActionButton>
-                          <ActionButton 
+                          <ActionButton
                             variant="cancel"
                             onClick={() => handleCancelClass(event.id)}
                           >
@@ -388,7 +417,7 @@ const pendingExtras = extraClassRequests.filter(request => {
                         </>
                       )}
                       {status === 'confirmed' && (
-                        <ActionButton 
+                        <ActionButton
                           variant="cancel"
                           onClick={() => handleCancelClass(event.id)}
                         >
@@ -424,21 +453,21 @@ const pendingExtras = extraClassRequests.filter(request => {
                       {request.notes && ` • ${request.notes}`}
                     </ClassDetails>
                   </ClassInfo>
-                  
+
                   <ClassActions>
-                    <ActionButton 
+                    <ActionButton
                       variant="schedule"
                       onClick={() => handleScheduleExtra(request.id)}
                     >
                       📅 Schedule
                     </ActionButton>
-                    <ActionButton 
+                    <ActionButton
                       variant="snooze"
                       onClick={() => handleSnoozeExtra(request.id)}
                     >
                       😴 Snooze
                     </ActionButton>
-                    <ActionButton 
+                    <ActionButton
                       variant="dismiss"
                       onClick={() => handleDismissExtra(request.id)}
                     >
@@ -591,10 +620,10 @@ const pendingExtras = extraClassRequests.filter(request => {
                 </Select>
                 <UIInput type="time" value={w.start} onChange={e => { const nw = [...form.windows]; nw[i] = { ...nw[i], start: e.target.value }; setForm({ ...form, windows: nw }); }} />
                 <UIInput type="time" value={w.end} onChange={e => { const nw = [...form.windows]; nw[i] = { ...nw[i], end: e.target.value }; setForm({ ...form, windows: nw }); }} />
-                <ActionButton variant="dismiss" onClick={() => { const nw = [...form.windows]; nw.splice(i,1); setForm({ ...form, windows: nw }); }}>Remove</ActionButton>
+                <ActionButton variant="dismiss" onClick={() => { const nw = [...form.windows]; nw.splice(i, 1); setForm({ ...form, windows: nw }); }}>Remove</ActionButton>
               </WindowRow>
             ))}
-            <ActionButton variant="schedule" onClick={() => setForm({ ...form, windows: [...(form.windows||[]), { dow: 1, start: '09:00', end: '10:00' }] })}>+ Add window</ActionButton>
+            <ActionButton variant="schedule" onClick={() => setForm({ ...form, windows: [...(form.windows || []), { dow: 1, start: '09:00', end: '10:00' }] })}>+ Add window</ActionButton>
           </div>
         </FormGroup>
       </UIModal>

@@ -8,7 +8,7 @@ import { hasConflict, findNextAvailableSlotSameDay } from '../utils/scheduling';
 const Overlay = styled.div`
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(2, 6, 23, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,11 +16,14 @@ const Overlay = styled.div`
 `;
 
 const Modal = styled.div`
-  background: white;
-  border-radius: 12px;
+  background: ${({ theme }) => theme.colors.surface1};
+  color: ${({ theme }) => theme.colors.ink900};
+  border-radius: ${({ theme }) => theme.radius.lg};
   padding: 20px;
   width: 90%;
   max-width: 520px;
+  box-shadow: ${({ theme }) => theme.shadow.card};
+  border: 1px solid ${({ theme }) => theme.colors.ink400};
 `;
 
 const Row = styled.div`
@@ -32,21 +35,25 @@ const Row = styled.div`
 
 const Label = styled.label`
   font-weight: 500;
-  color: #374151;
+  color: ${({ theme }) => theme.colors.ink900};
 `;
 
 const Input = styled.input`
   width: 100%;
   padding: 8px 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border: 1px solid ${({ theme }) => theme.colors.ink400};
+  border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ theme }) => theme.colors.surface1};
+  color: ${({ theme }) => theme.colors.ink900};
 `;
 
 const Select = styled.select`
   width: 100%;
   padding: 8px 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border: 1px solid ${({ theme }) => theme.colors.ink400};
+  border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ theme }) => theme.colors.surface1};
+  color: ${({ theme }) => theme.colors.ink900};
 `;
 
 const ButtonRow = styled.div`
@@ -59,9 +66,13 @@ const ButtonRow = styled.div`
 const Button = styled.button<{ variant?: 'primary' | 'danger' }>`
   padding: 8px 12px;
   border: 1px solid;
-  border-radius: 6px;
+  border-radius: ${({ theme }) => theme.radius.md};
   cursor: pointer;
-  ${p => p.variant === 'primary' ? `background:#3b82f6;border-color:#3b82f6;color:#fff;` : p.variant === 'danger' ? `background:#ef4444;border-color:#ef4444;color:#fff;` : `background:#fff;border-color:#d1d5db;color:#374151;`}
+  ${p => p.variant === 'primary'
+    ? `background:${p.theme.colors.brand};border-color:${p.theme.colors.brand};color:#fff;`
+    : p.variant === 'danger'
+      ? `background:${p.theme.colors.danger};border-color:${p.theme.colors.danger};color:#fff;`
+      : `background:${p.theme.colors.surface1};border-color:${p.theme.colors.ink400};color:${p.theme.colors.ink900};`}
 `;
 
 interface EventModalProps {

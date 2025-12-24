@@ -8,15 +8,29 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #ffffff;
+  background: ${({ theme }) => theme.colors.surface0};
+  color: ${({ theme }) => theme.colors.ink900};
 `;
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 24px;
-  border-bottom: 1px solid #e1e5e9;
+  padding: 24px 32px;
+  background: ${({ theme }) => theme.colors.glass1};
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border-bottom: 1px solid ${({ theme }) => theme.colors.glassBorder};
+  position: relative;
+  z-index: 10;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px; left: 0; right: 0; height: 8px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, transparent 100%);
+    pointer-events: none;
+  }
 `;
 
 const Controls = styled.div`
@@ -26,15 +40,27 @@ const Controls = styled.div`
 `;
 
 const Select = styled.select`
-  padding: 6px 8px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, ${({ theme }) => theme.colors.surface1} 0%, ${({ theme }) => theme.colors.surface0} 100%);
+  color: ${({ theme }) => theme.colors.ink900};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-bottom-color: ${({ theme }) => theme.colors.glassHighlight};
+  border-radius: ${({ theme }) => theme.radius.md};
+  font-family: ${({ theme }) => theme.font.body};
+  outline: none;
+  box-shadow: ${({ theme }) => theme.shadow.skeuoRaised};
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:focus {
+    border-color: ${({ theme }) => theme.colors.info};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.info}25, ${({ theme }) => theme.shadow.skeuoRaised};
+  }
 `;
 
 const Title = styled.h2`
   font-size: 18px;
   font-weight: 600;
-  color: #111827;
+  color: ${({ theme }) => theme.colors.ink900};
   margin: 0;
 `;
 
@@ -46,31 +72,31 @@ const Grid = styled.div`
 `;
 
 const TimeColumn = styled.div`
-  background: #f9fafb;
-  border-right: 1px solid #e5e7eb;
+  background: ${({ theme }) => theme.colors.surface0};
+  border-right: 1px solid ${({ theme }) => theme.colors.ink400};
 `;
 
 const TimeLabel = styled.div`
   height: 60px;
   padding: 8px 12px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.ink400};
   font-size: 12px;
-  color: #6b7280;
+  color: ${({ theme }) => theme.colors.ink600};
   display: flex;
   align-items: center;
 `;
 
 const DayColumn = styled.div`
-  border-right: 1px solid #e5e7eb;
+  border-right: 1px solid ${({ theme }) => theme.colors.ink400};
 `;
 
 const DayHeader = styled.div`
   height: 60px;
   padding: 8px 12px;
-  border-bottom: 2px solid #e5e7eb;
-  background: #ffffff;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.ink400};
+  background: ${({ theme }) => theme.colors.surface1};
   font-weight: 600;
-  color: #374151;
+  color: ${({ theme }) => theme.colors.ink600};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -79,8 +105,16 @@ const DayHeader = styled.div`
 
 const Cell = styled.div<{ level: 'free' | 'partial' | 'busy' }>`
   height: 60px;
-  border-bottom: 1px solid #e5e7eb;
-  background: ${p => p.level === 'free' ? '#d1fae5' : p.level === 'busy' ? '#fca5a5' : '#86efac'};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  background: ${props =>
+    props.level === 'free' ? props.theme.colors.success :
+      props.level === 'busy' ? props.theme.colors.danger :
+        props.theme.colors.warning};
+  opacity: 0.15;
+  transition: opacity 0.2s ease-out;
+  &:hover {
+    opacity: 0.3;
+  }
 `;
 
 function generateTimeSlots() {

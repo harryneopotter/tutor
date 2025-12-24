@@ -1,5 +1,8 @@
-import styled from 'styled-components';
+import React from 'react';
+import styled, { css, DefaultTheme } from 'styled-components';
 import { useSettingsStore } from '../store/settingsStore';
+import { Modal as UIModal } from '../ui/components/Modal';
+import { Button as UIButton } from '../ui/components/Button';
 import { PaletteName } from '../ui/theme/presets';
 
 export function SettingsModal({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -23,158 +26,116 @@ export function SettingsModal({ open, onClose }: { open: boolean; onClose: () =>
   };
 
   return (
-    <Overlay role="dialog" aria-modal="true" aria-label="Settings">
-      <Dialog>
-        <Header>
-          <Title>Settings</Title>
-          <CloseBtn onClick={onClose}>Close</CloseBtn>
-        </Header>
-        <Body>
-          <SectionTitle>Theme</SectionTitle>
-          <Grid>
-            {palettes.map((p) => (
-              <ThemeCard key={p.name} $active={themeName === p.name} onClick={() => handleSelect(p.name)}>
-                <Swatch $variant={p.name} />
-                <span>{p.label}</span>
-              </ThemeCard>
-            ))}
-          </Grid>
+    <UIModal
+      open={open}
+      onClose={onClose}
+      title="Settings"
+      footer={
+        <UIButton variant="primary" onClick={onClose}>Done</UIButton>
+      }
+    >
+      <SectionTitle>Theme Color</SectionTitle>
+      <Grid>
+        {palettes.map((p) => (
+          <ThemeCard key={p.name} $active={themeName === p.name} onClick={() => handleSelect(p.name)}>
+            <Swatch $variant={p.name} />
+            <span>{p.label}</span>
+          </ThemeCard>
+        ))}
+      </Grid>
 
-          <div style={{ height: 16 }} />
-          <SectionTitle>Appearance</SectionTitle>
-          <Row>
-            {(['system','light','dark'] as const).map(opt => (
-              <Choice
-                key={opt}
-                aria-pressed={appearance === opt}
-                $active={appearance === opt}
-                onClick={() => setAppearance(opt)}
-              >{opt.charAt(0).toUpperCase() + opt.slice(1)}</Choice>
-            ))}
-          </Row>
-        </Body>
-        <Footer>
-          <FooterBtn onClick={onClose}>Done</FooterBtn>
-        </Footer>
-      </Dialog>
-    </Overlay>
+      <div style={{ height: 24 }} />
+      <SectionTitle>Appearance</SectionTitle>
+      <Row>
+        {(['system', 'light', 'dark'] as const).map(opt => (
+          <Choice
+            key={opt}
+            aria-pressed={appearance === opt}
+            $active={appearance === opt}
+            onClick={() => setAppearance(opt)}
+          >{opt.charAt(0).toUpperCase() + opt.slice(1)}</Choice>
+        ))}
+      </Row>
+    </UIModal>
   );
 }
 
-const Overlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background: rgba(2, 6, 23, 0.4);
-  display: grid;
-  place-items: center;
-  z-index: 50;
-`;
-
-const Dialog = styled.div`
-  width: 560px;
-  max-width: calc(100vw - 32px);
-  background: ${({ theme }) => theme.colors.surface1};
-  color: ${({ theme }) => theme.colors.ink900};
-  border-radius: ${({ theme }) => theme.radius.xl};
-  box-shadow: ${({ theme }) => theme.shadow.card};
-  border: 1px solid #e2e8f0;
-  overflow: hidden;
-`;
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  border-bottom: 1px solid #e2e8f0;
-`;
-
-const Title = styled.h3`
-  margin: 0;
-  font-size: 16px;
-`;
-
-const CloseBtn = styled.button`
-  border: 1px solid #e2e8f0;
-  background: white;
-  border-radius: ${({ theme }) => theme.radius.md};
-  padding: 6px 10px;
-  cursor: pointer;
-  &:hover { background: #f8fafc; }
-`;
-
-const Body = styled.div`
-  padding: 16px;
-`;
-
 const SectionTitle = styled.div`
-  font-size: 12px;
-  color: ${({ theme }) => theme.colors.ink600};
+  font-size: 11px;
+  font-weight: 800;
+  color: ${({ theme }) => theme.colors.ink400};
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: 8px;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
 `;
 
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 16px;
 `;
 
 const Row = styled.div`
   display: flex;
-  gap: 8px;
+  background: rgba(0,0,0,0.05);
+  padding: 4px;
+  border-radius: ${({ theme }) => theme.radius.md};
+  gap: 4px;
 `;
 
 const ThemeCard = styled.button<{ $active: boolean }>`
   display: flex;
   align-items: center;
-  gap: 10px;
-  border: 1px solid ${p => (p.$active ? p.theme.colors.brand : '#e2e8f0')};
-  background: white;
+  gap: 12px;
+  border: 1px solid ${({ $active, theme }) => ($active ? theme.colors.brand : 'rgba(0,0,0,0.05)')};
+  background: ${({ $active, theme }) => ($active ? theme.colors.surface1 : 'rgba(255,255,255,0.5)')};
   border-radius: ${({ theme }) => theme.radius.lg};
-  padding: 12px;
+  padding: 14px;
   cursor: pointer;
   text-align: left;
-  &:hover { border-color: ${({ theme }) => theme.colors.brand}; }
+  transition: all 0.3s ease;
+  box-shadow: ${({ $active }) => $active ? '0 8px 16px rgba(0,0,0,0.05)' : 'none'};
+  
+  &:hover { 
+    border-color: ${({ theme }) => theme.colors.brand};
+    transform: translateY(-2px);
+  }
 `;
 
 const Swatch = styled.div<{ $variant: PaletteName }>`
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 9999px;
   background: ${({ $variant }) =>
     $variant === 'indigo' ? '#4F46E5' :
-    $variant === 'teal' ? '#0D9488' :
-    $variant === 'rose' ? '#E11D48' :
-    '#D97706'};
-  box-shadow: inset 0 0 0 3px rgba(255,255,255,0.6);
-`;
-
-const Footer = styled.div`
-  padding: 12px 16px;
-  border-top: 1px solid #e2e8f0;
-  display: flex;
-  justify-content: flex-end;
+      $variant === 'teal' ? '#0D9488' :
+        $variant === 'rose' ? '#E11D48' :
+          '#D97706'};
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 4px 8px rgba(0,0,0,0.1);
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 2px; left: 2px; right: 2px; height: 12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%);
+    border-radius: 999px;
+  }
 `;
 
 const Choice = styled.button<{ $active: boolean }>`
-  border: 1px solid ${p => (p.$active ? p.theme.colors.brand : '#e2e8f0')};
-  background: ${p => (p.$active ? p.theme.colors.surface1 : 'white')};
-  color: inherit;
-  border-radius: ${({ theme }) => theme.radius.md};
-  padding: 6px 10px;
-  cursor: pointer;
-  &:hover { border-color: ${({ theme }) => theme.colors.brand}; }
-`;
-
-const FooterBtn = styled.button`
-  background: ${({ theme }) => theme.colors.brand};
-  color: white;
+  flex: 1;
   border: none;
-  border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ $active, theme }) => ($active ? theme.colors.surface1 : 'transparent')};
+  color: ${({ $active, theme }) => ($active ? theme.colors.ink900 : theme.colors.ink600)};
+  box-shadow: ${({ $active }) => ($active ? '0 2px 8px rgba(0,0,0,0.08)' : 'none')};
+  border-radius: ${({ theme }) => theme.radius.sm};
   padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  &:hover { background: ${({ theme }) => theme.colors.brandHover}; }
+  transition: all 0.2s ease;
+  
+  &:hover { color: ${({ theme }) => theme.colors.brand}; }
 `;
 

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { 
-  startOfWeek, 
-  endOfWeek, 
-  eachDayOfInterval, 
-  format, 
-  addWeeks, 
+import {
+  startOfWeek,
+  endOfWeek,
+  eachDayOfInterval,
+  format,
+  addWeeks,
   subWeeks,
   isSameDay,
   setHours,
@@ -22,8 +22,8 @@ const CalendarContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #ffffff;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: ${({ theme }) => theme.colors.surface0};
+  color: ${({ theme }) => theme.colors.ink900};
 `;
 
 const Header = styled.div`
@@ -31,8 +31,20 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 16px 24px;
-  border-bottom: 1px solid #e1e5e9;
-  background: #ffffff;
+  background: ${({ theme }) => theme.colors.glass1};
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border-bottom: 1px solid ${({ theme }) => theme.colors.glassBorder};
+  z-index: 10;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px; left: 0; right: 0; height: 8px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, transparent 100%);
+    pointer-events: none;
+  }
 `;
 
 const HeaderActions = styled.div`
@@ -52,7 +64,7 @@ const WeekNavigation = styled.div`
 const WeekTitle = styled.h2`
   font-size: 18px;
   font-weight: 600;
-  color: #111827;
+  color: ${({ theme }) => theme.colors.ink900};
   margin: 0;
 `;
 
@@ -64,22 +76,23 @@ const CalendarGrid = styled.div`
 `;
 
 const TimeColumn = styled.div`
-  border-right: 1px solid #e5e7eb;
-  background: #f9fafb;
+  border-right: 1px solid ${({ theme }) => theme.colors.ink400};
+  background: ${({ theme }) => theme.colors.surface0};
 `;
 
 const TimeSlotLabel = styled.div`
   height: 60px;
   padding: 8px 12px;
-  border-bottom: 1px solid #e5e7eb;
-  font-size: 12px;
-  color: #6b7280;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  font-size: 11px;
+  font-family: ${({ theme }) => theme.font.mono};
+  color: ${({ theme }) => theme.colors.ink600};
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 `;
 
 const DayColumn = styled.div`
-  border-right: 1px solid #e5e7eb;
+  border-right: 1px solid ${({ theme }) => theme.colors.border};
   position: relative;
   min-width: 120px;
 `;
@@ -95,16 +108,17 @@ const NowLine = styled.div`
 `;
 
 const DayHeader = styled.div<{ $isToday: boolean }>`
-  height: 60px;
+  height: 64px;
   padding: 8px 12px;
-  border-bottom: 2px solid ${props => props.$isToday ? '#3b82f6' : '#e5e7eb'};
-  background: ${props => props.$isToday ? '#eff6ff' : '#ffffff'};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  background: ${props => props.$isToday ? props.theme.colors.surface1 : 'transparent'};
   font-weight: 600;
-  color: ${props => props.$isToday ? '#1d4ed8' : '#374151'};
+  color: ${props => props.$isToday ? props.theme.colors.info : props.theme.colors.ink900};
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease-out;
 `;
 
 const DayName = styled.div`
@@ -119,37 +133,63 @@ const DayNumber = styled.div`
 
 const TimeSlotCell = styled.div`
   height: 60px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   position: relative;
   cursor: pointer;
+  transition: background 0.1s ease-out;
   
   &:hover {
-    background: #f1f5f9;
+    background: ${({ theme }) => theme.colors.surface1}80;
   }
 `;
 
 const EventBlock = styled.div<{ eventType: 'tutor-class' | 'student-class' | 'missing-info' }>`
   position: absolute;
-  left: 2px;
-  right: 2px;
+  left: 3px;
+  right: 3px;
   background: ${props => {
     switch (props.eventType) {
-      case 'tutor-class': return '#3b82f6';
-      case 'student-class': return '#10b981';
-      case 'missing-info': return '#ef4444';
-      default: return '#6b7280';
+      case 'tutor-class': return `linear-gradient(180deg, ${props.theme.colors.info} 0%, #0056B3 100%)`;
+      case 'student-class': return `linear-gradient(180deg, ${props.theme.colors.success} 0%, #1E7E34 100%)`;
+      case 'missing-info': return `linear-gradient(180deg, ${props.theme.colors.danger} 0%, #B71C1C 100%)`;
+      default: return props.theme.colors.brand;
     }
   }};
   color: white;
-  padding: 4px 6px;
-  border-radius: 4px;
+  padding: 8px 10px;
+  border-radius: ${({ theme }) => theme.radius.sm};
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 700;
+  font-family: ${({ theme }) => theme.font.heading};
   z-index: 1;
   cursor: pointer;
+  box-shadow: ${({ theme }) => theme.shadow.skeuoRaised}, 0 4px 8px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 1px; left: 1px; right: 1px; height: 45%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+    pointer-events: none;
+    border-radius: inherit;
+  }
   
   &:hover {
-    opacity: 0.9;
+    filter: brightness(1.1);
+    transform: scale(1.05) translateY(-2px);
+    z-index: 50;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.2), ${({ theme }) => theme.shadow.skeuoRaised};
+  }
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: ${({ theme }) => theme.shadow.skeuoPressed};
+    &::after { opacity: 0; }
   }
 `;
 
@@ -169,10 +209,10 @@ const generateTimeSlots = (): TimeSlot[] => {
 };
 
 export const WeeklyCalendar: React.FC = () => {
-  const { 
-    currentWeek, 
-    setCurrentWeek, 
-    events, 
+  const {
+    currentWeek,
+    setCurrentWeek,
+    events,
     students,
     waitlist,
     setSelectedEvent,
@@ -242,11 +282,11 @@ export const WeeklyCalendar: React.FC = () => {
   const weekStart = startOfWeek(currentWeek, { weekStartsOn: 1 }); // Monday
   const weekEnd = endOfWeek(currentWeek, { weekStartsOn: 1 });
   const weekDays = eachDayOfInterval({ start: weekStart, end: weekEnd });
-  
+
   const goToPreviousWeek = () => {
     setCurrentWeek(subWeeks(currentWeek, 1));
   };
-  
+
   const goToNextWeek = () => {
     setCurrentWeek(addWeeks(currentWeek, 1));
   };
@@ -285,9 +325,9 @@ export const WeeklyCalendar: React.FC = () => {
       if (event.deletedAt) return false;
       if (event.canceled) return false;
       const eventStart = new Date(event.start);
-      return isSameDay(eventStart, day) && 
-             eventStart.getHours() === timeSlot.hour && 
-             eventStart.getMinutes() === timeSlot.minute;
+      return isSameDay(eventStart, day) &&
+        eventStart.getHours() === timeSlot.hour &&
+        eventStart.getMinutes() === timeSlot.minute;
     });
   };
 
@@ -353,16 +393,16 @@ export const WeeklyCalendar: React.FC = () => {
               const background = todayCol
                 ? (zebra ? '#EEF2FF' : '#F8FAFF')
                 : (zebra ? '#F3F6FB' : undefined);
-              
+
               return (
-                <TimeSlotCell 
+                <TimeSlotCell
                   key={slotIndex}
                   onClick={() => handleSlotClick(day, slot)}
                   style={background ? { background } : undefined}
                 >
                   {eventsInSlot.map((event, eventIndex) => {
                     let longPressTimer: NodeJS.Timeout;
-                    
+
                     return (
                       <EventBlock
                         key={event.id}
@@ -412,7 +452,7 @@ export const WeeklyCalendar: React.FC = () => {
           </DayColumn>
         ))}
       </CalendarGrid>
-      
+
       {canceledEvent && (
         <FillSlotModal
           isOpen={showFillSlotModal}
@@ -429,7 +469,7 @@ export const WeeklyCalendar: React.FC = () => {
       )}
 
       {/* Add event modal */}
-      <AddEventModal 
+      <AddEventModal
         isOpen={addModal.open}
         startISO={addModal.startISO || new Date().toISOString()}
         onClose={() => setAddModal({ open: false })}
@@ -437,8 +477,8 @@ export const WeeklyCalendar: React.FC = () => {
 
       {/* Event detail modal */}
       {/** Using selectedEvent from store */}
-      { (useAppStore.getState().selectedEvent) && showEventModal && (
-        <EventModal 
+      {(useAppStore.getState().selectedEvent) && showEventModal && (
+        <EventModal
           event={useAppStore.getState().selectedEvent as ClassEvent}
           onClose={() => setShowEventModal(false)}
         />
