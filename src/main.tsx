@@ -5,6 +5,7 @@ import App from './App.tsx';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle, makeTheme } from './ui/theme';
 import { useSettingsStore } from './store/settingsStore';
+import { ToastProvider } from './ui/components/ToastProvider';
 
 const Root = () => {
   const themeName = useSettingsStore(state => state.theme);
@@ -28,7 +29,9 @@ const Root = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <App />
+      <ToastProvider>
+        <App />
+      </ToastProvider>
     </ThemeProvider>
   );
 };

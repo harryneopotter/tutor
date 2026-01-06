@@ -1,14 +1,23 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { WeeklyCalendar } from './components/WeeklyCalendar';
-const TodayDashboard = lazy(() => import('./components/TodayDashboard').then(m => ({ default: m.TodayDashboard })));
-const WaitlistManagement = lazy(() => import('./components/WaitlistManagement').then(m => ({ default: m.WaitlistManagement })));
-const TrashView = lazy(() => import('./components/TrashView').then(m => ({ default: m.TrashView })));
-const AvailabilityReport = lazy(() => import('./components/AvailabilityReport').then(m => ({ default: m.AvailabilityReport })));
-const StudentBinder = lazy(() => import('./components/StudentBinder').then(m => ({ default: m.StudentBinder })));
+import { WeeklyCalendar } from './features/calendar/WeeklyCalendar';
+const TodayDashboard = lazy(() => import('./features/dashboard/TodayDashboard').then(m => ({ default: m.TodayDashboard })));
+const WaitlistManagement = lazy(() => import('./features/waitlist/WaitlistManagement').then(m => ({ default: m.WaitlistManagement })));
+const TrashView = lazy(() => import('./features/system/TrashView').then(m => ({ default: m.TrashView })));
+const AvailabilityReport = lazy(() => import('./features/binder/AvailabilityReport').then(m => ({ default: m.AvailabilityReport })));
+const StudentBinder = lazy(() => import('./features/binder/StudentBinder').then(m => ({ default: m.StudentBinder })));
 import { useAppStore } from './store/appStore';
-import { SettingsModal } from './components/SettingsModal';
-import { SplashScreen } from './components/SplashScreen';
+import { SettingsModal } from './features/settings/SettingsModal';
+import { SplashScreen } from './features/system/SplashScreen';
+import {
+  Calendar,
+  ClipboardList,
+  Clock,
+  BarChart,
+  BookOpen,
+  Trash2,
+  Settings
+} from 'lucide-react';
 // Premium Book UI integration (feature flag)
 const PremiumBookUILazy = lazy(() => import('./redesign/premium-book-ui'));
 
@@ -133,13 +142,6 @@ const SettingsButton = styled(SampleDataButton)`
 
 type ViewType = 'calendar' | 'today' | 'waitlist' | 'trash' | 'availability' | 'binder';
 
-const Icon = styled.span`
-  font-size: 16px;
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-`;
 
 function App() {
   const ENABLE_BOOK_UI = (import.meta as any).env?.VITE_ENABLE_BOOK_UI === 'true';
@@ -212,7 +214,7 @@ function App() {
           aria-current={currentView === 'calendar' ? 'page' : undefined}
           onClick={() => setCurrentView('calendar')}
         >
-          <Icon aria-hidden>📅</Icon>
+          <Calendar size={18} />
           <span>Weekly Calendar</span>
         </NavButton>
         <NavButton
@@ -220,7 +222,7 @@ function App() {
           aria-current={currentView === 'today' ? 'page' : undefined}
           onClick={() => setCurrentView('today')}
         >
-          <Icon aria-hidden>📋</Icon>
+          <ClipboardList size={18} />
           <span>Today</span>
         </NavButton>
         <NavButton
@@ -228,7 +230,7 @@ function App() {
           aria-current={currentView === 'waitlist' ? 'page' : undefined}
           onClick={() => setCurrentView('waitlist')}
         >
-          <Icon aria-hidden>⏰</Icon>
+          <Clock size={18} />
           <span>Waitlist</span>
         </NavButton>
         <NavButton
@@ -236,7 +238,7 @@ function App() {
           aria-current={currentView === 'availability' ? 'page' : undefined}
           onClick={() => setCurrentView('availability')}
         >
-          <Icon aria-hidden>📊</Icon>
+          <BarChart size={18} />
           <span>Availability</span>
         </NavButton>
         <NavButton
@@ -244,7 +246,7 @@ function App() {
           aria-current={currentView === 'binder' ? 'page' : undefined}
           onClick={() => setCurrentView('binder')}
         >
-          <Icon aria-hidden>📚</Icon>
+          <BookOpen size={18} />
           <span>Binder</span>
         </NavButton>
         <NavButton
@@ -252,12 +254,15 @@ function App() {
           aria-current={currentView === 'trash' ? 'page' : undefined}
           onClick={() => setCurrentView('trash')}
         >
-          <Icon aria-hidden>🗑️</Icon>
+          <Trash2 size={18} />
           <span>Trash</span>
         </NavButton>
 
         <RightControls>
-          <SettingsButton onClick={() => setShowSettings(true)}>⚙ Settings</SettingsButton>
+          <SettingsButton onClick={() => setShowSettings(true)}>
+            <Settings size={14} style={{ marginRight: 6 }} />
+            Settings
+          </SettingsButton>
           {students.length === 0 && (
             <SampleDataButton onClick={handleLoadSampleData}>
               Load Sample Data

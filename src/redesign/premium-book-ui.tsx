@@ -3,12 +3,12 @@ import { BookOpen, Calendar, Clock, Users, Bookmark, Trash2, ChevronRight } from
 
 // Lazy map of real app components for chapters
 const ChapterComponentMap: Record<string, React.ComponentType<any>> = {
-  calendar: lazy(() => import('../components/WeeklyCalendar').then(m => ({ default: m.WeeklyCalendar }))),
-  today: lazy(() => import('../components/TodayDashboard').then(m => ({ default: m.TodayDashboard }))),
-  waitlist: lazy(() => import('../components/WaitlistManagement').then(m => ({ default: m.WaitlistManagement }))),
-  availability: lazy(() => import('../components/AvailabilityReport').then(m => ({ default: m.AvailabilityReport }))),
-  binder: lazy(() => import('../components/StudentBinder').then(m => ({ default: m.StudentBinder }))),
-  trash: lazy(() => import('../components/TrashView').then(m => ({ default: m.TrashView }))),
+  calendar: lazy(() => import('../features/calendar/WeeklyCalendar').then(m => ({ default: m.WeeklyCalendar }))),
+  today: lazy(() => import('../features/dashboard/TodayDashboard').then(m => ({ default: m.TodayDashboard }))),
+  waitlist: lazy(() => import('../features/waitlist/WaitlistManagement').then(m => ({ default: m.WaitlistManagement }))),
+  availability: lazy(() => import('../features/binder/AvailabilityReport').then(m => ({ default: m.AvailabilityReport }))),
+  binder: lazy(() => import('../features/binder/StudentBinder').then(m => ({ default: m.StudentBinder }))),
+  trash: lazy(() => import('../features/system/TrashView').then(m => ({ default: m.TrashView }))),
 };
 
 const PremiumBookUI = () => {

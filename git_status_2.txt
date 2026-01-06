@@ -1,0 +1,60 @@
+On branch main
+Your branch is ahead of 'origin/main' by 2 commits.
+  (use "git push" to publish your local commits)
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   .dropstone/mcp.json
+	new file:   .dropstone/monitoring/metrics.json
+	new file:   .env.example
+	modified:   .gitignore
+	new file:   .trae/rules/project_rules.md
+	new file:   Tutor.code-workspace-new.code-workspace
+	new file:   design/Screenshot 2025-09-07 at 17-25-04 Tutor Virtual Classroom.png
+	new file:   design/Screenshot 2025-09-07 at 17-25-43 Tutor Virtual Classroom.png
+	new file:   design/Screenshot 2025-09-07 at 17-25-50 Tutor Virtual Classroom.png
+	new file:   design/Screenshot 2025-09-07 at 17-25-55 Tutor Virtual Classroom.png
+	new file:   design/Screenshot 2025-09-07 at 17-26-01 Tutor Virtual Classroom.png
+	new file:   design/Screenshot 2025-09-07 at 17-26-21 Tutor Virtual Classroom.png
+	new file:   design/Screenshot 2025-09-07 at 17-27-00 Tutor Virtual Classroom.png
+	new file:   design/Screenshot 2025-09-07 at 17-27-16 Tutor Virtual Classroom.png
+	modified:   index.html
+	modified:   package-lock.json
+	modified:   package.json
+	new file:   redesign/book-ui-implementation-guide.md
+	new file:   redesign/implementation_plan.md
+	new file:   redesign/todo_list.md
+	modified:   src/App.tsx
+	modified:   src/components/AvailabilityReport.tsx
+	modified:   src/components/EventModal.tsx
+	modified:   src/components/FillSlotModal.tsx
+	modified:   src/components/SettingsModal.tsx
+	modified:   src/components/SplashScreen.tsx
+	modified:   src/components/StudentBinder.tsx
+	modified:   src/components/TodayDashboard.tsx
+	modified:   src/components/TrashView.tsx
+	modified:   src/components/WaitlistManagement.tsx
+	modified:   src/components/WeeklyCalendar.tsx
+	new file:   src/redesign/premium-book-ui.tsx
+	modified:   src/store/appStore.ts
+	modified:   src/ui/components/Button.tsx
+	modified:   src/ui/components/Card.tsx
+	modified:   src/ui/components/Input.tsx
+	modified:   src/ui/components/Modal.tsx
+	modified:   src/ui/components/TextArea.tsx
+	modified:   src/ui/theme/presets.ts
+	modified:   src/ui/theme/styled.d.ts
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	Recording 2025-12-24 150021.mp4
+	Screenshot 2025-12-24 144105.jpg
+	Screenshot 2025-12-24 145208.jpg
+	Screenshot 2025-12-24 145227.jpg
+	design/tutor_redesign-1.md
+	git_status_2.txt
+	git_status_out.txt
+	prd.md
+	tutor_redesign-1.md
+	vite_output.txt
+

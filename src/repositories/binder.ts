@@ -1,32 +1,26 @@
 import { db } from '../db/database';
-import { LessonPlan, SyllabusTopic } from '../types';
+import { SyllabusTopic, LessonPlan } from '../types';
+import { BaseRepository } from '../db/baseRepository';
 
-export const binderRepo = {
-  // Syllabus
+class BinderRepository {
+  // Binder uses multiple tables, so we'll encapsulate them
+  // or use sub-repositories if needed. For now, we'll keep it as a service-like repo.
+
   async getSyllabusByStudent(studentId: string): Promise<SyllabusTopic[]> {
-    return db.table<SyllabusTopic, string>('syllabusTopics').where('studentId').equals(studentId).toArray();
-  },
-  async addSyllabusTopic(topic: SyllabusTopic): Promise<string> {
-    return db.table<SyllabusTopic, string>('syllabusTopics').put(topic);
-  },
-  async updateSyllabusTopic(id: string, updates: Partial<SyllabusTopic>): Promise<number> {
-    return db.table<SyllabusTopic, string>('syllabusTopics').update(id, updates);
-  },
-  async removeSyllabusTopic(id: string): Promise<void> {
-    await db.table<SyllabusTopic, string>('syllabusTopics').delete(id);
-  },
+    return db.syllabusTopics.where('studentId').equals(studentId).toArray();
+  }
 
-  // Lesson Plans
+  async addSyllabusTopic(topic: SyllabusTopic): Promise<string> {
+    return db.syllabusTopics.put(topic);
+  }
+
   async getLessonPlansByStudent(studentId: string): Promise<LessonPlan[]> {
-    return db.table<LessonPlan, string>('lessonPlans').where('studentId').equals(studentId).toArray();
-  },
+    return db.lessonPlans.where('studentId').equals(studentId).toArray();
+  }
+
   async addLessonPlan(plan: LessonPlan): Promise<string> {
-    return db.table<LessonPlan, string>('lessonPlans').put(plan);
-  },
-  async updateLessonPlan(id: string, updates: Partial<LessonPlan>): Promise<number> {
-    return db.table<LessonPlan, string>('lessonPlans').update(id, updates);
-  },
-  async removeLessonPlan(id: string): Promise<void> {
-    await db.table<LessonPlan, string>('lessonPlans').delete(id);
-  },
-};
+    return db.lessonPlans.put(plan);
+  }
+}
+
+export const binderRepo = new BinderRepository();

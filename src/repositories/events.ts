@@ -1,24 +1,16 @@
 import { db } from '../db/database';
 import { ClassEvent } from '../types';
+import { BaseRepository } from '../db/baseRepository';
 
-export const eventsRepo = {
-  async getAll(): Promise<ClassEvent[]> {
-    return db.classEvents.toArray();
-  },
-  async add(event: ClassEvent): Promise<string> {
-    return db.classEvents.put(event);
-  },
-  async addMany(events: ClassEvent[]): Promise<void> {
-    await db.classEvents.bulkPut(events);
-  },
-  async update(id: string, updates: Partial<ClassEvent>): Promise<number> {
-    return db.classEvents.update(id, updates);
-  },
+class EventsRepository extends BaseRepository<ClassEvent, string> {
+  constructor() {
+    super(db.classEvents, 'Events');
+  }
+
   async softDelete(id: string): Promise<number> {
     const deletedAt = new Date().toISOString();
-    return db.classEvents.update(id, { deletedAt });
-  },
-  async remove(id: string): Promise<void> {
-    await db.classEvents.delete(id);
+    return this.update(id, { deletedAt } as Partial<ClassEvent>);
   }
-};
+}
+
+export const eventsRepo = new EventsRepository();
