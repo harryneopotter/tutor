@@ -28,20 +28,36 @@ Desktop.ini
 /coverage/
 
 # Project-specific non-essential files
-Tutor.code-workspace
-!prd.md
+Tutor.code-workspace*
+prd.md
 *.pdf
 WARP.md
+feedback.md
+tutor_redesign-1.md
 
-# Local docs (keep untracked)
-docs/REDESIGN_STATUS.md
-docs/SCREENSHOT_GUIDE.md
-docs/screenshots/
+# Logs & Error Reports
+tsc_errors.txt
+dev.log
+git_status_*.txt
+git_status_out.txt
+vite_output.txt
+*.log
+
+# Local media (root level)
+*.mp4
+Screenshot *.jpg
+Recording *.mp4
+
+# Shared documentation (keep tracks README and its assets)
+!README.md
+!docs/screenshots/
 
 # Internal change logs (keep local-only)
 CHANGE_LOG*.md
+CHANGE_LOG_DETAILS.md
 
-# Design files and local documentation
-!.design/
-!tutor_redesign-1.md
+# Design files (local only)
+.dropstone/
+.trae/
+.design/
 
