@@ -1,11 +1,13 @@
 import Dexie, { Table } from 'dexie';
-import { Student, ClassEvent, ExtraClassRequest, WaitlistEntry } from '../types';
+import { Student, ClassEvent, ExtraClassRequest, WaitlistEntry, SyllabusTopic, LessonPlan } from '../types';
 
 export class TutorDB extends Dexie {
   students!: Table<Student, string>;
   classEvents!: Table<ClassEvent, string>;
   extraRequests!: Table<ExtraClassRequest, string>;
   waitlist!: Table<WaitlistEntry, string>;
+  syllabusTopics!: Table<SyllabusTopic, string>;
+  lessonPlans!: Table<LessonPlan, string>;
 
   constructor() {
     super('tutor_vc_db');

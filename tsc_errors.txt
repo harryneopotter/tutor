@@ -1,0 +1,37 @@
+src/a11y/__tests__/binder.a11y.test.tsx(8,41): error TS7016: Could not find a declaration file for module 'jest-axe'. 'G:/AI/Github/projects for git/Tutor/node_modules/jest-axe/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/jest-axe` if it exists or add a new declaration (.d.ts) file containing `declare module 'jest-axe';`
+src/a11y/__tests__/binder.a11y.test.tsx(22,21): error TS2339: Property 'toHaveNoViolations' does not exist on type 'Assertion<any>'.
+src/a11y/__tests__/calendar.a11y.test.tsx(8,41): error TS7016: Could not find a declaration file for module 'jest-axe'. 'G:/AI/Github/projects for git/Tutor/node_modules/jest-axe/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/jest-axe` if it exists or add a new declaration (.d.ts) file containing `declare module 'jest-axe';`
+src/a11y/__tests__/calendar.a11y.test.tsx(22,21): error TS2339: Property 'toHaveNoViolations' does not exist on type 'Assertion<any>'.
+src/a11y/__tests__/settings.a11y.test.tsx(8,41): error TS7016: Could not find a declaration file for module 'jest-axe'. 'G:/AI/Github/projects for git/Tutor/node_modules/jest-axe/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/jest-axe` if it exists or add a new declaration (.d.ts) file containing `declare module 'jest-axe';`
+src/a11y/__tests__/settings.a11y.test.tsx(22,21): error TS2339: Property 'toHaveNoViolations' does not exist on type 'Assertion<any>'.
+src/a11y/__tests__/today.a11y.test.tsx(8,41): error TS7016: Could not find a declaration file for module 'jest-axe'. 'G:/AI/Github/projects for git/Tutor/node_modules/jest-axe/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/jest-axe` if it exists or add a new declaration (.d.ts) file containing `declare module 'jest-axe';`
+src/a11y/__tests__/today.a11y.test.tsx(22,21): error TS2339: Property 'toHaveNoViolations' does not exist on type 'Assertion<any>'.
+src/a11y/__tests__/trash.a11y.test.tsx(8,41): error TS7016: Could not find a declaration file for module 'jest-axe'. 'G:/AI/Github/projects for git/Tutor/node_modules/jest-axe/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/jest-axe` if it exists or add a new declaration (.d.ts) file containing `declare module 'jest-axe';`
+src/a11y/__tests__/trash.a11y.test.tsx(22,21): error TS2339: Property 'toHaveNoViolations' does not exist on type 'Assertion<any>'.
+src/a11y/__tests__/waitlist.a11y.test.tsx(8,41): error TS7016: Could not find a declaration file for module 'jest-axe'. 'G:/AI/Github/projects for git/Tutor/node_modules/jest-axe/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/jest-axe` if it exists or add a new declaration (.d.ts) file containing `declare module 'jest-axe';`
+src/a11y/__tests__/waitlist.a11y.test.tsx(22,21): error TS2339: Property 'toHaveNoViolations' does not exist on type 'Assertion<any>'.
+src/features/calendar/EventModal.tsx(162,23): error TS2322: Type '"small"' is not assignable to type 'ButtonSize | undefined'.
+src/features/calendar/EventModal.tsx(168,23): error TS2322: Type '"small"' is not assignable to type 'ButtonSize | undefined'.
+src/features/settings/SettingsModal.tsx(2,18): error TS6133: 'css' is declared but its value is never read.
+src/features/settings/SettingsModal.tsx(2,23): error TS6133: 'DefaultTheme' is declared but its value is never read.
+src/redesign/premium-book-ui.tsx(72,21): error TS7006: Parameter 'index' implicitly has an 'any' type.
+src/redesign/premium-book-ui.tsx(84,29): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/redesign/premium-book-ui.tsx(88,28): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/redesign/premium-book-ui.tsx(102,34): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/redesign/premium-book-ui.tsx(162,9): error TS6133: 'currentPage' is declared but its value is never read.
+src/redesign/premium-book-ui.tsx(352,22): error TS7031: Binding element 'page' implicitly has an 'any' type.
+src/redesign/premium-book-ui.tsx(389,20): error TS7031: Binding element 'page' implicitly has an 'any' type.
+src/redesign/premium-book-ui.tsx(389,26): error TS7031: Binding element 'goToPage' implicitly has an 'any' type.
+src/redesign/premium-book-ui.tsx(389,36): error TS7031: Binding element 'pages' implicitly has an 'any' type.
+src/redesign/premium-book-ui.tsx(402,29): error TS7006: Parameter 'chapter' implicitly has an 'any' type.
+src/redesign/premium-book-ui.tsx(402,38): error TS7006: Parameter 'idx' implicitly has an 'any' type.
+src/redesign/premium-book-ui.tsx(405,53): error TS7006: Parameter 'p' implicitly has an 'any' type.
+src/redesign/premium-book-ui.tsx(440,24): error TS7031: Binding element 'page' implicitly has an 'any' type.
+src/repositories/binder.ts(3,1): error TS6133: 'BaseRepository' is declared but its value is never read.
+src/ui/components/ToastProvider.tsx(2,29): error TS6133: 'css' is declared but its value is never read.
