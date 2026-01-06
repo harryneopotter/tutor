@@ -116,7 +116,7 @@ const Cell = styled.div<{ level: 'free' | 'partial' | 'busy' }>`
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   background: ${props =>
     props.level === 'free' ? props.theme.colors.success :
-      props.level === 'busy' ? props.theme.colors.danger :
+      props.level === 'busy' ? '#FF69B4' : // HotPink/Pink for busy as per PRD
         props.theme.colors.warning};
   opacity: 0.15;
   transition: opacity 0.2s ease-out;

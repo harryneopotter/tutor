@@ -16,7 +16,8 @@ import {
   BarChart,
   BookOpen,
   Trash2,
-  Settings
+  Settings,
+  Bell
 } from 'lucide-react';
 // Premium Book UI integration (feature flag)
 const PremiumBookUILazy = lazy(() => import('./redesign/premium-book-ui'));
@@ -140,6 +141,42 @@ const SettingsButton = styled(SampleDataButton)`
   border-color: ${({ theme }) => theme.colors.ink400};
 `;
 
+const NotificationBell = styled.button`
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.ink600};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  
+  &:hover {
+    background: rgba(0,0,0,0.05);
+    color: ${({ theme }) => theme.colors.brand};
+  }
+`;
+
+const Badge = styled.span`
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: ${({ theme }) => theme.colors.danger};
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+`;
+
 type ViewType = 'calendar' | 'today' | 'waitlist' | 'trash' | 'availability' | 'binder';
 
 
@@ -148,7 +185,9 @@ function App() {
   const [currentView, setCurrentView] = useState<ViewType>('calendar');
   const [showSettings, setShowSettings] = useState(false);
   const [showSplash, setShowSplash] = useState(false);
-  const { students, initializeSampleData, hydrateFromDB, initialized } = useAppStore();
+  const { students, extraClassRequests, initializeSampleData, hydrateFromDB, initialized } = useAppStore();
+
+  const openRequestsCount = extraClassRequests.filter(r => r.status === 'open').length;
   const [splashExiting, setSplashExiting] = useState(false);
 
   useEffect(() => {
@@ -259,6 +298,15 @@ function App() {
         </NavButton>
 
         <RightControls>
+          {openRequestsCount > 0 && (
+            <NotificationBell
+              onClick={() => setCurrentView('today')}
+              title={`${openRequestsCount} pending extra class requests`}
+            >
+              <Bell size={18} />
+              <Badge>{openRequestsCount}</Badge>
+            </NotificationBell>
+          )}
           <SettingsButton onClick={() => setShowSettings(true)}>
             <Settings size={14} style={{ marginRight: 6 }} />
             Settings

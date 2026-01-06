@@ -297,10 +297,14 @@ export const WeeklyCalendar: React.FC = () => {
   };
 
   const handleEventLongPress = (event: ClassEvent) => {
-    // Cancel the event and show fill slot modal
-    deleteEvent(event.id);
-    setCanceledEvent(event);
-    setShowFillSlotModal(true);
+    // Cancel the event and show fill slot modal (Quick Cancel)
+    // We update the state to mark as canceled per PRD "quick cancel" flow
+    // which then triggers the Fill Slot suggestions.
+    if (window.confirm(`Quick cancel class for ${students.find(s => s.id === event.studentId)?.name}?`)) {
+      deleteEvent(event.id);
+      setCanceledEvent(event);
+      setShowFillSlotModal(true);
+    }
   };
 
   const handleAssignSlot = (studentId: string, duration: number) => {
@@ -420,7 +424,7 @@ export const WeeklyCalendar: React.FC = () => {
                         onMouseDown={() => {
                           longPressTimer = setTimeout(() => {
                             handleEventLongPress(event);
-                          }, 500);
+                          }, 400);
                         }}
                         onMouseUp={() => {
                           clearTimeout(longPressTimer);
