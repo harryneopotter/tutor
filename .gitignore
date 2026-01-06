@@ -51,6 +51,11 @@ Recording *.mp4
 # Shared documentation (keep tracks README and its assets)
 !README.md
 !docs/screenshots/
+*.md
+!README.md
+**/docs/*.md
+**/design/*.md
+!README.md
 
 # Internal change logs (keep local-only)
 CHANGE_LOG*.md
