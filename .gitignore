@@ -55,7 +55,12 @@ Recording *.mp4
 !README.md
 **/docs/*.md
 **/design/*.md
-!README.md
+
+# Project-specific large files
+Tutor_Documentation.zip
+
+# Redesign folder (local-only)
+redesign/
 
 # Internal change logs (keep local-only)
 CHANGE_LOG*.md
