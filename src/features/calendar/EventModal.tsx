@@ -159,13 +159,13 @@ export const EventModal: React.FC<EventModalProps> = ({ event, onClose }) => {
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <StatusBadge $status={status}>{status}</StatusBadge>
           {!event.confirmed && !event.canceled && (
-            <UIButton size="small" variant="secondary" onClick={() => { updateEvent(event.id, { confirmed: true, canceled: false }); showToast('Event confirmed', 'success'); onClose(); }}>
+            <UIButton size="sm" variant="secondary" onClick={() => { updateEvent(event.id, { confirmed: true, canceled: false }); showToast('Event confirmed', 'success'); onClose(); }}>
               <Check size={14} style={{ marginRight: 6 }} />
               Confirm
             </UIButton>
           )}
           {!event.canceled && (
-            <UIButton size="small" variant="secondary" onClick={() => { updateEvent(event.id, { canceled: true, confirmed: false }); showToast('Event canceled', 'info'); onClose(); }}>
+            <UIButton size="sm" variant="secondary" onClick={() => { updateEvent(event.id, { canceled: true, confirmed: false }); showToast('Event canceled', 'info'); onClose(); }}>
               <X size={14} style={{ marginRight: 6 }} />
               Cancel
             </UIButton>

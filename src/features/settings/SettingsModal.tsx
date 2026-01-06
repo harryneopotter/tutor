@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css, DefaultTheme } from 'styled-components';
+import styled from 'styled-components';
 import { useSettingsStore } from '../../store/settingsStore';
 import { Modal as UIModal } from '../../ui/components/Modal';
 import { Button as UIButton } from '../../ui/components/Button';

@@ -1,6 +1,5 @@
 import { db } from '../db/database';
 import { SyllabusTopic, LessonPlan } from '../types';
-import { BaseRepository } from '../db/baseRepository';
 
 class BinderRepository {
   // Binder uses multiple tables, so we'll encapsulate them

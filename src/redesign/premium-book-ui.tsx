@@ -11,6 +11,24 @@ const ChapterComponentMap: Record<string, React.ComponentType<any>> = {
   trash: lazy(() => import('../features/system/TrashView').then(m => ({ default: m.TrashView }))),
 };
 
+interface Chapter {
+  id: string;
+  title: string;
+  icon: React.ComponentType<any>;
+  chapter: string;
+}
+
+interface Page {
+  id: string;
+  type: string;
+  title?: string;
+  subtitle?: string;
+  edition?: string;
+  chapters?: Chapter[];
+  icon?: React.ComponentType<any>;
+  chapter?: string;
+}
+
 const PremiumBookUI = () => {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -69,7 +87,7 @@ const PremiumBookUI = () => {
     }, 400);
   };
 
-  const goToPage = (index) => {
+  const goToPage = (index: number) => {
     if (isTransitioning || index === currentPageIndex) return;
     setIsTransitioning(true);
     setTransitionDirection(index > currentPageIndex ? 'forward' : 'backward');
@@ -81,11 +99,11 @@ const PremiumBookUI = () => {
   };
 
   // Touch handlers for swipe
-  const handleTouchStart = (e) => {
+  const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
   };
 
-  const handleTouchMove = (e) => {
+  const handleTouchMove = (e: React.TouchEvent) => {
     setTouchEnd(e.targetTouches[0].clientX);
   };
 
@@ -99,7 +117,7 @@ const PremiumBookUI = () => {
   };
 
   // Keyboard navigation: ArrowLeft/Right, PageUp/PageDown, Home/End
-  const onKeyDown = useCallback((e) => {
+  const onKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (isTransitioning) return;
     switch (e.key) {
       case 'ArrowRight':
@@ -158,8 +176,6 @@ const PremiumBookUI = () => {
       container?.focus();
     }
   }, [currentPageIndex, isTransitioning]);
-
-  const currentPage = pages[currentPageIndex];
 
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-amber-100 via-orange-50 to-amber-50 overflow-hidden">
@@ -349,7 +365,7 @@ const PremiumBookUI = () => {
 };
 
 // Cover Page Component
-const CoverPage = ({ page }) => (
+const CoverPage = ({ page }: { page: Page }) => (
   <div className="w-full h-full rounded-2xl shadow-2xl leather-texture bg-gradient-to-br from-amber-900 via-amber-800 to-amber-950 flex flex-col items-center justify-center border-4 border-amber-950 relative overflow-hidden">
     {/* Gold Border Frame */}
     <div className="absolute inset-8 border-2 border-amber-400/30 rounded-xl"></div>
@@ -386,7 +402,7 @@ const CoverPage = ({ page }) => (
 );
 
 // Table of Contents Page Component
-const TOCPage = ({ page, goToPage, pages }) => (
+const TOCPage = ({ page, goToPage, pages }: { page: Page; goToPage: (index: number) => void; pages: Page[] }) => (
   <div className="w-full h-full rounded-2xl shadow-2xl bg-gradient-to-br from-amber-50 via-orange-50 to-amber-50 page-texture border border-amber-200/50 overflow-hidden">
     <div className="h-full flex flex-col p-8 md:p-16">
       {/* Header */}
@@ -399,10 +415,10 @@ const TOCPage = ({ page, goToPage, pages }) => (
 
       {/* Chapters List */}
       <div className="flex-1 overflow-y-auto space-y-3">
-        {page.chapters.map((chapter, idx) => (
+        {page.chapters?.map((chapter: Chapter, idx: number) => (
           <button
             key={chapter.id}
-            onClick={() => goToPage(pages.findIndex(p => p.id === chapter.id))}
+            onClick={() => goToPage(pages.findIndex((p: Page) => p.id === chapter.id))}
             className="w-full group hover:bg-amber-100/70 p-4 md:p-6 rounded-xl transition-all duration-300 border border-transparent hover:border-amber-300/50 hover:shadow-md"
           >
             <div className="flex items-center gap-4 md:gap-6">
@@ -437,13 +453,13 @@ const TOCPage = ({ page, goToPage, pages }) => (
 );
 
 // Chapter Page Component
-const ChapterPage = ({ page }) => (
+const ChapterPage = ({ page }: { page: Page }) => (
   <div className="w-full h-full rounded-2xl shadow-2xl bg-gradient-to-br from-orange-50 via-amber-50 to-orange-50 page-texture border border-amber-200/50 overflow-hidden">
     <div className="h-full flex flex-col p-8 md:p-16">
       {/* Chapter Header */}
       <div className="mb-8">
         <div className="flex items-center gap-4 mb-6">
-          {React.createElement(page.icon, {
+          {page.icon && React.createElement(page.icon, {
             className: "w-10 h-10 md:w-12 md:h-12 text-amber-600",
             strokeWidth: 1.5
           })}
@@ -463,9 +479,9 @@ const ChapterPage = ({ page }) => (
       <div className="flex-1 overflow-hidden">
         <div className="bg-white/50 rounded-xl p-3 md:p-4 border border-amber-200/50 h-full max-w-screen-xl mx-auto">
           <Suspense fallback={<div className="body-font text-amber-800 p-6" role="status" aria-live="polite">Loading {page.title}...</div>}>
-            {ChapterComponentMap[page.id] ? (
+            {page.id in ChapterComponentMap ? (
               <div className="rounded-lg bg-white/70 p-2 md:p-4 overflow-auto min-h-[60vh]">
-                {React.createElement(ChapterComponentMap[page.id])}
+                {React.createElement(ChapterComponentMap[page.id as keyof typeof ChapterComponentMap])}
               </div>
             ) : (
               <div className="body-font text-amber-700 p-6">Component not found for {page.id}.</div>
