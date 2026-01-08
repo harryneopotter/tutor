@@ -8,7 +8,7 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const Card = styled.div<CardProps>`
   position: relative;
-  background: ${({ theme, glass }) => glass ? 'rgba(255, 255, 255, 0.15)' : theme.colors.surface1};
+  background: ${({ theme, glass }) => glass ? 'rgba(255, 255, 255, 0.85)' : theme.colors.surface1};
   color: ${({ theme }) => theme.colors.ink900};
   border: 1px solid ${({ theme, glass }) => glass ? 'rgba(255, 255, 255, 0.2)' : theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.lg};

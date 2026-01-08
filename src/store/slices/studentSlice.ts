@@ -11,6 +11,7 @@ export interface StudentSlice {
     addStudent: (student: Omit<Student, 'id'>) => void;
     addWaitlistEntry: (entry: Omit<WaitlistEntry, 'id'>) => void;
     removeWaitlistEntry: (id: string) => void;
+    updateStudent: (id: string, updates: Partial<Student>) => void;
     assignSlotFromWaitlist: (eventId: string, studentId: string, duration: number) => void;
 }
 
@@ -45,6 +46,13 @@ export const createStudentSlice: StateCreator<any, [], [], StudentSlice> = (set,
             waitlist: state.waitlist.filter((entry: WaitlistEntry) => entry.id !== id)
         }));
         void waitlistRepo.remove(id).catch(console.error);
+    },
+
+    updateStudent: (id, updates) => {
+        set((state: any) => ({
+            students: state.students.map((s: Student) => s.id === id ? { ...s, ...updates } : s)
+        }));
+        void studentsRepo.update(id, updates).catch(console.error);
     },
 
     assignSlotFromWaitlist: (eventId, studentId, duration) => {

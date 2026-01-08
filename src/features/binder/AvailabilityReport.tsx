@@ -8,7 +8,8 @@ import { BarChart, Filter } from 'lucide-react';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
+  padding: 24px;
   background: ${({ theme }) => theme.colors.surface0};
   color: ${({ theme }) => theme.colors.ink900};
 `;

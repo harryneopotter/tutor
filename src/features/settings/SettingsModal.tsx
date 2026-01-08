@@ -8,11 +8,16 @@ import { useToast } from '../../ui/components/ToastProvider';
 import { BackupService } from '../../utils/backupService';
 import { Download, Upload, Database, Smartphone } from 'lucide-react';
 
+import { Input as UIInput } from '../../ui/components/Input';
+
 export function SettingsModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const themeName = useSettingsStore((s) => s.theme);
   const setTheme = useSettingsStore((s) => s.setTheme);
   const appearance = useSettingsStore((s) => s.appearance);
   const setAppearance = useSettingsStore((s) => s.setAppearance);
+  const userName = useSettingsStore((s) => s.userName);
+  const setUserName = useSettingsStore((s) => s.setUserName);
+
   const { showToast } = useToast();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -65,6 +70,18 @@ export function SettingsModal({ open, onClose }: { open: boolean; onClose: () =>
         <UIButton variant="primary" onClick={onClose}>Done</UIButton>
       }
     >
+      <SectionTitle>User Name</SectionTitle>
+      <div style={{ marginBottom: 24 }}>
+        <UIInput
+          placeholder="Enter your name"
+          value={userName}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserName(e.target.value)}
+        />
+        <p style={{ fontSize: 11, color: 'rgba(0,0,0,0.4)', marginTop: 6, fontStyle: 'italic' }}>
+          This name will be used throughout the app for a personalized experience.
+        </p>
+      </div>
+
       <SectionTitle>Theme Color</SectionTitle>
       <Grid>
         {palettes.map((p) => (

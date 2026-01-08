@@ -76,8 +76,9 @@ const CalendarGrid = styled.div`
 `;
 
 const TimeColumn = styled.div`
-  border-right: 1px solid ${({ theme }) => theme.colors.ink400};
+  flex: 0 0 60px;
   background: ${({ theme }) => theme.colors.surface0};
+  border-right: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 const TimeSlotLabel = styled.div`
@@ -297,14 +298,32 @@ export const WeeklyCalendar: React.FC = () => {
   };
 
   const handleEventLongPress = (event: ClassEvent) => {
-    // Cancel the event and show fill slot modal (Quick Cancel)
-    // We update the state to mark as canceled per PRD "quick cancel" flow
-    // which then triggers the Fill Slot suggestions.
     if (window.confirm(`Quick cancel class for ${students.find(s => s.id === event.studentId)?.name}?`)) {
       deleteEvent(event.id);
       setCanceledEvent(event);
       setShowFillSlotModal(true);
     }
+  };
+
+  const getDayEvents = (day: Date): ClassEvent[] => {
+    return events.filter(event => {
+      if (event.deletedAt) return false;
+      if (event.canceled) return false;
+      return isSameDay(new Date(event.start), day);
+    });
+  };
+
+  const calculateEventLayout = (event: ClassEvent) => {
+    const startHour = 6;
+    const eventStart = new Date(event.start);
+    const eventEnd = new Date(event.end);
+    const startMins = (eventStart.getHours() - startHour) * 60 + eventStart.getMinutes();
+    const durationMins = Math.max(30, (eventEnd.getTime() - eventStart.getTime()) / 60000);
+
+    return {
+      top: 64 + startMins * 2,
+      height: Math.max(20, durationMins * 2 - 4) // Reduced height slightly for gap
+    };
   };
 
   const handleAssignSlot = (studentId: string, duration: number) => {
@@ -324,16 +343,6 @@ export const WeeklyCalendar: React.FC = () => {
     setAddModal({ open: true, startISO: start.toISOString() });
   };
 
-  const getEventsForSlot = (day: Date, timeSlot: TimeSlot): ClassEvent[] => {
-    return events.filter(event => {
-      if (event.deletedAt) return false;
-      if (event.canceled) return false;
-      const eventStart = new Date(event.start);
-      return isSameDay(eventStart, day) &&
-        eventStart.getHours() === timeSlot.hour &&
-        eventStart.getMinutes() === timeSlot.minute;
-    });
-  };
 
   const getEventType = (event: ClassEvent): 'tutor-class' | 'student-class' | 'missing-info' => {
     if (!event.studentId) return 'missing-info';
@@ -391,7 +400,6 @@ export const WeeklyCalendar: React.FC = () => {
             })()}
 
             {timeSlots.map((slot, slotIndex) => {
-              const eventsInSlot = getEventsForSlot(day, slot);
               const zebra = slot.hour % 2 === 1;
               const todayCol = isSameDay(day, new Date());
               const background = todayCol
@@ -403,54 +411,58 @@ export const WeeklyCalendar: React.FC = () => {
                   key={slotIndex}
                   onClick={() => handleSlotClick(day, slot)}
                   style={background ? { background } : undefined}
-                >
-                  {eventsInSlot.map((event, eventIndex) => {
-                    let longPressTimer: NodeJS.Timeout;
+                />
+              );
+            })}
 
-                    return (
-                      <EventBlock
-                        key={event.id}
-                        eventType={getEventType(event)}
-                        style={{ top: `${eventIndex * 20}px` }}
-                        role="button"
-                        tabIndex={0}
-                        aria-label={`Event: ${event.title}`}
-                        onKeyDown={(ke) => {
-                          if (ke.key === 'Enter' || ke.key === ' ') {
-                            ke.preventDefault();
-                            handleEventClick(event);
-                          }
-                        }}
-                        onMouseDown={() => {
-                          longPressTimer = setTimeout(() => {
-                            handleEventLongPress(event);
-                          }, 400);
-                        }}
-                        onMouseUp={() => {
-                          clearTimeout(longPressTimer);
-                        }}
-                        onMouseLeave={() => {
-                          clearTimeout(longPressTimer);
-                        }}
-                        onTouchStart={() => {
-                          longPressTimer = setTimeout(() => {
-                            handleEventLongPress(event);
-                          }, 500);
-                        }}
-                        onTouchEnd={() => {
-                          clearTimeout(longPressTimer);
-                        }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          clearTimeout(longPressTimer);
-                          handleEventClick(event);
-                        }}
-                      >
-                        {event.title}
-                      </EventBlock>
-                    );
-                  })}
-                </TimeSlotCell>
+            {/* Proportional Events Layer */}
+            {getDayEvents(day).map((event) => {
+              const { top, height } = calculateEventLayout(event);
+              let longPressTimer: any;
+
+              return (
+                <EventBlock
+                  key={event.id}
+                  eventType={getEventType(event)}
+                  style={{ top: `${top}px`, height: `${height}px` }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Event: ${event.title}`}
+                  onKeyDown={(ke) => {
+                    if (ke.key === 'Enter' || ke.key === ' ') {
+                      ke.preventDefault();
+                      handleEventClick(event);
+                    }
+                  }}
+                  onMouseDown={() => {
+                    longPressTimer = setTimeout(() => {
+                      handleEventLongPress(event);
+                    }, 400);
+                  }}
+                  onMouseUp={() => clearTimeout(longPressTimer)}
+                  onMouseLeave={() => clearTimeout(longPressTimer)}
+                  onTouchStart={() => {
+                    longPressTimer = setTimeout(() => {
+                      handleEventLongPress(event);
+                    }, 500);
+                  }}
+                  onTouchEnd={() => clearTimeout(longPressTimer)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    clearTimeout(longPressTimer);
+                    handleEventClick(event);
+                  }}
+                >
+                  <div style={{ fontSize: '10px', opacity: 0.8, marginBottom: 2 }}>
+                    {format(new Date(event.start), 'h:mm a')}
+                  </div>
+                  <div style={{ fontWeight: 800 }}>{event.title}</div>
+                  {height > 40 && (
+                    <div style={{ fontSize: '10px', marginTop: 4, opacity: 0.9 }}>
+                      {students.find(s => s.id === event.studentId)?.name}
+                    </div>
+                  )}
+                </EventBlock>
               );
             })}
           </DayColumn>

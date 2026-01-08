@@ -19,12 +19,13 @@ import {
   Settings,
   Bell
 } from 'lucide-react';
+import { ThemeBackground } from './ui/components/ThemeBackground';
 // Premium Book UI integration (feature flag)
 const PremiumBookUILazy = lazy(() => import('./redesign/premium-book-ui'));
 
 const AppContainer = styled.div`
   height: 100vh;
-  background: ${({ theme }) => theme.colors.surface0};
+  background: transparent;
   color: ${({ theme }) => theme.colors.ink900};
   transition: background-color 200ms ease, color 200ms ease;
 `;
@@ -34,7 +35,7 @@ const Navigation = styled.nav`
   top: 12px;
   display: flex;
   margin: 0 16px 24px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: ${({ theme }) => theme.blur.thick} saturate(250%);
   -webkit-backdrop-filter: ${({ theme }) => theme.blur.thick} saturate(250%);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -125,15 +126,20 @@ const NavButton = styled.button<{ $active: boolean }>`
 
 const SampleDataButton = styled.button`
   padding: 8px 16px;
-  border: 1px solid ${({ theme }) => theme.colors.ink400};
-  border-radius: 4px;
-  background: ${({ theme }) => theme.colors.surface1};
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: ${({ theme }) => theme.radius.md};
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: ${({ theme }) => theme.colors.ink900};
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 700;
   cursor: pointer;
+  transition: all 0.2s ease;
   
   &:hover {
-    background: ${({ theme }) => theme.colors.surface0};
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateY(-1px);
   }
 `;
 
@@ -247,6 +253,7 @@ function App() {
 
   return (
     <AppContainer>
+      <ThemeBackground />
       <Navigation>
         <NavButton
           $active={currentView === 'calendar'}

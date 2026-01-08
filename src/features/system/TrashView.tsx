@@ -9,18 +9,18 @@ import { Card as UICard } from '../../ui/components/Card';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  background: ${({ theme }) => theme.colors.surface1};
+  min-height: 100vh;
+  background: ${({ theme }) => theme.colors.surface0};
   color: ${({ theme }) => theme.colors.ink900};
+  padding: 24px;
 `;
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 16px 24px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.ink400};
-  background: ${({ theme }) => theme.colors.surface1};
+  align-items: flex-start;
+  margin-bottom: 32px;
+  background: ${({ theme }) => theme.colors.surface0};
 `;
 
 const Title = styled.h2`
@@ -115,7 +115,7 @@ export const TrashView: React.FC = () => {
               <Info>
                 <div style={{ fontWeight: 600 }}>{ev.title}</div>
                 <div style={{ fontSize: 12, color: '#6b7280' }}>
-                  {getStudentName(ev.studentId)} • {new Date(ev.start).toLocaleString()} - {new Date(ev.end).toLocaleTimeString()} 
+                  {getStudentName(ev.studentId)} • {new Date(ev.start).toLocaleString()} - {new Date(ev.end).toLocaleTimeString()}
                 </div>
                 <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 4 }}>
                   {(() => {

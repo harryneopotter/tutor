@@ -8,13 +8,13 @@ import { TextArea as UITextArea } from '../../ui/components/TextArea';
 import { Card as UICard } from '../../ui/components/Card';
 import { Button as UIButton } from '../../ui/components/Button';
 import { useToast } from '../../ui/components/ToastProvider';
-import { Download, Plus, Book, FileText, GraduationCap } from 'lucide-react';
+import { Download, Plus, Book, FileText, GraduationCap, User } from 'lucide-react';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: ${({ theme }) => theme.colors.surface0};
+  background: transparent;
   color: ${({ theme }) => theme.colors.ink900};
 `;
 
@@ -58,11 +58,14 @@ const Select = styled.select`
 const TabList = styled.div`
   display: flex;
   margin: 0 32px;
-  background: rgba(0,0,0,0.05);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   padding: 4px;
   border-radius: ${({ theme }) => theme.radius.lg};
   width: fit-content;
   gap: 4px;
+  border: 1px solid rgba(255,255,255,0.2);
 `;
 
 const Tab = styled.button<{ $active: boolean }>`
@@ -111,11 +114,194 @@ const Row = styled.div`
   &:hover { transform: translateX(4px); background: rgba(255,255,255,0.6); }
 `;
 
+const RowItem = styled.div`
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+const Label = styled.label`
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: ${({ theme }) => theme.colors.ink400};
+`;
+
+const RelationSection = styled.div`
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(0,0,0,0.05);
+`;
+
+const SiblingTag = styled.button<{ $linked?: boolean }>`
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid ${p => p.$linked ? p.theme.colors.brand : 'rgba(0,0,0,0.1)'};
+  background: ${p => p.$linked ? p.theme.colors.surface1 : 'transparent'};
+  color: ${p => p.$linked ? p.theme.colors.brand : p.theme.colors.ink600};
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.brand};
+    color: ${({ theme }) => theme.colors.brand};
+    transform: translateY(-1px);
+  }
+`;
+
+interface ProfileForm {
+  age: string | number;
+  dob: string;
+  school: string;
+  classDetails: string;
+  binderNotes: string;
+  siblingIds: string[];
+}
+
+const StudentProfile: React.FC<{
+  student?: any;
+  allStudents: any[];
+  onUpdate: (updates: any) => void;
+  onSwitch: (id: string) => void;
+}> = ({ student, allStudents, onUpdate, onSwitch }) => {
+  const [form, setForm] = useState<ProfileForm>({
+    age: student?.age || '',
+    dob: student?.dob || '',
+    school: student?.school || '',
+    classDetails: student?.classDetails || '',
+    binderNotes: student?.binderNotes || '',
+    siblingIds: student?.siblingIds || []
+  });
+
+  useEffect(() => {
+    if (student) {
+      setForm({
+        age: student.age || '',
+        dob: student.dob || '',
+        school: student.school || '',
+        classDetails: student.classDetails || '',
+        binderNotes: student.binderNotes || '',
+        siblingIds: student.siblingIds || []
+      });
+    }
+  }, [student]);
+
+  const toggleSibling = (id: string) => {
+    const current = [...(form.siblingIds || [])];
+    if (current.includes(id)) {
+      setForm({ ...form, siblingIds: current.filter(sid => sid !== id) });
+    } else {
+      setForm({ ...form, siblingIds: [...current, id] });
+    }
+  };
+
+  const handleSave = () => {
+    onUpdate({
+      ...form,
+      age: form.age ? parseInt(form.age.toString()) : undefined
+    });
+  };
+
+  if (!student) return <div style={{ opacity: 0.5, textAlign: 'center', padding: 40 }}>Select a student to view profile.</div>;
+
+  return (
+    <div style={{ gridColumn: '1 / span 2', maxWidth: '800px', margin: '0 auto', width: '100%' }}>
+      <UICard glass padding="none" style={{ padding: 32 }}>
+        <Title style={{ fontSize: 20, marginBottom: 32 }}>Student Profile</Title>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 40px' }}>
+          <RowItem>
+            <Label>Age</Label>
+            <UIInput type="number" value={form.age} onChange={e => setForm({ ...form, age: e.target.value })} />
+          </RowItem>
+          <RowItem>
+            <Label>Date of Birth</Label>
+            <UIInput type="date" value={form.dob} onChange={e => setForm({ ...form, dob: e.target.value })} />
+          </RowItem>
+          <RowItem>
+            <Label>School</Label>
+            <UIInput value={form.school} onChange={e => setForm({ ...form, school: e.target.value })} />
+          </RowItem>
+          <RowItem>
+            <Label>Class Details</Label>
+            <UIInput value={form.classDetails} onChange={e => setForm({ ...form, classDetails: e.target.value })} />
+          </RowItem>
+        </div>
+
+        <div style={{ marginTop: 24 }}>
+          <Label style={{ marginBottom: 12, display: 'block' }}>Student Notes</Label>
+          <UITextArea
+            placeholder="Academic goals, strengths, weaknesses..."
+            value={form.binderNotes}
+            onChange={e => setForm({ ...form, binderNotes: e.target.value })}
+            rows={6}
+          />
+        </div>
+
+        <RelationSection>
+          <Label style={{ marginBottom: 16, display: 'block' }}>Siblings & Relationships</Label>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 20 }}>
+            {allStudents.filter(s => s.id !== student.id).map(s => (
+              <SiblingTag
+                key={s.id}
+                $linked={form.siblingIds.includes(s.id)}
+                onClick={() => toggleSibling(s.id)}
+              >
+                {form.siblingIds.includes(s.id) ? '✓ ' : '+ '}
+                {s.name}
+              </SiblingTag>
+            ))}
+          </div>
+
+          {form.siblingIds.length > 0 && (
+            <div style={{ background: 'rgba(0,0,0,0.02)', padding: 12, borderRadius: 8 }}>
+              <span style={{ fontSize: 11, fontWeight: 800, color: 'rgba(0,0,0,0.4)', textTransform: 'uppercase' }}>Quick Switch:</span>
+              <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
+                {(form.siblingIds || []).map((sid: string) => {
+                  const s = allStudents.find(o => o.id === sid);
+                  if (!s) return null;
+                  return (
+                    <button
+                      key={sid}
+                      onClick={() => onSwitch(sid)}
+                      style={{
+                        background: 'none', border: 'none', padding: 0,
+                        color: '#4F46E5', fontWeight: 700, fontSize: 13,
+                        cursor: 'pointer', textDecoration: 'underline'
+                      }}
+                    >
+                      {s.name}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </RelationSection>
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 32 }}>
+          <UIButton variant="primary" onClick={handleSave} style={{ padding: '12px 32px' }}>
+            Save Profile Details
+          </UIButton>
+        </div>
+      </UICard>
+    </div>
+  );
+};
+
 export const StudentBinder: React.FC = () => {
   const { students } = useAppStore();
   const { showToast } = useToast();
   const [studentId, setStudentId] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'syllabus' | 'plans'>('syllabus');
+  const [activeTab, setActiveTab] = useState<'profile' | 'syllabus' | 'plans'>('profile');
   const [syllabus, setSyllabus] = useState<SyllabusTopic[]>([]);
   const [plans, setPlans] = useState<LessonPlan[]>([]);
 
@@ -207,6 +393,10 @@ export const StudentBinder: React.FC = () => {
       </Header>
 
       <TabList>
+        <Tab $active={activeTab === 'profile'} onClick={() => setActiveTab('profile')}>
+          <User size={16} />
+          Profile
+        </Tab>
         <Tab $active={activeTab === 'syllabus'} onClick={() => setActiveTab('syllabus')}>
           <Book size={16} />
           Syllabus
@@ -218,27 +408,69 @@ export const StudentBinder: React.FC = () => {
       </TabList>
 
       <Content>
-        {activeTab === 'syllabus' ? (
+        {activeTab === 'profile' ? (
+          <StudentProfile
+            student={students.find(s => s.id === studentId)}
+            allStudents={students}
+            onSwitch={(id) => setStudentId(id)}
+            onUpdate={(updates) => {
+              if (studentId) {
+                useAppStore.getState().updateStudent(studentId, updates);
+                showToast('Student profile updated', 'success');
+              }
+            }}
+          />
+        ) : activeTab === 'syllabus' ? (
           <>
-            <UICard glass padding="none" style={{ padding: 24, alignSelf: 'start' }}>
-              <Title style={{ fontSize: 18, marginBottom: 20 }}>Add Topic</Title>
-              <div style={{ display: 'grid', gap: 12 }}>
-                <UIInput placeholder="Month (e.g., Sep)" value={topicForm.month} onChange={e => setTopicForm({ ...topicForm, month: e.target.value })} />
-                <UIInput placeholder="Topic" value={topicForm.topic} onChange={e => setTopicForm({ ...topicForm, topic: e.target.value })} />
-                <UIInput placeholder="Page (optional)" value={topicForm.page} onChange={e => setTopicForm({ ...topicForm, page: e.target.value })} />
-                <UIButton
-                  variant="primary"
-                  onClick={() => { if (topicForm.month && topicForm.topic) { addTopic({ month: topicForm.month, topic: topicForm.topic, page: topicForm.page || undefined }); setTopicForm({ month: '', topic: '', page: '' }); } }}
-                >
-                  <Plus size={16} />
-                  Add
-                </UIButton>
-              </div>
-            </UICard>
-            <UICard glass padding="none" style={{ padding: 24 }}>
-              <Title style={{ fontSize: 18, marginBottom: 20 }}>Topics</Title>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <UICard glass padding="none" style={{ padding: 24 }}>
+                <Title style={{ fontSize: 18, marginBottom: 12 }}>School Syllabus Reference</Title>
+                <p style={{ fontSize: 12, opacity: 0.6, marginBottom: 20 }}>
+                  Paste the full school-provided syllabus requirements here for quick reference.
+                </p>
+                <UITextArea
+                  placeholder="Paste school syllabus overview here..."
+                  value={students.find(s => s.id === studentId)?.schoolSyllabus || ''}
+                  onChange={e => {
+                    if (studentId) {
+                      useAppStore.getState().updateStudent(studentId, { schoolSyllabus: e.target.value });
+                    }
+                  }}
+                  rows={12}
+                  style={{ marginBottom: 16 }}
+                />
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <UIButton
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => showToast('Syllabus reference saved', 'success')}
+                  >
+                    Save Reference
+                  </UIButton>
+                </div>
+              </UICard>
+
+              <UICard glass padding="none" style={{ padding: 24 }}>
+                <Title style={{ fontSize: 18, marginBottom: 20 }}>Add Topic Tracker</Title>
+                <div style={{ display: 'grid', gap: 12 }}>
+                  <UIInput placeholder="Month (e.g., Sep)" value={topicForm.month} onChange={e => setTopicForm({ ...topicForm, month: e.target.value })} />
+                  <UIInput placeholder="Topic" value={topicForm.topic} onChange={e => setTopicForm({ ...topicForm, topic: e.target.value })} />
+                  <UIInput placeholder="Page (optional)" value={topicForm.page} onChange={e => setTopicForm({ ...topicForm, page: e.target.value })} />
+                  <UIButton
+                    variant="primary"
+                    onClick={() => { if (topicForm.month && topicForm.topic) { addTopic({ month: topicForm.month, topic: topicForm.topic, page: topicForm.page || undefined }); setTopicForm({ month: '', topic: '', page: '' }); } }}
+                  >
+                    <Plus size={16} />
+                    Add Entry
+                  </UIButton>
+                </div>
+              </UICard>
+            </div>
+
+            <UICard glass padding="none" style={{ padding: 24, height: 'fit-content' }}>
+              <Title style={{ fontSize: 18, marginBottom: 20 }}>Completion Log</Title>
               <List>
-                {syllabus.length === 0 && <div style={{ opacity: 0.5, textAlign: 'center', padding: 20 }}>No topics added yet.</div>}
+                {syllabus.length === 0 && <div style={{ opacity: 0.5, textAlign: 'center', padding: 20 }}>No topics logged yet.</div>}
                 {syllabus.map(t => (
                   <Row key={t.id}>
                     <div style={{ fontWeight: 600 }}>{t.month}</div>

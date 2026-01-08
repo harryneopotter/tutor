@@ -106,6 +106,7 @@ export const AddEventModal: React.FC<AddEventModalProps> = ({ isOpen, startISO, 
           <Label>Duration</Label>
           <Select value={durationMin} onChange={e => setDurationMin(parseInt(e.target.value))}>
             <option value={30}>30 min</option>
+            <option value={45}>45 min</option>
             <option value={60}>60 min</option>
             <option value={90}>90 min</option>
           </Select>

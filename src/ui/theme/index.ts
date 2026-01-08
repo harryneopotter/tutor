@@ -5,7 +5,7 @@ export const GlobalStyle = createGlobalStyle`
   :root {
     font-family: ${({ theme }) => theme.font.body};
     color: ${({ theme }) => theme.colors.ink900};
-    background: ${({ theme }) => theme.colors.surface0};
+    background: transparent;
     line-height: 1.4;
   }
   *, *::before, *::after {
@@ -13,6 +13,7 @@ export const GlobalStyle = createGlobalStyle`
   }
   body {
     margin: 0;
+    background: transparent;
     transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
   }
   @media (prefers-reduced-motion: reduce) {

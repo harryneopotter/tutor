@@ -2,7 +2,14 @@ export interface Student {
   id: string;
   name: string;
   grade: string;
+  age?: number;
+  dob?: string;
+  school?: string;
+  classDetails?: string;
+  binderNotes?: string;
   notes?: string;
+  schoolSyllabus?: string;
+  siblingIds?: string[];
 }
 
 export interface ClassEvent {

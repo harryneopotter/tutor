@@ -13,7 +13,8 @@ import { Card as UICard } from '../../ui/components/Card';
 const DashboardContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  padding: 24px;
+  min-height: 100vh;
   background: ${({ theme }) => theme.colors.surface0};
   color: ${({ theme }) => theme.colors.ink900};
 `;
@@ -275,6 +276,8 @@ const BellIcon = styled.span`
   font-size: 18px;
 `;
 
+import { useSettingsStore } from '../../store/settingsStore';
+
 export const TodayDashboard: React.FC = () => {
   const {
     events,
@@ -285,6 +288,8 @@ export const TodayDashboard: React.FC = () => {
     addExtraClassRequest,
     scheduleExtra
   } = useAppStore();
+
+  const userName = useSettingsStore(s => s.userName);
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [form, setForm] = useState({ studentId: '', durationMin: 60, notes: '', windows: [] as { dow: number; start: string; end: string }[] });
@@ -368,7 +373,7 @@ export const TodayDashboard: React.FC = () => {
     <DashboardContainer>
       <Header>
         <div>
-          <Title>Today's Schedule</Title>
+          <Title>Welcome back, {userName}!</Title>
           <DateSubtitle>{format(new Date(), 'EEEE, MMMM d, yyyy')}</DateSubtitle>
         </div>
         <AddButton onClick={() => setShowAddModal(true)}>+ Add Extra Request</AddButton>
