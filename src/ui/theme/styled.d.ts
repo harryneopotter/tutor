@@ -19,6 +19,7 @@ declare module 'styled-components' {
       glassHighlight: string;
       glassBorder: string;
       border: string;
+      appearance: 'light' | 'dark';
     };
     radius: {
       xs: string;

@@ -20,6 +20,7 @@ export interface Palette {
   glassHighlight: string;
   glassBorder: string;
   border: string;
+  appearance: Appearance;
 }
 
 const baseLight = {
@@ -37,6 +38,7 @@ const baseLight = {
   glassHighlight: 'rgba(255, 255, 255, 0.9)',
   glassBorder: 'rgba(255, 255, 255, 0.4)',
   border: 'rgba(0, 0, 0, 0.08)',
+  appearance: 'light' as Appearance,
 } as const;
 
 const baseDark = {
@@ -54,6 +56,7 @@ const baseDark = {
   glassHighlight: 'rgba(255, 255, 255, 0.1)',
   glassBorder: 'rgba(255, 255, 255, 0.1)',
   border: 'rgba(255, 255, 255, 0.12)',
+  appearance: 'dark' as Appearance,
 } as const;
 
 export const palettes: Record<PaletteName, { light: Palette; dark: Palette }> = {
