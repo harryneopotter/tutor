@@ -7,7 +7,9 @@ import { Input as UIInput } from '../../ui/components/Input';
 import { TextArea as UITextArea } from '../../ui/components/TextArea';
 import { Card as UICard } from '../../ui/components/Card';
 import { Button as UIButton } from '../../ui/components/Button';
+import { Modal as UIModal } from '../../ui/components/Modal';
 import { useToast } from '../../ui/components/ToastProvider';
+import { validateStudentData, sanitizeString } from '../../utils/validation';
 import { Download, Plus, Book, FileText, GraduationCap, User } from 'lucide-react';
 
 const Container = styled.div`
@@ -204,9 +206,34 @@ const StudentProfile: React.FC<{
   };
 
   const handleSave = () => {
+    const validation = validateStudentData({
+      name: student.name, // Required from existing student
+      grade: student.grade, // Required from existing student
+      age: form.age,
+      dob: form.dob,
+      school: form.school,
+      classDetails: form.classDetails,
+      binderNotes: form.binderNotes,
+    });
+
+    if (!validation.valid) {
+      // Use toast to show error
+      const toast = (window as any).__showToast;
+      if (toast) {
+        toast(validation.error || 'Invalid input', 'error');
+      } else {
+        alert(validation.error);
+      }
+      return;
+    }
+
     onUpdate({
-      ...form,
-      age: form.age ? parseInt(form.age.toString()) : undefined
+      age: form.age ? parseInt(form.age.toString()) : undefined,
+      dob: sanitizeString(form.dob, 50),
+      school: sanitizeString(form.school, 200),
+      classDetails: sanitizeString(form.classDetails, 200),
+      binderNotes: sanitizeString(form.binderNotes, 5000),
+      siblingIds: form.siblingIds,
     });
   };
 
@@ -298,12 +325,14 @@ const StudentProfile: React.FC<{
 };
 
 export const StudentBinder: React.FC = () => {
-  const { students } = useAppStore();
+  const { students, addStudent } = useAppStore();
   const { showToast } = useToast();
   const [studentId, setStudentId] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'profile' | 'syllabus' | 'plans'>('profile');
   const [syllabus, setSyllabus] = useState<SyllabusTopic[]>([]);
   const [plans, setPlans] = useState<LessonPlan[]>([]);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newStudentForm, setNewStudentForm] = useState({ name: '', grade: '' });
 
   useEffect(() => {
     if (students.length && !studentId) setStudentId(students[0].id);
@@ -351,6 +380,13 @@ export const StudentBinder: React.FC = () => {
           <Select aria-label="Student" value={studentId} onChange={e => setStudentId(e.target.value)}>
             {students.map(s => (<option key={s.id} value={s.id}>{s.name}</option>))}
           </Select>
+          <UIButton
+            variant="primary"
+            onClick={() => setShowAddModal(true)}
+          >
+            <Plus size={14} style={{ marginRight: 8 }} />
+            Add Student
+          </UIButton>
           <UIButton
             variant="secondary"
             onClick={async () => {
@@ -516,6 +552,77 @@ export const StudentBinder: React.FC = () => {
           </>
         )}
       </Content>
+
+      {/* Add Student Modal */}
+      <UIModal
+        open={showAddModal}
+        title="Add New Student"
+        onClose={() => {
+          setShowAddModal(false);
+          setNewStudentForm({ name: '', grade: '' });
+        }}
+        footer={
+          <>
+            <UIButton variant="secondary" onClick={() => {
+              setShowAddModal(false);
+              setNewStudentForm({ name: '', grade: '' });
+            }}>
+              Cancel
+            </UIButton>
+            <UIButton
+              variant="primary"
+              onClick={() => {
+                const validation = validateStudentData({
+                  name: newStudentForm.name,
+                  grade: newStudentForm.grade,
+                });
+
+                if (!validation.valid) {
+                  showToast(validation.error || 'Invalid input', 'error');
+                  return;
+                }
+
+                const sanitizedName = sanitizeString(newStudentForm.name, 100);
+                const sanitizedGrade = sanitizeString(newStudentForm.grade, 50);
+
+                addStudent({ name: sanitizedName, grade: sanitizedGrade });
+                const newId = useAppStore.getState().students[useAppStore.getState().students.length - 1]?.id;
+                if (newId) setStudentId(newId);
+                showToast(`${sanitizedName} added successfully`, 'success');
+                setShowAddModal(false);
+                setNewStudentForm({ name: '', grade: '' });
+              }}
+            >
+              Add Student
+            </UIButton>
+          </>
+        }
+      >
+        <div style={{ display: 'grid', gap: 20 }}>
+          <div>
+            <Label style={{ marginBottom: 8, display: 'block' }}>Student Name *</Label>
+            <UIInput
+              placeholder="Enter student name"
+              value={newStudentForm.name}
+              onChange={e => setNewStudentForm({ ...newStudentForm, name: e.target.value })}
+              maxLength={100}
+              autoFocus
+            />
+          </div>
+          <div>
+            <Label style={{ marginBottom: 8, display: 'block' }}>Grade *</Label>
+            <UIInput
+              placeholder="e.g., Grade 5, Year 10, 3rd Grade"
+              value={newStudentForm.grade}
+              onChange={e => setNewStudentForm({ ...newStudentForm, grade: e.target.value })}
+              maxLength={50}
+            />
+          </div>
+          <p style={{ fontSize: 12, color: 'rgba(0,0,0,0.5)', margin: 0, fontStyle: 'italic' }}>
+            You can add additional details (age, DOB, school, etc.) after creating the student in the Profile tab.
+          </p>
+        </div>
+      </UIModal>
     </Container>
   );
 };

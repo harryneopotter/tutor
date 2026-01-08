@@ -1,0 +1,19 @@
+src/a11y/__tests__/binder.a11y.test.tsx(8,41): error TS7016: Could not find a declaration file for module 'jest-axe'. 'G:/AI/Github/projects for git/Tutor/node_modules/jest-axe/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/jest-axe` if it exists or add a new declaration (.d.ts) file containing `declare module 'jest-axe';`
+src/a11y/__tests__/binder.a11y.test.tsx(22,21): error TS2339: Property 'toHaveNoViolations' does not exist on type 'Assertion<any>'.
+src/a11y/__tests__/calendar.a11y.test.tsx(8,41): error TS7016: Could not find a declaration file for module 'jest-axe'. 'G:/AI/Github/projects for git/Tutor/node_modules/jest-axe/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/jest-axe` if it exists or add a new declaration (.d.ts) file containing `declare module 'jest-axe';`
+src/a11y/__tests__/calendar.a11y.test.tsx(22,21): error TS2339: Property 'toHaveNoViolations' does not exist on type 'Assertion<any>'.
+src/a11y/__tests__/settings.a11y.test.tsx(8,41): error TS7016: Could not find a declaration file for module 'jest-axe'. 'G:/AI/Github/projects for git/Tutor/node_modules/jest-axe/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/jest-axe` if it exists or add a new declaration (.d.ts) file containing `declare module 'jest-axe';`
+src/a11y/__tests__/settings.a11y.test.tsx(22,21): error TS2339: Property 'toHaveNoViolations' does not exist on type 'Assertion<any>'.
+src/a11y/__tests__/today.a11y.test.tsx(8,41): error TS7016: Could not find a declaration file for module 'jest-axe'. 'G:/AI/Github/projects for git/Tutor/node_modules/jest-axe/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/jest-axe` if it exists or add a new declaration (.d.ts) file containing `declare module 'jest-axe';`
+src/a11y/__tests__/today.a11y.test.tsx(22,21): error TS2339: Property 'toHaveNoViolations' does not exist on type 'Assertion<any>'.
+src/a11y/__tests__/trash.a11y.test.tsx(8,41): error TS7016: Could not find a declaration file for module 'jest-axe'. 'G:/AI/Github/projects for git/Tutor/node_modules/jest-axe/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/jest-axe` if it exists or add a new declaration (.d.ts) file containing `declare module 'jest-axe';`
+src/a11y/__tests__/trash.a11y.test.tsx(22,21): error TS2339: Property 'toHaveNoViolations' does not exist on type 'Assertion<any>'.
+src/a11y/__tests__/waitlist.a11y.test.tsx(8,41): error TS7016: Could not find a declaration file for module 'jest-axe'. 'G:/AI/Github/projects for git/Tutor/node_modules/jest-axe/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/jest-axe` if it exists or add a new declaration (.d.ts) file containing `declare module 'jest-axe';`
+src/a11y/__tests__/waitlist.a11y.test.tsx(22,21): error TS2339: Property 'toHaveNoViolations' does not exist on type 'Assertion<any>'.
+src/features/binder/StudentBinder.tsx(256,38): error TS7006: Parameter 'sid' implicitly has an 'any' type.
