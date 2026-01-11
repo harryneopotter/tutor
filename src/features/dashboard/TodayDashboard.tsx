@@ -139,7 +139,7 @@ const WindowRow = styled.div`
 
 const DateSubtitle = styled.p`
   font-size: 14px;
-  color: #6b7280;
+  color: ${({ theme }) => theme.colors.ink600};
   margin: 4px 0 0 0;
 `;
 
@@ -156,7 +156,7 @@ const Section = styled.div`
 const SectionTitle = styled.h3`
   font-size: 16px;
   font-weight: 600;
-  color: #374151;
+  color: ${({ theme }) => theme.colors.ink900};
   margin: 0 0 16px 0;
   display: flex;
   align-items: center;
@@ -164,82 +164,83 @@ const SectionTitle = styled.h3`
 `;
 
 const ClassList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+display: flex;
+flex - direction: column;
+gap: 16px;
 `;
 
 const ClassItem = styled(UICard).attrs({ glass: true }) <{ status: 'confirmed' | 'pending' | 'canceled' }>`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  margin-bottom: 2px;
-  
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    padding: 16px;
-  }
+display: flex;
+justify - content: space - between;
+align - items: center;
+padding: 20px;
+margin - bottom: 2px;
+
+@media(max - width: ${({ theme }) => theme.breakpoints.mobile}) {
+  flex - direction: column;
+  align - items: stretch;
+  gap: 12px;
+  padding: 16px;
+}
 
   &::before {
-    content: '';
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 6px;
-    background: ${props => {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+  background: ${props => {
     switch (props.status) {
       case 'confirmed': return props.theme.colors.success;
       case 'pending': return props.theme.colors.warning;
       case 'canceled': return props.theme.colors.danger;
       default: return props.theme.colors.border;
     }
-  }};
-    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
   }
+  };
+  box - shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
 `;
 
 const ClassInfo = styled.div`
-  flex: 1;
+flex: 1;
 `;
 
 const ClassTitle = styled.div`
-  font-weight: 600;
-  color: #111827;
-  margin-bottom: 4px;
+font - weight: 600;
+color: ${({ theme }) => theme.colors.ink900};
+margin - bottom: 4px;
 `;
 
 const ClassDetails = styled.div`
-  font-size: 14px;
-  color: #6b7280;
+font - size: 14px;
+color: ${({ theme }) => theme.colors.ink600};
 `;
 
 const ClassActions = styled.div`
-  display: flex;
-  gap: 8px;
+display: flex;
+gap: 8px;
 `;
 
 const ActionButton = styled.button<{ variant: 'confirm' | 'cancel' | 'schedule' | 'snooze' | 'dismiss' }>`
-  padding: 8px 16px;
-  border: none;
-  border-radius: ${({ theme }) => theme.radius.md};
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: ${({ theme }) => theme.shadow.skeuoRaised};
+padding: 8px 16px;
+border: none;
+border - radius: ${({ theme }) => theme.radius.md};
+font - size: 13px;
+font - weight: 700;
+cursor: pointer;
+position: relative;
+overflow: hidden;
+transition: all 0.2s cubic - bezier(0.4, 0, 0.2, 1);
+box - shadow: ${({ theme }) => theme.shadow.skeuoRaised};
 
   &::after {
-    content: '';
-    position: absolute;
-    top: 1px; left: 1px; right: 1px; height: 45%;
-    background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
-    border-radius: inherit;
-    pointer-events: none;
-  }
+  content: '';
+  position: absolute;
+  top: 1px; left: 1px; right: 1px; height: 45 %;
+  background: linear - gradient(180deg, rgba(255, 255, 255, 0.2) 0 %, rgba(255, 255, 255, 0) 100 %);
+  border - radius: inherit;
+  pointer - events: none;
+}
   
   ${props => {
     switch (props.variant) {
@@ -263,56 +264,57 @@ const ActionButton = styled.button<{ variant: 'confirm' | 'cancel' | 'schedule' 
         `;
       default:
         return `
-          background: linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);
-          color: #374151;
-          border: 1px solid rgba(0,0,0,0.1);
-          &::after { background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%); }
-          &:hover { background: #ffffff; }
+          background: ${props.theme.colors.appearance === 'dark' ? 'rgba(255,255,255,0.08)' : 'linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%)'};
+          color: ${props.theme.colors.ink900};
+          border: 1px solid ${props.theme.colors.appearance === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'};
+          &::after { background: linear-gradient(180deg, ${props.theme.colors.appearance === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.6)'} 0%, rgba(255,255,255,0) 100%); }
+          &:hover { background: ${props.theme.colors.appearance === 'dark' ? 'rgba(255,255,255,0.12)' : '#ffffff'}; }
         `;
     }
-  }}
+  }
+  }
 
   &:active {
-    transform: translateY(1px);
-    box-shadow: ${({ theme }) => theme.shadow.skeuoPressed};
+  transform: translateY(1px);
+  box - shadow: ${({ theme }) => theme.shadow.skeuoPressed};
     &::after { opacity: 0; }
-  }
+}
 `;
 
 
 const ExtraRequestItem = styled(UICard).attrs({ glass: true })`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  margin-bottom: 2px;
-  
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    padding: 16px;
-  }
+display: flex;
+justify - content: space - between;
+align - items: center;
+padding: 20px;
+margin - bottom: 2px;
+
+@media(max - width: ${({ theme }) => theme.breakpoints.mobile}) {
+  flex - direction: column;
+  align - items: stretch;
+  gap: 12px;
+  padding: 16px;
+}
 
   &::before {
-    content: '';
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 6px;
-    background: ${({ theme }) => theme.colors.info};
-    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
-  }
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+  background: ${({ theme }) => theme.colors.info};
+  box - shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
 `;
 
 const EmptyState = styled.div`
-  text-align: center;
-  padding: 48px 24px;
-  color: #6b7280;
+text - align: center;
+padding: 48px 24px;
+color: #6b7280;
 `;
 
 const BellIcon = styled.span`
-  color: #f59e0b;
-  font-size: 18px;
+color: #f59e0b;
+font - size: 18px;
 `;
 
 import { useSettingsStore } from '../../store/settingsStore';
@@ -494,7 +496,7 @@ export const TodayDashboard: React.FC = () => {
                     </ClassTitle>
                     <ClassDetails>
                       {getStudentName(request.studentId)} • {request.durationMin} minutes
-                      {request.notes && ` • ${request.notes}`}
+                      {request.notes && ` • ${request.notes} `}
                     </ClassDetails>
                   </ClassInfo>
 
@@ -547,9 +549,9 @@ export const TodayDashboard: React.FC = () => {
                   if (hasConflict(start, end, evts)) {
                     const suggestion = findNextAvailableSlotSameDay(start, durationMin, evts);
                     if (suggestion) {
-                      const ok = window.confirm(`Selected time conflicts. Use next available slot at ${format(suggestion.start, 'h:mm a')}?`);
+                      const ok = window.confirm(`Selected time conflicts.Use next available slot at ${format(suggestion.start, 'h:mm a')}?`);
                       if (!ok) return;
-                      const title = `Extra Class - ${getStudentName(studentId)}`;
+                      const title = `Extra Class - ${getStudentName(studentId)} `;
                       scheduleExtra(requestId, { studentId, title, start: suggestion.start.toISOString(), end: suggestion.end.toISOString() });
                       setScheduleModal({ open: false });
                       return;
@@ -559,7 +561,7 @@ export const TodayDashboard: React.FC = () => {
                     }
                   }
 
-                  const title = `Extra Class - ${getStudentName(studentId)}`;
+                  const title = `Extra Class - ${getStudentName(studentId)} `;
                   scheduleExtra(requestId, { studentId, title, start: start.toISOString(), end: end.toISOString() });
                   setScheduleModal({ open: false });
                 } catch (e) {

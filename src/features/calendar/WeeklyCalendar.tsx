@@ -99,13 +99,13 @@ const CalendarGrid = styled.div`
 const TimeColumn = styled.div`
   flex: 0 0 60px;
   background: ${({ theme }) => theme.colors.surface0};
-  border-right: 1px solid ${({ theme }) => theme.colors.border};
+  border-right: 1px solid ${({ theme }) => theme.colors.appearance === 'dark' ? 'rgba(255, 255, 255, 0.15)' : theme.colors.border};
 `;
 
 const TimeSlotLabel = styled.div`
   height: 60px;
   padding: 8px 12px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.appearance === 'dark' ? 'rgba(255, 255, 255, 0.1)' : theme.colors.border};
   font-size: 11px;
   font-family: ${({ theme }) => theme.font.mono};
   color: ${({ theme }) => theme.colors.ink600};
@@ -114,7 +114,7 @@ const TimeSlotLabel = styled.div`
 `;
 
 const DayColumn = styled.div`
-  border-right: 1px solid ${({ theme }) => theme.colors.border};
+  border-right: 1px solid ${({ theme }) => theme.colors.appearance === 'dark' ? 'rgba(255, 255, 255, 0.1)' : theme.colors.border};
   position: relative;
   min-width: 120px;
 `;
@@ -132,7 +132,7 @@ const NowLine = styled.div`
 const DayHeader = styled.div<{ $isToday: boolean }>`
   height: 64px;
   padding: 8px 12px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.appearance === 'dark' ? 'rgba(255, 255, 255, 0.15)' : theme.colors.border};
   background: ${props => props.$isToday ? props.theme.colors.surface1 : 'transparent'};
   font-weight: 600;
   color: ${props => props.$isToday ? props.theme.colors.info : props.theme.colors.ink900};

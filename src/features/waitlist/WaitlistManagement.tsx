@@ -109,13 +109,13 @@ const StudentInfo = styled.div`
 
 const StudentName = styled.div`
   font-weight: 600;
-  color: #111827;
+  color: ${({ theme }) => theme.colors.ink900};
   margin-bottom: 4px;
 `;
 
 const StudentDetails = styled.div`
   font-size: 14px;
-  color: #6b7280;
+  color: ${({ theme }) => theme.colors.ink600};
 `;
 
 const Duration = styled.div`

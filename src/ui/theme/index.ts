@@ -15,6 +15,7 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     background: transparent;
     transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+    -webkit-tap-highlight-color: transparent;
   }
   @media (prefers-reduced-motion: reduce) {
     body { transition: none; }

@@ -61,29 +61,41 @@ const variantStyles = {
     }
   `,
   secondary: css`
-    background: linear-gradient(180deg, #FFFFFF 0%, #F0F0F0 100%);
+    background: ${({ theme }) => theme.colors.appearance === 'dark'
+      ? 'rgba(255, 255, 255, 0.08)'
+      : 'linear-gradient(180deg, #FFFFFF 0%, #F0F0F0 100%)'};
     color: ${({ theme }) => theme.colors.ink900};
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1px solid ${({ theme }) => theme.colors.appearance === 'dark'
+      ? 'rgba(255, 255, 255, 0.15)'
+      : 'rgba(0,0,0,0.1)'};
     box-shadow: 
       ${({ theme }) => theme.shadow.skeuoRaised},
-      inset 0 1px 0 #fff;
+      ${({ theme, colors }) => theme.colors.appearance === 'dark'
+      ? 'inset 0 1px 0 rgba(255,255,255,0.05)'
+      : 'inset 0 1px 0 #fff'};
     
     &::after {
       content: '';
       position: absolute;
       top: 1px; left: 1px; right: 1px; height: 40%;
-      background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%);
+      background: linear-gradient(180deg, ${({ theme }) => theme.colors.appearance === 'dark'
+      ? 'rgba(255,255,255,0.08)'
+      : 'rgba(255,255,255,0.6)'} 0%, rgba(255,255,255,0) 100%);
       pointer-events: none;
       border-radius: inherit;
     }
 
     &:hover { 
-      background: #fff;
+      background: ${({ theme }) => theme.colors.appearance === 'dark'
+      ? 'rgba(255, 255, 255, 0.12)'
+      : '#fff'};
       box-shadow: 0 8px 16px rgba(0,0,0,0.08), ${({ theme }) => theme.shadow.skeuoRaised};
     }
     
     &:active {
-      background: #E0E0E0;
+      background: ${({ theme }) => theme.colors.appearance === 'dark'
+      ? 'rgba(255, 255, 255, 0.05)'
+      : '#E0E0E0'};
       box-shadow: ${({ theme }) => theme.shadow.skeuoPressed};
       &::after { opacity: 0; }
     }

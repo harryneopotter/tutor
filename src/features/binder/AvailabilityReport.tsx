@@ -95,13 +95,13 @@ const Grid = styled.div`
 
 const TimeColumn = styled.div`
   background: ${({ theme }) => theme.colors.surface0};
-  border-right: 1px solid ${({ theme }) => theme.colors.ink400};
+  border-right: 1px solid ${({ theme }) => theme.colors.appearance === 'dark' ? 'rgba(255, 255, 255, 0.15)' : theme.colors.border};
 `;
 
 const TimeLabel = styled.div`
   height: 60px;
   padding: 8px 12px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.ink400};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.appearance === 'dark' ? 'rgba(255, 255, 255, 0.1)' : theme.colors.border};
   font-size: 12px;
   color: ${({ theme }) => theme.colors.ink600};
   display: flex;
@@ -109,13 +109,13 @@ const TimeLabel = styled.div`
 `;
 
 const DayColumn = styled.div`
-  border-right: 1px solid ${({ theme }) => theme.colors.ink400};
+  border-right: 1px solid ${({ theme }) => theme.colors.appearance === 'dark' ? 'rgba(255, 255, 255, 0.1)' : theme.colors.border};
 `;
 
 const DayHeader = styled.div`
   height: 60px;
   padding: 8px 12px;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.border};
+  border-bottom: 2px solid ${({ theme }) => theme.colors.appearance === 'dark' ? 'rgba(255, 255, 255, 0.15)' : theme.colors.border};
   background: ${({ theme }) => theme.colors.surface1};
   font-weight: 700;
   color: ${({ theme }) => theme.colors.ink600};

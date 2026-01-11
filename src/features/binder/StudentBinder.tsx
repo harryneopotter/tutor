@@ -136,11 +136,11 @@ const Row = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background: rgba(255,255,255,0.4);
-  border: 1px solid rgba(0,0,0,0.05);
+  background: ${({ theme }) => theme.colors.appearance === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.4)'};
+  border: 1px solid ${({ theme }) => theme.colors.appearance === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'};
   border-radius: ${({ theme }) => theme.radius.md};
   transition: all 0.2s ease;
-  &:hover { transform: translateX(4px); background: rgba(255,255,255,0.6); }
+  &:hover { transform: translateX(4px); background: ${({ theme }) => theme.colors.appearance === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.6)'}; }
 `;
 
 const RowItem = styled.div`
