@@ -53,6 +53,10 @@ declare module 'styled-components' {
       spring: string;
       speed: string;
     };
+    breakpoints: {
+      mobile: string;
+      tablet: string;
+    };
   }
 }
 
