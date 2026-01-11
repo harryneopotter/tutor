@@ -31,6 +31,13 @@ const Header = styled.div`
   z-index: 10;
   position: relative;
   
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    flex-direction: column;
+    padding: 16px;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
   &::after {
     content: '';
     position: absolute;
@@ -45,6 +52,10 @@ const Title = styled.h2`
   font-weight: 600;
   color: ${({ theme }) => theme.colors.ink900};
   margin: 0;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    font-size: 16px;
+  }
 `;
 
 const AddButton = styled.button`
@@ -82,6 +93,12 @@ const AddButton = styled.button`
     background: ${({ theme }) => theme.colors.brandHover};
     &::after { opacity: 0; }
   }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 13px;
+  }
 `;
 
 
@@ -111,6 +128,13 @@ const WindowRow = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr auto;
   gap: 8px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    grid-template-columns: 1fr 1fr;
+    & > :last-child {
+      grid-column: span 2;
+    }
+  }
 `;
 
 const DateSubtitle = styled.p`
@@ -152,6 +176,13 @@ const ClassItem = styled(UICard).attrs({ glass: true }) <{ status: 'confirmed' |
   padding: 20px;
   margin-bottom: 2px;
   
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 16px;
+  }
+
   &::before {
     content: '';
     position: absolute;
@@ -255,6 +286,14 @@ const ExtraRequestItem = styled(UICard).attrs({ glass: true })`
   align-items: center;
   padding: 20px;
   margin-bottom: 2px;
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 16px;
+  }
+
   &::before {
     content: '';
     position: absolute;

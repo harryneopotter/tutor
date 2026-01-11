@@ -28,6 +28,13 @@ const Header = styled.div`
   position: relative;
   z-index: 10;
   
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    flex-direction: column;
+    padding: 16px;
+    align-items: stretch;
+    gap: 16px;
+  }
+
   &::after {
     content: '';
     position: absolute;
@@ -87,6 +94,13 @@ const WaitlistCard = styled.div`
     box-shadow: 0 12px 48px rgba(0,0,0,0.12);
     transform: translateY(-4px);
   }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 16px;
+  }
 `;
 
 const StudentInfo = styled.div`
@@ -114,6 +128,11 @@ const Duration = styled.div`
   margin: 0 16px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    margin: 0;
+    align-self: flex-start;
+  }
 `;
 
 

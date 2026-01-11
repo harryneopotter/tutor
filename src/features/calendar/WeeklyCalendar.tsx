@@ -38,6 +38,13 @@ const Header = styled.div`
   z-index: 10;
   position: relative;
   
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    align-items: stretch;
+  }
+
   &::after {
     content: '';
     position: absolute;
@@ -51,6 +58,11 @@ const HeaderActions = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    justify-content: space-between;
+    button { flex: 1; }
+  }
 `;
 
 
@@ -58,6 +70,11 @@ const WeekNavigation = styled.div`
   display: flex;
   align-items: center;
   gap: 16px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    justify-content: space-between;
+    span { font-size: 13px; text-align: center; }
+  }
 `;
 
 
@@ -73,6 +90,10 @@ const CalendarGrid = styled.div`
   display: grid;
   grid-template-columns: 80px repeat(7, 1fr);
   overflow: auto;
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    grid-template-columns: 60px repeat(7, 120px);
+  }
 `;
 
 const TimeColumn = styled.div`

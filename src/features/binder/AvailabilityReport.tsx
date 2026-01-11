@@ -26,6 +26,13 @@ const Header = styled.div`
   position: relative;
   z-index: 10;
   
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    flex-direction: column;
+    padding: 16px;
+    align-items: stretch;
+    gap: 16px;
+  }
+
   &::after {
     content: '';
     position: absolute;
@@ -39,6 +46,11 @@ const Controls = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
 `;
 
 const Select = styled.select`
@@ -75,6 +87,10 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: 80px repeat(7, 1fr);
   overflow: auto;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    grid-template-columns: 60px repeat(7, 120px);
+  }
 `;
 
 const TimeColumn = styled.div`

@@ -128,6 +128,10 @@ export const makeTheme = (name: PaletteName, mode: Appearance = 'light'): Defaul
       default: 'cubic-bezier(0.4, 0, 0.2, 1)',
       spring: 'cubic-bezier(0.175, 0.885, 0.32, 1.1)',
       speed: '250ms',
+    },
+    breakpoints: {
+      mobile: '768px',
+      tablet: '1024px',
     }
   } as any;
 };

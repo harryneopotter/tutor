@@ -25,6 +25,13 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 24px 32px 12px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    flex-direction: column;
+    padding: 16px 16px 8px;
+    align-items: stretch;
+    gap: 16px;
+  }
 `;
 
 const Title = styled.h2`
@@ -42,6 +49,13 @@ const Controls = styled.div`
   display: flex;
   gap: 16px;
   align-items: center;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    & > * { width: 100%; }
+  }
 `;
 
 
@@ -68,6 +82,14 @@ const TabList = styled.div`
   width: fit-content;
   gap: 4px;
   border: 1px solid rgba(255,255,255,0.2);
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    margin: 8px 16px;
+    width: auto;
+    overflow-x: auto;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
 `;
 
 const Tab = styled.button<{ $active: boolean }>`
@@ -95,6 +117,11 @@ const Content = styled.div`
   gap: 16px;
   padding: 24px;
   overflow: auto;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
 `;
 
 
@@ -122,6 +149,11 @@ const RowItem = styled.div`
   gap: 16px;
   align-items: center;
   margin-bottom: 20px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
 `;
 
 const Label = styled.label`
@@ -130,6 +162,17 @@ const Label = styled.label`
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: ${({ theme }) => theme.colors.ink400};
+`;
+
+const ProfileGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 40px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
 `;
 
 const RelationSection = styled.div`
@@ -243,7 +286,7 @@ const StudentProfile: React.FC<{
     <div style={{ gridColumn: '1 / span 2', maxWidth: '800px', margin: '0 auto', width: '100%' }}>
       <UICard glass padding="none" style={{ padding: 32 }}>
         <Title style={{ fontSize: 20, marginBottom: 32 }}>Student Profile</Title>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 40px' }}>
+        <ProfileGrid>
           <RowItem>
             <Label>Age</Label>
             <UIInput type="number" value={form.age} onChange={e => setForm({ ...form, age: e.target.value })} />
@@ -260,7 +303,7 @@ const StudentProfile: React.FC<{
             <Label>Class Details</Label>
             <UIInput value={form.classDetails} onChange={e => setForm({ ...form, classDetails: e.target.value })} />
           </RowItem>
-        </div>
+        </ProfileGrid>
 
         <div style={{ marginTop: 24 }}>
           <Label style={{ marginBottom: 12, display: 'block' }}>Student Notes</Label>

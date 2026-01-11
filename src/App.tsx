@@ -44,8 +44,16 @@ const Navigation = styled.nav`
     0 32px 64px rgba(0,0,0,0.15),
     ${({ theme }) => theme.shadow.liquidGlass};
   z-index: 1000;
-  overflow: hidden;
   padding: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    margin: 0 8px 16px;
+    border-radius: ${({ theme }) => theme.radius.lg};
+    top: 8px;
+  }
 
   &::before {
     content: '';
@@ -67,6 +75,8 @@ const RightControls = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+  padding-right: 4px;
+  flex-shrink: 0;
 `;
 
 const NavButton = styled.button<{ $active: boolean }>`
@@ -110,6 +120,14 @@ const NavButton = styled.button<{ $active: boolean }>`
     transform: translateY(${props => props.$active ? '-2px' : '-1px'});
   }
   
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    padding: 10px 16px;
+    font-size: 11px;
+    flex-shrink: 0;
+    gap: 6px;
+    span { display: none; }
+  }
+  
   &:active {
     transform: translateY(1px) scale(0.96);
     ${props => props.$active && css`
@@ -145,6 +163,11 @@ const SampleDataButton = styled.button`
 
 const SettingsButton = styled(SampleDataButton)`
   border-color: ${({ theme }) => theme.colors.ink400};
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    padding: 8px;
+    span { display: none; }
+    svg { margin: 0 !important; }
+  }
 `;
 
 const NotificationBell = styled.button`
@@ -316,7 +339,7 @@ function App() {
           )}
           <SettingsButton onClick={() => setShowSettings(true)}>
             <Settings size={14} style={{ marginRight: 6 }} />
-            Settings
+            <span>Settings</span>
           </SettingsButton>
           {students.length === 0 && (
             <SampleDataButton onClick={handleLoadSampleData}>
